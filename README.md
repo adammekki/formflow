@@ -35,7 +35,7 @@ Transform any PDF form filling workflow using open-source LLMs with built-in exp
 
 3. **Pull the vision model (first time only):**
    ```bash
-   docker exec -it formflow-ollama ollama pull qwen3-vl:8b
+   docker exec -it formflow-ollama ollama pull ministral-3:8b
    ```
 
 4. **Access the API:**
