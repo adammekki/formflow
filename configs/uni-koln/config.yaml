@@ -1,0 +1,321 @@
+client_name: uni-koln
+fields:
+- data_type: text
+  description: Title, Vorname (First Name), Name (Last Name) of the employee
+  field_name: Titel/Vorname/Name
+  required: true
+  semantic_name: Employee_Name
+- data_type: text
+  description: Faculty/Institute/Seminar/Department where the employee belongs
+  field_name: Fakultät/Fachbereich/Institut/Seminar / Dienststelle
+  required: false
+  semantic_name: Department
+- data_type: date
+  description: Date of the form submission
+  field_name: Geb.-Datum
+  required: true
+  semantic_name: Date_of_Birth
+- data_type: email
+  description: Email address of the employee
+  field_name: E-Mail
+  required: false
+  semantic_name: Email_Address
+- data_type: text
+  description: House number and street address of the employee
+  field_name: Hausanschluss/Durchwahl
+  required: false
+  semantic_name: Home_Address
+- data_type: phone
+  description: Telephone number of the employee
+  field_name: Telefonnummer
+  required: false
+  semantic_name: Phone_Number
+- data_type: text
+  description: Street and city of residence
+  field_name: Straße/Wohnort
+  required: false
+  semantic_name: Residence_Address
+- data_type: number
+  description: Personal number (if known)
+  field_name: Personalnummer UJK (wenn bekannt)
+  required: false
+  semantic_name: Personal_Number
+- data_type: text
+  description: LBV Personal number (if not known)
+  field_name: nicht LBV-Personalnummer
+  required: false
+  semantic_name: LBV_Personal_Number
+- data_type: checkbox
+  description: Check if payment should be made to the salary account
+  field_name: 'Interne: Die Auszahlung erfolgt auf das Gehaltskonto'
+  required: false
+  semantic_name: Payment_to_Salary_Account
+- data_type: text
+  description: Bank name for external reimbursement
+  field_name: 'Name der Bank:'
+  required: false
+  semantic_name: Bank_Name
+- data_type: text
+  description: IBAN for external reimbursement
+  field_name: 'IBAN:'
+  required: true
+  semantic_name: IBAN
+- data_type: text
+  description: BIC/SWIFT code for external reimbursement
+  field_name: 'BIC/SWIFT:'
+  required: true
+  semantic_name: BIC_SWIFT_Code
+- data_type: checkbox
+  description: Check if external reimbursement is required
+  field_name: 'Externe: Die Auszahlung erfolgt auf das unten angegebene Bankkonto'
+  required: false
+  semantic_name: External_Payment_Required
+- data_type: text
+  description: Finanzamt (Tax Office) for external reimbursement
+  field_name: 'Finanzamt:'
+  required: false
+  semantic_name: Tax_Office
+- data_type: text
+  description: Steuer-ID (Tax ID) for external reimbursement
+  field_name: 'Steuer IdNr.:'
+  required: false
+  semantic_name: Tax_ID
+- data_type: date
+  description: Start date of the trip (residence/service location)
+  field_name: Begin der Reise (Wohnung/Dienststelle)
+  required: true
+  semantic_name: Start_Date_of_Trip
+- data_type: date
+  description: End date of the trip (residence/service location)
+  field_name: Beendigung der Reise (Wohnung/Dienststelle)
+  required: true
+  semantic_name: End_Date_of_Trip
+- data_type: date
+  description: Start date of the business trip (service location)
+  field_name: Begin des Dienstgeschäftes
+  required: true
+  semantic_name: Start_Date_of_Business_Trip
+- data_type: date
+  description: End date of the business trip (service location)
+  field_name: Beendigung des Dienstgeschäftes
+  required: true
+  semantic_name: End_Date_of_Business_Trip
+- data_type: text
+  description: Purpose of the trip/travel event
+  field_name: Reisezweck/Titel der Veranstaltung
+  required: false
+  semantic_name: Purpose_of_Trip
+- data_type: text
+  description: Location(s) of the business trip (country)
+  field_name: Dienst-/Geschäftsort(e) (und Land/Länder)
+  required: false
+  semantic_name: Business_Trip_Locations
+- data_type: checkbox
+  description: Check if the trip is connected with a private stay
+  field_name: Wurde die Reise mit einem Privataufenthalt verbunden?
+  required: false
+  semantic_name: Private_Stay_Connected
+- data_type: date
+  description: Departure date and time from the residence/service location
+  field_name: 'Hinreise: Ort, Datum, Uhrzeit'
+  required: false
+  semantic_name: Departure_Date_Time
+- data_type: date
+  description: Return date and time to the residence/service location
+  field_name: 'Rückreise: Ort, Datum, Uhrzeit'
+  required: false
+  semantic_name: Return_Date_Time
+- data_type: checkbox
+  description: Check if meals were provided by the employer
+  field_name: Wurde von Amts wegen unentgeltlich Verpflegung bereitgestellt bzw. ist
+    Verpflegung in den Tagessätzen/übernachtungsgebühren des Hotels/Flughafens enthalten?
+  required: false
+  semantic_name: Meals_Provided_by_Employer
+- data_type: checkbox
+  description: Check if breakfast was provided
+  field_name: Frühstück
+  required: false
+  semantic_name: Breakfast_Provided
+- data_type: checkbox
+  description: Check if lunch was provided
+  field_name: Mittagessen
+  required: false
+  semantic_name: Lunch_Provided
+- data_type: checkbox
+  description: Check if dinner was provided
+  field_name: Abendessen
+  required: false
+  semantic_name: Dinner_Provided
+- data_type: checkbox
+  description: Check if overnight accommodation costs are covered by the employer
+  field_name: Keine Erstattung von Übernachtungskosten
+  required: false
+  semantic_name: No_Overnight_Costs_Covered
+- data_type: checkbox
+  description: Check if accommodation was provided by the employer
+  field_name: Übernachtung wurde von Amts wegen kostenfrei gestellt oder (bereits)
+    durch UZK/Dr.Orte bezahlt
+  required: false
+  semantic_name: Accommodation_Free_of_Cost
+- data_type: checkbox
+  description: Check if accommodation was at own expense or daily return
+  field_name: keine Übernachtung oder tägliche Rückkehr (eigene Wohnung)
+  required: false
+  semantic_name: No_Overnight_Or_Daily_Return
+- data_type: checkbox
+  description: Check if overnight accommodation was reimbursed per night
+  field_name: Erstattung d. Übernachtungspauschale Inland 20€ / Ausl. 30€/Nacht
+  required: false
+  semantic_name: Overnight_Accommodation_Reimbursement
+- data_type: text
+  description: Additional explanation for overnight accommodation
+  field_name: 'Ggf. weitere Erläuterung:'
+  required: false
+  semantic_name: Additional_Overnight_Explanation
+- data_type: number
+  description: Total overnight accommodation costs
+  field_name: Summe Übernachtungskosten
+  required: false
+  semantic_name: Total_Overnight_Costs
+- data_type: currency
+  description: Total transportation costs
+  field_name: Summe Fahrkosten
+  required: false
+  semantic_name: Total_Transportation_Costs
+- data_type: text
+  description: Transportation means (e.g., train class)
+  field_name: Behörungsmittel
+  required: false
+  semantic_name: Transport_Means
+- data_type: number
+  description: Costs for train/bus travel (e.g., first class)
+  field_name: bezahlte Klasse/n
+  required: false
+  semantic_name: Train_Class_Costs
+- data_type: text
+  description: Reason for using higher train/bus class
+  field_name: 'Begründung:'
+  required: false
+  semantic_name: Reason_Higher_Class
+- data_type: checkbox
+  description: Check if flight was taken
+  field_name: Flugzeug*
+  required: false
+  semantic_name: Flight_Taken
+- data_type: text
+  description: Reason for using taxi
+  field_name: Taxi*
+  required: false
+  semantic_name: Taxi_Reason
+- data_type: text
+  description: Other transportation costs
+  field_name: 'Sonstige:'
+  required: false
+  semantic_name: Other_Transportation_Costs
+- data_type: checkbox
+  description: Check if service vehicle was used
+  field_name: Es wurde ein Dienst-KFZ genutzt
+  required: false
+  semantic_name: Service_Vehicle_Used
+- data_type: number
+  description: Distance covered by private car (in km)
+  field_name: Privat-KFZ
+  required: false
+  semantic_name: Private_Car_Distance
+- data_type: number
+  description: Distance covered by private bicycle (in km)
+  field_name: privates zweirädiges KFZ/Fahrrad
+  required: false
+  semantic_name: Private_Bicycle_Distance
+- data_type: text
+  description: Other distances covered (in km)
+  field_name: Sonstige
+  required: false
+  semantic_name: Other_Distances
+- data_type: text
+  description: Names of persons accompanied in private vehicle
+  field_name: Namen der mitgenommenen Personen
+  required: false
+  semantic_name: Names_Accompanied_Persons
+- data_type: currency
+  description: Conference fee
+  field_name: Tagungsgebühr
+  required: false
+  semantic_name: Conference_Fee
+- data_type: currency
+  description: Visa fee
+  field_name: Visum
+  required: false
+  semantic_name: Visa_Fee
+- data_type: currency
+  description: Other costs I
+  field_name: Sonstige I
+  required: false
+  semantic_name: Other_Costs_I
+- data_type: currency
+  description: Other costs II
+  field_name: Sonstige II
+  required: false
+  semantic_name: Other_Costs_II
+- data_type: currency
+  description: Advance received from the university
+  field_name: einen Abschlag / eine Vorauszahlung in Höhe von
+  required: false
+  semantic_name: Advance_Received
+- data_type: currency
+  description: Costs covered by third parties
+  field_name: Kosten von Dritten übernommen (Zuschwendungen)
+  required: false
+  semantic_name: Third_Party_Costs
+- data_type: currency
+  description: Limit for reimbursement of travel costs
+  field_name: Bitte begrenzen Sie die Erstattung der Reisekosten auf
+  required: false
+  semantic_name: Reimbursement_Limit
+- data_type: checkbox
+  description: Check if the travel costs are for internal or external purposes
+  field_name: Reisekosten Interne / Dienstreisen (685000)
+  required: false
+  semantic_name: Internal_Travel_Costs
+- data_type: checkbox
+  description: Check if the travel costs are for internal education purposes
+  field_name: Reisekosten Interne | Weiterbildung (685100)
+  required: false
+  semantic_name: Internal_Education_Travel_Costs
+- data_type: checkbox
+  description: Check if the travel costs are for external purposes
+  field_name: Reisekosten Externe (685200)
+  required: false
+  semantic_name: External_Travel_Costs
+- data_type: checkbox
+  description: Check if the travel costs are for scholarships
+  field_name: Reisekosten Stipendiaten (730160)
+  required: false
+  semantic_name: Scholarship_Travel_Costs
+- data_type: checkbox
+  description: Check if the travel costs are for Erasmus program
+  field_name: Reisekosten Dozenten ERASMUS (685050)
+  required: false
+  semantic_name: Erasmus_Travel_Costs
+- data_type: text
+  description: Additional comments on financing or other notes
+  field_name: Kommentar zur Finanzierung oder sonstige Anmerkung
+  required: false
+  semantic_name: Financing_Comments
+- data_type: checkbox
+  description: Declaration of correctness of the entries
+  field_name: Unterschrift der/des Verantwortlichen
+  required: true
+  semantic_name: Declaration_Correctness
+- data_type: date
+  description: Date of the declaration
+  field_name: Datum/Unterschrift
+  required: true
+  semantic_name: Declaration_Date
+form_language: German
+form_title: Reisekostenabrechnung (Travel Expense Report)
+pdf_fields_raw: []
+supported_languages:
+- en
+- de
+target_currency: EUR

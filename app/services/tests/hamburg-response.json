@@ -1,0 +1,232 @@
+{
+  "status": "success",
+  "session_id": "6d2ee3e4-088f-44d8-b65a-ffe1537b45fc",
+  "message": "Data extracted successfully. Please verify before filling form.",
+  "extracted_fields": [
+    {
+      "field_name": "Name",
+      "value": "Hofmann",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Last name extracted from attendee name 'Dr. Maximilian Hofmann'"
+    },
+    {
+      "field_name": "Vorname",
+      "value": "Maximilian",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "First name extracted from attendee name 'Dr. Maximilian Hofmann'"
+    },
+    {
+      "field_name": "Fakultät",
+      "value": "Institute for Artificial Intelligence",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.85,
+      "reasoning": "Affiliation extracted from 'Universitat Ulm, Institute for Artificial Intelligence'"
+    },
+    {
+      "field_name": "Dienststelle",
+      "value": "Universitat Ulm",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Institution extracted from 'Universitat Ulm'"
+    },
+    {
+      "field_name": "Anschrift privat",
+      "value": "Universitat Ulm, Albert-Einstein-Allee 11, 89081 Ulm",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Private address extracted from guest address on hotel invoice"
+    },
+    {
+      "field_name": "IBAN",
+      "value": "DE89 3704 0044 0532 0130 00",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "IBAN extracted from payment details in registration receipt"
+    },
+    {
+      "field_name": "BIC",
+      "value": "DEUTDEBBXXX",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.8,
+      "reasoning": "Inferred from the bank details in the registration receipt (likely Deutsche Bank)"
+    },
+    {
+      "field_name": "Reiseantritt",
+      "value": "Dienststelle (Workplace)",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 0.85,
+      "reasoning": "Assuming departure from Stuttgart (STR) airport, which is near the workplace in Ulm, inferred from flight details"
+    },
+    {
+      "field_name": "Datum_RA",
+      "value": "14.03.2025",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Departure date extracted from outbound flight details"
+    },
+    {
+      "field_name": "Uhrzeit_RA",
+      "value": "07:45",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Departure time extracted from outbound flight details"
+    },
+    {
+      "field_name": "Reiseziel_RA",
+      "value": "Berlin Brandenburg (BER)",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Destination extracted from outbound flight route"
+    },
+    {
+      "field_name": "Verkehrsmittel_RA",
+      "value": "Flight (EuroWings Express)",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Mode of transport extracted from flight booking details"
+    },
+    {
+      "field_name": "Datum_B",
+      "value": "14.03.2025",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Conference dates start on 14.03.2025, assumed as the start date of business activities"
+    },
+    {
+      "field_name": "Datum_E",
+      "value": "16.03.2025",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Conference dates end on 16.03.2025, assumed as the end date of business activities"
+    },
+    {
+      "field_name": "Rückkehr",
+      "value": "Dienststelle (Workplace)",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 0.85,
+      "reasoning": "Assuming return to Stuttgart (STR) airport, inferred from return flight details"
+    },
+    {
+      "field_name": "Datum_R2",
+      "value": "16.03.2025",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Return date extracted from return flight details"
+    },
+    {
+      "field_name": "Uhrzeit_R2",
+      "value": "18:20",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Return time extracted from return flight details"
+    },
+    {
+      "field_name": "R_Verkehrsmittel",
+      "value": "Flight (EuroWings Express)",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Mode of return transport extracted from return flight booking details"
+    },
+    {
+      "field_name": "Kostenaufstellung",
+      "value": "International Trip",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Conference is held in Berlin, Germany, but since it's an international conference and travel involves crossing state borders, it is considered an international trip"
+    },
+    {
+      "field_name": "Verpflegung u",
+      "value": "No",
+      "source_document": "receipt_0.pdf, receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.8,
+      "reasoning": "No mention of free meals provided in conference or hotel receipts"
+    },
+    {
+      "field_name": "Frühstück",
+      "value": "0",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Breakfast was paid for (buffet included in invoice)"
+    },
+    {
+      "field_name": "Mittagessen",
+      "value": "0",
+      "source_document": "receipt_0.pdf, receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.8,
+      "reasoning": "No mention of free lunch provided in conference or hotel receipts"
+    },
+    {
+      "field_name": "Abendessen",
+      "value": "1",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Conference dinner ticket included in fees breakdown"
+    },
+    {
+      "field_name": "Übernachtung u",
+      "value": "No",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Overnight accommodation was paid for, not provided for free"
+    },
+    {
+      "field_name": "Übernachtungen",
+      "value": "2",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Duration of stay extracted from hotel invoice"
+    },
+    {
+      "field_name": "Programm",
+      "value": "No",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "No conference program attached or mentioned in the receipt"
+    },
+    {
+      "field_name": "Tagegeld",
+      "value": "No",
+      "source_document": "receipt_0.pdf, receipt_1.pdf, receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.8,
+      "reasoning": "No mention of daily allowance claimed in any document"
+    },
+    {
+      "field_name": "Kantine2",
+      "value": "No",
+      "source_document": "receipt_0.pdf, receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "No mention of canteen usage in any document"
+    }
+  ],
+  "errors": null
+}

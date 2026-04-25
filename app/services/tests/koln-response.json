@@ -1,0 +1,128 @@
+{
+  "status": "success",
+  "session_id": "931d9f26-a348-4a94-ae3d-2a1706f42cd5",
+  "message": "Data extracted successfully. Please verify before filling form.",
+  "extracted_fields": [
+    {
+      "field_name": "Titel/Vornamen/Name",
+      "value": "Dr. Maximilian Hofmann",
+      "source_document": "receipt_0.pdf, receipt_1.pdf, receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "Name and title are consistently mentioned across all three receipts."
+    },
+    {
+      "field_name": "Fakultät/Fachbereich/Institut/Seminar; Dienststelle",
+      "value": "Universität Ulm, Institute for Artificial Intelligence",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "Affiliation is clearly stated in the conference registration receipt."
+    },
+    {
+      "field_name": "Straße/Wohnort",
+      "value": "Albert-Einstein-Allee 11, 89081 Ulm",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "Address is provided in the hotel invoice."
+    },
+    {
+      "field_name": "Begin der Reise (Wohnung/Dienststelle)",
+      "value": "14.03.2025",
+      "source_document": "receipt_1.pdf, receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "Check-in date at the hotel and outbound flight departure date both indicate the trip starts on 14.03.2025."
+    },
+    {
+      "field_name": "Beendigung der Reise (Wohnung/Dienststelle)",
+      "value": "16.03.2025",
+      "source_document": "receipt_1.pdf, receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "Check-out date at the hotel and return flight departure date both indicate the trip ends on 16.03.2025."
+    },
+    {
+      "field_name": "Begin des Dienstgeschäftes",
+      "value": "14.03.2025",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "Conference dates are from 14.03.2025 to 16.03.2025."
+    },
+    {
+      "field_name": "Beendigung des Dienstgeschäftes",
+      "value": "16.03.2025",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "Conference dates are from 14.03.2025 to 16.03.2025."
+    },
+    {
+      "field_name": "Reisepzweck/Titel der Veranstaltung",
+      "value": "International Conference on Machine Learning (ICML 2025)",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The title of the event is clearly stated in the conference registration receipt."
+    },
+    {
+      "field_name": "Dienst-/Geschäftsort(e) (und Land/Länder)",
+      "value": "Berlin, Germany",
+      "source_document": "receipt_0.pdf, receipt_1.pdf, receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "All documents mention Berlin as the location for the conference, hotel stay, and flights."
+    },
+    {
+      "field_name": "Hinreise: Ort, Datum, Uhrzeit",
+      "value": "Stuttgart (STR) to Berlin Brandenburg (BER), 14.03.2025, 07:45 departure; 09:10 arrival",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "Outbound flight details are provided in the flight booking confirmation."
+    },
+    {
+      "field_name": "Rückreise: Ort, Datum, Uhrzeit",
+      "value": "Berlin Brandenburg (BER) to Stuttgart (STR), 16.03.2025, 18:20 departure; 19:45 arrival",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "Return flight details are provided in the flight booking confirmation."
+    },
+    {
+      "field_name": "Summe Fahrkosten",
+      "value": "EUR 192.50",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "Total charged for flights is explicitly mentioned in the flight booking confirmation."
+    },
+    {
+      "field_name": "Summe Übernachtungskosten",
+      "value": "EUR 256.50",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "Total amount for hotel stay is provided in the hotel invoice."
+    },
+    {
+      "field_name": "Tagungsgebühr",
+      "value": "EUR 810.00",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "Total paid for conference registration is clearly stated in the registration confirmation."
+    },
+    {
+      "field_name": "Sonstige I",
+      "value": "EUR 8.50",
+      "source_document": "receipt_3.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "Parking fee is listed in the parking receipt."
+    }
+  ],
+  "errors": null
+}

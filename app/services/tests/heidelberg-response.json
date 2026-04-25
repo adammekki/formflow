@@ -1,0 +1,224 @@
+{
+  "status": "success",
+  "session_id": "82018f12-1e41-45e7-9919-709d46a79824",
+  "message": "Data extracted successfully. Please verify before filling form.",
+  "extracted_fields": [
+    {
+      "field_name": "Institut/(kurz) Bezeichnung bzw. Dienststelle/Dienstort",
+      "value": "Universität Ulm, Institute for Artificial Intelligence",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Affiliation of attendee is mentioned in the conference registration receipt."
+    },
+    {
+      "field_name": "Name, Vorname des/der Reisenden",
+      "value": "Hofmann, Dr. Maximilian",
+      "source_document": "receipt_0.pdf, receipt_1.pdf, receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Name of attendee/passenger/guest is consistently mentioned across multiple documents."
+    },
+    {
+      "field_name": "Straße",
+      "value": "Albert-Einstein-Allee 11",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Street address is provided in the hotel invoice."
+    },
+    {
+      "field_name": "PLZ",
+      "value": "89081",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Postal code is provided in the hotel invoice."
+    },
+    {
+      "field_name": "Wohnort",
+      "value": "Ulm",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "City is provided in the hotel invoice."
+    },
+    {
+      "field_name": "Tel. Nr. (dienstlich)",
+      "value": "+49 30 2094 0",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.8,
+      "reasoning": "Hotel contact number is provided, but not the personal work phone number of the attendee."
+    },
+    {
+      "field_name": "IBAN",
+      "value": "DE89 3704 0044 0532 0130 00",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "IBAN is provided in the conference registration receipt."
+    },
+    {
+      "field_name": "Begin der Reise Datum",
+      "value": "14.03.2025",
+      "source_document": "receipt_1.pdf, receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Departure date for outbound flight and check-in date at hotel are both on 14.03.2025."
+    },
+    {
+      "field_name": "Begin der Reise Uhrzeit",
+      "value": "07:45",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Departure time for outbound flight is provided."
+    },
+    {
+      "field_name": "Ende der Reise Datum",
+      "value": "16.03.2025",
+      "source_document": "receipt_1.pdf, receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Return flight arrival and check-out date at hotel are both on 16.03.2025."
+    },
+    {
+      "field_name": "Ende der Reise Uhrzeit",
+      "value": "19:45",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Arrival time for return flight is provided."
+    },
+    {
+      "field_name": "Dienstgeschäfte in: Beginn (Tag)",
+      "value": "14.03.2025",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Conference dates start on 14.03.2025."
+    },
+    {
+      "field_name": "Dienstgeschäfte in: Ende (Tag)",
+      "value": "16.03.2025",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Conference dates end on 16.03.2025."
+    },
+    {
+      "field_name": "Hinreise (ggf. Transit)",
+      "value": "Stuttgart (STR) → Berlin Brandenburg (BER) Flug EWX 4471",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Outbound flight details are provided."
+    },
+    {
+      "field_name": "Rückreise (ggf. Transit)",
+      "value": "Berlin Brandenburg (BER) → Stuttgart (STR) Flug EWX 4488",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Return flight details are provided."
+    },
+    {
+      "field_name": "Unentgeltliche Verpflegung (mit Datumsangabe) - Frühstück mal, Mittagessen mal, Abendessen mal",
+      "value": "Frühstück: 2 mal (14.03.2025, 15.03.2025)",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.8,
+      "reasoning": "Breakfast (Buffet) is included for 2 nights, but specific dates are not explicitly mentioned. Assumed to be during the stay."
+    },
+    {
+      "field_name": "Unentgeltliche Übernachtung - mal, vom ... bis ... von Seite bez. bei Verwandten/Bekannten",
+      "value": "2 mal, vom 14.03.2025 bis 16.03.2025, Hotelseite",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Hotel invoice specifies 2 nights of stay."
+    },
+    {
+      "field_name": "Flugzeug",
+      "value": "checked",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Air travel is confirmed by flight booking details."
+    },
+    {
+      "field_name": "Hotel",
+      "value": "checked",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Hotel stay is confirmed by hotel invoice."
+    },
+    {
+      "field_name": "Teilnahmegebühren",
+      "value": "EUR 810.00",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Total paid for conference registration is provided."
+    },
+    {
+      "field_name": "Betrag/Währung",
+      "value": "EUR 810.00 (Teilnahmegebühren), EUR 192.50 (Flug), EUR 256.50 (Hotel), EUR 8.50 (Parking)",
+      "source_document": "receipt_0.pdf, receipt_1.pdf, receipt_2.pdf, receipt_3.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Total amounts for different expenses are provided in respective documents."
+    },
+    {
+      "field_name": "Bereitschaft von der Dienststelle bezahlt",
+      "value": "EUR 810.00 (Teilnahmegebühren), EUR 192.50 (Flug), EUR 256.50 (Hotel), EUR 8.50 (Parking)",
+      "source_document": "receipt_0.pdf, receipt_1.pdf, receipt_2.pdf, receipt_3.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Total amounts for different expenses are paid as per receipts."
+    },
+    {
+      "field_name": "Dienststelle (€)",
+      "value": "EUR 810.00 (Teilnahmegebühren), EUR 192.50 (Flug), EUR 256.50 (Hotel), EUR 8.50 (Parking)",
+      "source_document": "receipt_0.pdf, receipt_1.pdf, receipt_2.pdf, receipt_3.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Total amounts for different expenses are likely paid by the department."
+    },
+    {
+      "field_name": "Name, Vorname (Personal Erklärung)",
+      "value": "Hofmann, Dr. Maximilian",
+      "source_document": "receipt_0.pdf, receipt_1.pdf, receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Name of attendee/passenger/guest is consistently mentioned."
+    },
+    {
+      "field_name": "Nutzung Flugzeug",
+      "value": "checked",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Air travel is confirmed by flight booking details."
+    },
+    {
+      "field_name": "Weiterer Bemerkungen",
+      "value": "Conference registration includes workshop and dinner. Hotel includes breakfast and parking.",
+      "source_document": "receipt_0.pdf, receipt_1.pdf, receipt_2.pdf, receipt_3.pdf",
+      "bounding_box": null,
+      "confidence": 0.8,
+      "reasoning": "Additional context about included services is provided."
+    },
+    {
+      "field_name": "Anlagen: Dienstreisegenehmigung, Fahrkarten, Quittungen, etc.",
+      "value": "checked",
+      "source_document": "receipt_0.pdf, receipt_1.pdf, receipt_2.pdf, receipt_3.pdf",
+      "bounding_box": null,
+      "confidence": 0.9,
+      "reasoning": "Receipts and invoices are provided as attachments."
+    }
+  ],
+  "errors": null
+}

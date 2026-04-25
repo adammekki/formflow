@@ -1,0 +1,349 @@
+client_name: uni-hamburg
+fields:
+- data_type: text
+  description: Surname or last name of the traveler
+  field_name: Name
+  required: true
+  semantic_name: Last Name
+- data_type: text
+  description: First name of the traveler
+  field_name: Vorname
+  required: true
+  semantic_name: First Name
+- data_type: text
+  description: Employee identification number
+  field_name: Personalnummer
+  required: true
+  semantic_name: Employee ID
+- data_type: text
+  description: Faculty or department of the traveler
+  field_name: Fakultät
+  required: false
+  semantic_name: Faculty/Department
+- data_type: text
+  description: Workplace or office of the traveler
+  field_name: Dienststelle
+  required: false
+  semantic_name: Workplace
+- data_type: email
+  description: Email address for official correspondence
+  field_name: E-Mail-Adresse
+  required: false
+  semantic_name: Email Address
+- data_type: phone
+  description: Contact phone number
+  field_name: Telefonnummer
+  required: false
+  semantic_name: Phone Number
+- data_type: text
+  description: Private address of the traveler
+  field_name: Anschrift privat
+  required: false
+  semantic_name: Private Address
+- data_type: text
+  description: Marital status (only required for domestic trips lasting more than
+    14 days)
+  field_name: Familienstand
+  required: false
+  semantic_name: Marital Status
+- data_type: text
+  description: Cost center or PSP element for reimbursement
+  field_name: Kostenstelle
+  required: true
+  semantic_name: Cost Center
+- data_type: text
+  description: IBAN for reimbursement bank account
+  field_name: IBAN
+  required: true
+  semantic_name: IBAN Account Number
+- data_type: text
+  description: BIC/SWIFT code for reimbursement bank account
+  field_name: BIC
+  required: true
+  semantic_name: BIC/SWIFT Code
+- data_type: checkbox
+  description: Option to select departure from home or workplace
+  field_name: Reiseantritt
+  required: true
+  semantic_name: Departure Location
+- data_type: date
+  description: Date of departure
+  field_name: Datum_RA
+  required: true
+  semantic_name: Departure Date
+- data_type: time
+  description: Time of departure
+  field_name: Uhrzeit_RA
+  required: false
+  semantic_name: Departure Time
+- data_type: text
+  description: Destination of the trip
+  field_name: Reiseziel_RA
+  required: true
+  semantic_name: Destination
+- data_type: text
+  description: Mode of transportation for departure
+  field_name: Verkehrsmittel_RA
+  required: true
+  semantic_name: Mode of Departure Transport
+- data_type: date
+  description: Date of the first official activity at the destination
+  field_name: Datum_B
+  required: true
+  semantic_name: Start Date of Business Activities
+- data_type: time
+  description: Time of the first official activity at the destination
+  field_name: Uhrzeit_B
+  required: false
+  semantic_name: Start Time of Business Activities
+- data_type: date
+  description: Date of the last official activity at the destination
+  field_name: Datum_E
+  required: true
+  semantic_name: End Date of Business Activities
+- data_type: time
+  description: Time of the last official activity at the destination
+  field_name: Uhrzeit_E
+  required: false
+  semantic_name: End Time of Business Activities
+- data_type: checkbox
+  description: Option to select return to home or workplace
+  field_name: Rückkehr
+  required: true
+  semantic_name: Return Location
+- data_type: date
+  description: Date of return
+  field_name: Datum_R2
+  required: true
+  semantic_name: Return Date
+- data_type: time
+  description: Time of return
+  field_name: Uhrzeit_R2
+  required: false
+  semantic_name: Return Time
+- data_type: text
+  description: Mode of transportation for return
+  field_name: R_Verkehrsmittel
+  required: true
+  semantic_name: Mode of Return Transport
+- data_type: checkbox
+  description: Was the business trip combined with a private trip?
+  field_name: Reise
+  required: false
+  semantic_name: Combined with Private Trip
+- data_type: date
+  description: Start date of private trip if combined
+  field_name: Datum_pR
+  required: false
+  semantic_name: Private Trip Start Date
+- data_type: time
+  description: Start time of private trip if combined
+  field_name: Uhrzeit_pR
+  required: false
+  semantic_name: Private Trip Start Time
+- data_type: text
+  description: Location of private trip start if combined
+  field_name: Ort_pR
+  required: false
+  semantic_name: Private Trip Start Location
+- data_type: date
+  description: End date of private trip if combined
+  field_name: Datum_pR 2
+  required: false
+  semantic_name: Private Trip End Date
+- data_type: time
+  description: End time of private trip if combined
+  field_name: Uhrzeit_pR 2
+  required: false
+  semantic_name: Private Trip End Time
+- data_type: text
+  description: Location of private trip end if combined
+  field_name: Ort_pR 2
+  required: false
+  semantic_name: Private Trip End Location
+- data_type: checkbox
+  description: Indicates if meals were provided for free during the trip
+  field_name: Verpflegung u
+  required: false
+  semantic_name: Free Meals Provided
+- data_type: number
+  description: Number of days breakfast was provided for free
+  field_name: Frühstück
+  required: false
+  semantic_name: Days Breakfast Provided
+- data_type: number
+  description: Number of days lunch was provided for free
+  field_name: Mittagessen
+  required: false
+  semantic_name: Days Lunch Provided
+- data_type: number
+  description: Number of days dinner was provided for free
+  field_name: Abendessen
+  required: false
+  semantic_name: Days Dinner Provided
+- data_type: checkbox
+  description: Indicates if overnight accommodation was provided for free
+  field_name: Übernachtung u
+  required: false
+  semantic_name: Free Overnight Accommodation
+- data_type: number
+  description: Number of days overnight accommodation was provided for free
+  field_name: Übernachtungen
+  required: false
+  semantic_name: Days Overnight Accommodation Provided
+- data_type: checkbox
+  description: Indicates if a conference program/agenda was attached
+  field_name: Programm
+  required: false
+  semantic_name: Conference Program Attached
+- data_type: text
+  description: Reason if conference program/agenda was not attached
+  field_name: Programm_Begründung
+  required: false
+  semantic_name: Reason for No Conference Program
+- data_type: checkbox
+  description: Indicates if daily allowance (Tagegeld) was claimed
+  field_name: Tagegeld
+  required: false
+  semantic_name: Daily Allowance Claimed
+- data_type: checkbox
+  description: Type of trip (domestic or international)
+  field_name: Kostenaufstellung
+  required: true
+  semantic_name: Type of Trip
+- data_type: checkbox
+  description: Indicates if the canteen was used during an international trip
+  field_name: Kantine2
+  required: false
+  semantic_name: Canteen Used
+- data_type: number
+  description: Number of days canteen was used
+  field_name: Kantine
+  required: false
+  semantic_name: Days Canteen Used
+- data_type: text
+  description: Explanation for any additional expenses
+  field_name: Erläuterung
+  required: false
+  semantic_name: Explanation
+- data_type: text
+  description: Signature of the traveler
+  field_name: Unterschrift
+  required: true
+  semantic_name: Signature
+- data_type: date
+  description: Date of signature
+  field_name: Unterschrift Datum
+  required: true
+  semantic_name: Signature Date
+- data_type: text
+  description: Location of signature
+  field_name: Unterschrift Ort
+  required: true
+  semantic_name: Signature Location
+form_language: German
+form_title: Reisekostenabrechnung (Travel Expense Report)
+pdf_fields_raw:
+- Name
+- Vorname
+- Personalnummer
+- Fakultät
+- E-Mail
+- Dienststelle
+- Telefon
+- Anschrift
+- Familienstand
+- Kostenstelle
+- IBAN
+- BIC
+- Reiseantritt
+- Uhrzeit_RA
+- Datum_RA
+- Reiseziel_RA
+- Verkehrsmittel_RA
+- Uhrzeit_B
+- Datum_B
+- Uhrzeit_E
+- Datum_E
+- Reiseende
+- Uhrzeit_R2
+- Datum_R2
+- R_Verkehrsmittel
+- Kostenaufstellung
+- Verpflegung u
+- Frühstück
+- Übernachtung u
+- Programm
+- Programm_Begründung
+- Tagegeld
+- ' Reise'
+- Uhrzeit_pR
+- Datum_pR
+- Ort_pR
+- Ort_pR 2
+- Uhrzeit_pR 2
+- Datum_pR 2
+- Mittagessen
+- Abendessen
+- Übernachtungen
+- Kantine2
+- Kantine
+- Übernachtungsgeld
+- Frühstück2
+- 2_Nächte
+- 2_Tage_Frühstück
+- 2_p_Übernachtungen_Tage
+- p_Übernachtungen
+- 3_Klasse
+- 2_Betrag
+- 3_Betrag
+- '4_1'
+- 4_Betrag1
+- '4_Klasse '
+- '4_2'
+- 4_Betrag2
+- '4_3'
+- 4_Betrag3
+- 4_km
+- 4_3_Genehmigung
+- '4_5'
+- '4_4'
+- 4_Betrag4
+- 4_Betrag5
+- 5_Betrag2
+- 5_Betrag1
+- '5_1'
+- '4_7'
+- '4_6'
+- 5_Betrag3
+- 5_3_sonstiges
+- 5_4_sonstiges
+- ZS_1
+- 5_Betrag4
+- A_Betrag2
+- A_Betrag1
+- A_2
+- A_1
+- ZS_2
+- ZS_3
+- '3_1'
+- '3_2'
+- '3_3'
+- DT-Ticket
+- wp title
+- wp number
+- activity
+- Erläuterung
+- Unterschrift
+- Unterschrift Datum
+- Unterschrift Ort
+- per_mail_versende 2
+- drucken 3
+- Zurücksetzen 3
+- Unterschrift 2
+- Unterschrift Datum 2
+- Unterschrift Name
+supported_languages:
+- en
+- de
+target_currency: EUR

@@ -1,0 +1,503 @@
+client_name: uni-heidelberg
+fields:
+- data_type: text
+  description: Optional reference number for processing the expense settlement
+  field_name: Bestellnummer/optional Bearbeitungshinweis
+  required: false
+  semantic_name: Order_Reference_Number_or_Processing_Notes
+- data_type: text
+  description: University department number for expense settlement
+  field_name: Dienststellen-Nummer
+  required: true
+  semantic_name: Department_Number
+- data_type: text
+  description: Short description of the department/service for expense settlement
+  field_name: Inst./(kurz) Bezeichnung bzw. Dienststelle/Dienst
+  required: true
+  semantic_name: Department_Short_Name_or_Service_Description
+- data_type: text
+  description: Barcode for processing
+  field_name: Barcode
+  required: false
+  semantic_name: Barcode
+- data_type: text
+  description: Full name of the traveler (Last Name)
+  field_name: Name
+  required: true
+  semantic_name: Last_Name
+- data_type: text
+  description: First name of the traveler
+  field_name: Vorname des/der Reisenden
+  required: true
+  semantic_name: First_Name
+- data_type: text
+  description: Street address of residence
+  field_name: Straße
+  required: true
+  semantic_name: Street_Address
+- data_type: text
+  description: Postal code of residence
+  field_name: PLZ
+  required: true
+  semantic_name: Postal_Code
+- data_type: text
+  description: City of residence
+  field_name: Wohnort
+  required: true
+  semantic_name: City
+- data_type: phone
+  description: Work phone number of the traveler
+  field_name: Tel. Nr. (dienstlich)
+  required: false
+  semantic_name: Work_Phone_Number
+- data_type: email
+  description: Email address of the traveler
+  field_name: E-Mail
+  required: false
+  semantic_name: Email_Address
+- data_type: text
+  description: Bank name
+  field_name: Bank
+  required: false
+  semantic_name: Bank_Name
+- data_type: text
+  description: Bank Identifier Code (BIC/SWIFT)
+  field_name: BIC
+  required: false
+  semantic_name: BIC_Code
+- data_type: text
+  description: International Bank Account Number (IBAN)
+  field_name: IBAN
+  required: false
+  semantic_name: IBAN_Number
+- data_type: date
+  description: Start date of the trip
+  field_name: Datum (Beginn der Reise)
+  required: true
+  semantic_name: Start_Date_of_Trip
+- data_type: text
+  description: Start time of the trip
+  field_name: Uhrzeit (Beginn der Reise)
+  required: false
+  semantic_name: Start_Time_of_Trip
+- data_type: date
+  description: End date of the trip
+  field_name: Datum (Ende der Reise)
+  required: true
+  semantic_name: End_Date_of_Trip
+- data_type: text
+  description: End time of the trip
+  field_name: Uhrzeit (Ende der Reise)
+  required: false
+  semantic_name: End_Time_of_Trip
+- data_type: text
+  description: Location of the trip start (Home/Office/Other)
+  field_name: Wohnung/Dienststelle/andere Stelle (Beginn)
+  required: true
+  semantic_name: Start_Location
+- data_type: text
+  description: Location of the trip end (Home/Office/Other)
+  field_name: Wohnung/Dienststelle/andere Stelle (Ende)
+  required: true
+  semantic_name: End_Location
+- data_type: checkbox
+  description: Check if daily return overview is provided
+  field_name: Bei täglicher Rückkehr bitte eine gesonderte Übersicht beifügen
+  required: false
+  semantic_name: Daily_Return_Overview_Provided
+- data_type: date
+  description: Start date of business trip (day)
+  field_name: 'Dienstgeschäfte in: Beginn (Tag)'
+  required: true
+  semantic_name: Business_Trip_Start_Date
+- data_type: text
+  description: Start time of business trip (hour)
+  field_name: 'Dienstgeschäfte in: Beginn (Uhr)'
+  required: false
+  semantic_name: Business_Trip_Start_Time
+- data_type: date
+  description: End date of business trip (day)
+  field_name: 'Dienstgeschäfte in: Ende (Tag)'
+  required: true
+  semantic_name: Business_Trip_End_Date
+- data_type: text
+  description: End time of business trip (hour)
+  field_name: 'Dienstgeschäfte in: Ende (Uhr)'
+  required: false
+  semantic_name: Business_Trip_End_Time
+- data_type: text
+  description: Border crossing details (day/time/location)
+  field_name: Grenzort bzw. von/nach, Tag/ Uhrzeit
+  required: false
+  semantic_name: Border_Crossing_Details
+- data_type: text
+  description: Border crossing details for return (day/time/location)
+  field_name: Grenzort bzw. von/nach (Rückkehr), Tag/ Uhrzeit
+  required: false
+  semantic_name: Return_Border_Crossing_Details
+- data_type: text
+  description: Transit details (if applicable)
+  field_name: Hinreise (ggf. Transit)
+  required: false
+  semantic_name: Transit_Details
+- data_type: text
+  description: Return transit details (if applicable)
+  field_name: Rückreise (ggf. Transit)
+  required: false
+  semantic_name: Return_Transit_Details
+- data_type: checkbox
+  description: Indicates if meal vouchers were used
+  field_name: Unentgeltliche Verpflegung
+  required: false
+  semantic_name: Meal_Vouchers_Used
+- data_type: text
+  description: Number of meal vouchers used (breakfast/lunch/dinner)
+  field_name: Frühstück _mal, Mittagessen _mal, Abendessen _mal
+  required: false
+  semantic_name: Meal_Vouchers_Count
+- data_type: checkbox
+  description: Indicates if overnight accommodation was used
+  field_name: Unentgeltliche Übernachtung
+  required: false
+  semantic_name: Free_Overnight_Accommodation
+- data_type: text
+  description: Dates of overnight accommodation (from/to)
+  field_name: mal, vom _ bis _
+  required: false
+  semantic_name: Overnight_Accommodation_Dates
+- data_type: checkbox
+  description: Indicates if accommodation was at relatives/friends
+  field_name: von Seite bez. bei Verwandten/Bekannten
+  required: false
+  semantic_name: Accommodation_at_Relatives_Friends
+- data_type: checkbox
+  description: Travel by train
+  field_name: Bahn
+  required: false
+  semantic_name: Train
+- data_type: checkbox
+  description: Travel by public transport (ÖPNV)
+  field_name: ÖPNV
+  required: false
+  semantic_name: Public_Transport
+- data_type: checkbox
+  description: Rental car
+  field_name: Mietwagen
+  required: false
+  semantic_name: Rental_Car
+- data_type: text
+  description: Number of kilometers driven with rental car
+  field_name: km abgerechnet (Mietwagen)
+  required: false
+  semantic_name: Miles_Driven_Rental_Car
+- data_type: checkbox
+  description: Fuel costs
+  field_name: Kraftstoff
+  required: false
+  semantic_name: Fuel_Costs
+- data_type: checkbox
+  description: Air travel
+  field_name: Flugzeug
+  required: false
+  semantic_name: Air_Travel
+- data_type: text
+  description: Hotel costs
+  field_name: Hotel
+  required: false
+  semantic_name: Hotel_Costs
+- data_type: text
+  description: Taxi costs
+  field_name: Taxi
+  required: false
+  semantic_name: Taxi_Costs
+- data_type: text
+  description: Other expenses
+  field_name: Sonstiges
+  required: false
+  semantic_name: Miscellaneous_Expenses
+- data_type: currency
+  description: Total amount for travel expenses
+  field_name: Gesamtbetrag
+  required: true
+  semantic_name: Total_Expense_Amount
+- data_type: checkbox
+  description: Use of private car for business purposes
+  field_name: einen Dienstwagen
+  required: false
+  semantic_name: Use_of_Company_Vehicle
+- data_type: checkbox
+  description: Use of private vehicle for business purposes
+  field_name: einen Mietwagen (privat genutzt)
+  required: false
+  semantic_name: Use_of_Private_Vehicle
+- data_type: checkbox
+  description: Use of central administration vehicle for business purposes
+  field_name: mein von der Zentralen Verwaltung für den Dienstreiseverkehr zugelassenes
+    Kfz
+  required: false
+  semantic_name: Use_of_Central_Administration_Vehicle
+- data_type: text
+  description: Kilometers driven with central administration vehicle
+  field_name: km abgerechnet (Zentrales Fahrzeug)
+  required: false
+  semantic_name: Miles_Driven_Central_Vehicle
+- data_type: checkbox
+  description: Use of vehicle for private purposes
+  field_name: Wegstreckenschadens für
+  required: false
+  semantic_name: Vehicle_Usage_for_Private_Purposes
+- data_type: text
+  description: Kilometers driven for private purposes
+  field_name: gefahrene km (Wegstreckenschadens)
+  required: false
+  semantic_name: Miles_Driven_Private_Purposes
+- data_type: checkbox
+  description: Use of train/bus/tram
+  field_name: Kfz (Fahrrad/E-Bike/Pedelec)
+  required: false
+  semantic_name: Train_Bus_Tram
+- data_type: text
+  description: Kilometers driven by bike/e-bike/pedelec
+  field_name: gefahrene km (Fahrrad/E-Bike/Pedelec)
+  required: false
+  semantic_name: Miles_Driven_Bike_E_Bike_Pedelec
+- data_type: checkbox
+  description: Use of public transport ticket (e.g., Monatskarte)
+  field_name: Monatskarte
+  required: false
+  semantic_name: Monthly_Pass
+- data_type: checkbox
+  description: Use of handycards/bahncard
+  field_name: Handycards/ BahnCard 100, BahnCard 25/50
+  required: false
+  semantic_name: Handycard_BahnCard
+- data_type: checkbox
+  description: Additional personal explanation required
+  field_name: Persönliche Erklärung
+  required: false
+  semantic_name: Personal_Explanation_Required
+- data_type: checkbox
+  description: Bonus miles from flights
+  field_name: Bonus-Miles sind aus diesem Flugdaten entstanden
+  required: false
+  semantic_name: Bonus_Miles_Earned
+- data_type: text
+  description: Amount of bonus miles
+  field_name: ja (in Höhe von)
+  required: false
+  semantic_name: Bonus_Miles_Amount
+- data_type: date
+  description: Date of declaration
+  field_name: Datum
+  required: true
+  semantic_name: Declaration_Date
+- data_type: text
+  description: Signature of the traveler
+  field_name: Unterschrift des/der Reisenden
+  required: true
+  semantic_name: Traveler_Signature
+- data_type: currency
+  description: Amount paid by the department
+  field_name: Bereits von der Dienststelle bezahlt
+  required: false
+  semantic_name: Amount_Paid_by_Department
+- data_type: currency
+  description: Amount to be reimbursed by the department
+  field_name: 'Erhaltene Erstattung/Zuwendung von dritter Seite gezahlt an: Reisenden
+    (€)'
+  required: false
+  semantic_name: Amount_Reimbursed_by_Third_Party_to_Traveler
+- data_type: currency
+  description: Amount to be reimbursed by the department
+  field_name: Dienststelle (€)
+  required: false
+  semantic_name: Amount_Reimbursed_by_Department
+- data_type: text
+  description: Explanation for travel expenses
+  field_name: Persönliche Erklärung und/oder Begründungen zu meiner Reisekostenabrechnung
+  required: false
+  semantic_name: Personal_Explanation_or_Justification_for_Travel_Expenses
+- data_type: text
+  description: Reason for using taxi
+  field_name: Nutzung Taxi weil
+  required: false
+  semantic_name: Reason_for_Taxi_Usage
+- data_type: text
+  description: Reason for renting a car
+  field_name: Nutzung Mietwagen weil
+  required: false
+  semantic_name: Reason_for_Rental_Car_Usage
+- data_type: text
+  description: Reason for using airplane
+  field_name: Nutzung Flugzeug weil
+  required: false
+  semantic_name: Reason_for_Airplane_Usage
+- data_type: checkbox
+  description: No public transport available
+  field_name: keine öffentlichen Personennahverkehrsmittel verkehren
+  required: false
+  semantic_name: No_Public_Transport_Available
+- data_type: checkbox
+  description: No connection to public transport
+  field_name: keine Anbindung an den öffentlichen Personennahverkehr besteht
+  required: false
+  semantic_name: No_Connection_to_Public_Transport
+- data_type: checkbox
+  description: Heavy luggage to transport
+  field_name: schweres Gepäck zu transportieren war
+  required: false
+  semantic_name: Heavy_Luggage_Transport
+- data_type: checkbox
+  description: Cost-effective due to shared ride with colleagues
+  field_name: 'günstiger, weil Kollegen gemeinsam fuhren - Name(n):'
+  required: false
+  semantic_name: Cost_Effective_Shared_Ride
+- data_type: checkbox
+  description: To keep to schedule due to train delay
+  field_name: um den Termin zu halten, weil die Bahn mit Verspätung am Zielort eintraf
+  required: false
+  semantic_name: Train_Delay_Schedule
+- data_type: checkbox
+  description: To keep to schedule due to flight delay
+  field_name: um den Termin zu halten, weil das Flugzeug mit Verspätung am Zielort
+    eintraf
+  required: false
+  semantic_name: Flight_Delay_Schedule
+- data_type: checkbox
+  description: Cheaper flight class
+  field_name: der Flug billiger war als eine Bahnfahrt 2. Klasse
+  required: false
+  semantic_name: Cheaper_Flight_Class
+- data_type: checkbox
+  description: Flight saves time
+  field_name: der Flug eine erhebliche Zeitersparnis bot
+  required: false
+  semantic_name: Flight_Saves_Time
+- data_type: checkbox
+  description: Flight avoids overnight stay
+  field_name: der Flug eine Übernachtung vermeidet
+  required: false
+  semantic_name: Flight_Avoids_Overnight_Stay
+- data_type: checkbox
+  description: No cheaper hotel available nearby
+  field_name: Es gab in der Nähe des Veranstaltungsortes kein günstigeres Hotel
+  required: false
+  semantic_name: No_Cheaper_Hotel_Available_Nearby
+- data_type: checkbox
+  description: Cheaper hotel further away would incur additional travel costs
+  field_name: Ein günstigeres Hotel in weiterer Entfernung hätte weitere Anfahrtskosten
+    erfordert
+  required: false
+  semantic_name: Cheaper_Hotel_Further_Away_Incurs_Costs
+- data_type: checkbox
+  description: Day hotel was offered at special conditions
+  field_name: Das Tagungshotel wurde vom Veranstalter zu Sonderkonditionen angeboten
+  required: false
+  semantic_name: Day_Hotel_Offered_at_Special_Conditions
+- data_type: text
+  description: Additional costs for telephone usage
+  field_name: Telefon in Höhe von
+  required: false
+  semantic_name: Additional_Telephone_Costs
+- data_type: text
+  description: Additional costs for internet usage
+  field_name: Internet in Höhe von
+  required: false
+  semantic_name: Additional_Internet_Costs
+- data_type: date
+  description: Private stay before the trip
+  field_name: Vorher von bis
+  required: false
+  semantic_name: Private_Stay_Before_Trip
+- data_type: date
+  description: Private stay after the trip
+  field_name: Nachher von bis
+  required: false
+  semantic_name: Private_Stay_After_Trip
+- data_type: text
+  description: Additional remarks
+  field_name: Weitere Bemerkungen
+  required: false
+  semantic_name: Additional_Remarks
+- data_type: checkbox
+  description: Attachments list
+  field_name: Anlagen
+  required: false
+  semantic_name: Attachments
+- data_type: text
+  description: Travel authorization
+  field_name: Dienstreisegenehmigung
+  required: false
+  semantic_name: Travel_Authorization
+- data_type: text
+  description: Train tickets (Deutsche Bahn)
+  field_name: Fahrkarten Deutsche Bahn
+  required: false
+  semantic_name: Train_Tickets_Deutsche_Bahn
+- data_type: text
+  description: Public transport tickets
+  field_name: Fahrkarten ÖPNV
+  required: false
+  semantic_name: Public_Transport_Tickets
+- data_type: text
+  description: Parking fees receipt
+  field_name: Quittung Parkgebühren
+  required: false
+  semantic_name: Parking_Fees_Receipt
+- data_type: text
+  description: Airport parking receipt
+  field_name: Bordkarten Flugzeug
+  required: false
+  semantic_name: Airport_Parking_Receipt
+- data_type: text
+  description: Flight receipt
+  field_name: Flugrechnung
+  required: false
+  semantic_name: Flight_Receipt
+- data_type: text
+  description: Flight plan for long-haul flights
+  field_name: Flugplan bei grenzüberschreitenden Flügen
+  required: false
+  semantic_name: Flight_Plan_Long_Haul
+- data_type: text
+  description: Comparison offer for flight
+  field_name: Vergleichsangebot zum Flug (GBT)
+  required: false
+  semantic_name: Flight_Comparison_Offer
+- data_type: text
+  description: Hotel invoice
+  field_name: Hotelrechnung
+  required: false
+  semantic_name: Hotel_Invoice
+- data_type: text
+  description: Receipt for participant fees
+  field_name: Quittung über Teilnehmergebühr
+  required: false
+  semantic_name: Participant_Fees_Receipt
+- data_type: text
+  description: Copy of the conference program
+  field_name: Kopie des Tagungsprogramms
+  required: false
+  semantic_name: Conference_Program_Copy
+- data_type: text
+  description: Bank statement extract
+  field_name: Kontoauszug
+  required: false
+  semantic_name: Bank_Statement_Extract
+- data_type: text
+  description: Credit card statement
+  field_name: Kreditkartenabrechnung
+  required: false
+  semantic_name: Credit_Card_Statement
+- data_type: text
+  description: Comparison offer for accommodation
+  field_name: Vergleichsangebot zur Unterkunft
+  required: false
+  semantic_name: Accommodation_Comparison_Offer
+form_language: German
+form_title: Reisekosten-Abrechnung (Travel Expense Settlement)
+pdf_fields_raw: []
+supported_languages:
+- en
+- de
+target_currency: EUR

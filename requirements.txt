@@ -1,0 +1,27 @@
+# FormFlow - Python Dependencies
+
+# Web framework
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+python-multipart>=0.0.6
+
+# PDF handling
+fillpdf>=0.7.0
+pdf2image>=1.16.0
+Pillow>=10.0.0
+
+# Configuration
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+PyYAML>=6.0.0
+
+# HTTP client for model API calls
+httpx>=0.26.0
+aiofiles>=23.2.1
+
+# Data handling
+python-dotenv>=1.0.0
+
+# Development
+pytest>=7.4.0
+pytest-asyncio>=0.23.0

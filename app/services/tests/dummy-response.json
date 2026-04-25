@@ -1,0 +1,312 @@
+{
+  "status": "success",
+  "session_id": "c00783a3-19f5-4521-9913-78fc56363a7d",
+  "message": "Data extracted successfully. Please verify before filling form.",
+  "extracted_fields": [
+    {
+      "field_name": "conference_name",
+      "value": "International Conference on Machine Learning (ICML) 2025",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The document explicitly states 'ICML 2025 - International Conference on Machine Learning' at the top."
+    },
+    {
+      "field_name": "conference_location",
+      "value": "Berlin, Germany",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The location is clearly mentioned as 'Berlin, Germany' in the header."
+    },
+    {
+      "field_name": "conference_dates",
+      "value": "14-16 March 2025",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The conference dates are listed as '14.03.2025 - 16.03.2025'."
+    },
+    {
+      "field_name": "attendee_name",
+      "value": "Dr. Maximilian Hofmann",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The attendee's name is listed as 'Dr. Maximilian Hofmann' under 'Attendee'."
+    },
+    {
+      "field_name": "attendee_affiliation",
+      "value": "Universitat Ulm, Institute for Artificial Intelligence",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The affiliation is provided under 'Affiliation' in the receipt."
+    },
+    {
+      "field_name": "registration_type",
+      "value": "Academic / Full Conference Pass",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The registration type is explicitly mentioned as 'Academic / Full Conference Pass'."
+    },
+    {
+      "field_name": "registration_id",
+      "value": "ICML25-REG-007423",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The registration ID is listed as 'Registration ID: ICML25-REG-007423'."
+    },
+    {
+      "field_name": "conference_registration_fee",
+      "value": "EUR 650.00",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The fee for 'Full Conference Registration' is listed as 'EUR 650.00'."
+    },
+    {
+      "field_name": "workshop_fee",
+      "value": "EUR 80.00",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The fee for 'Workshop (Deep Learning Day)' is listed as 'EUR 80.00'."
+    },
+    {
+      "field_name": "conference_dinner_fee",
+      "value": "EUR 55.00",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The fee for 'Conference Dinner (1 ticket)' is listed as 'EUR 55.00'."
+    },
+    {
+      "field_name": "proceedings_fee",
+      "value": "EUR 25.00",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The fee for 'Proceedings (USB + Digital)' is listed as 'EUR 25.00'."
+    },
+    {
+      "field_name": "total_conference_fee",
+      "value": "EUR 810.00",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The total paid amount is listed as 'TOTAL PAID: EUR 810.00'."
+    },
+    {
+      "field_name": "payment_method_conference",
+      "value": "Bank transfer (IBAN: DE89 3704 0044 0532 0130 00)",
+      "source_document": "receipt_0.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The payment method is mentioned as 'Bank transfer' with the IBAN."
+    },
+    {
+      "field_name": "outbound_flight_departure_date",
+      "value": "14.03.2025",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The outbound flight departure date is listed as '14.03.2025'."
+    },
+    {
+      "field_name": "outbound_flight_departure_time",
+      "value": "07:45",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The outbound flight departure time is listed as '07:45'."
+    },
+    {
+      "field_name": "outbound_flight_arrival_time",
+      "value": "09:10",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The outbound flight arrival time is listed as '09:10'."
+    },
+    {
+      "field_name": "outbound_flight_route",
+      "value": "Stuttgart (STR) -> Berlin Brandenburg (BER)",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The route is listed as 'Stuttgart (STR) -> Berlin Brandenburg (BER)' under 'Route'."
+    },
+    {
+      "field_name": "outbound_flight_number",
+      "value": "EWX 4471",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The flight number is listed as 'EWX 4471'."
+    },
+    {
+      "field_name": "return_flight_departure_date",
+      "value": "16.03.2025",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The return flight departure date is listed as '16.03.2025'."
+    },
+    {
+      "field_name": "return_flight_departure_time",
+      "value": "18:20",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The return flight departure time is listed as '18:20'."
+    },
+    {
+      "field_name": "return_flight_arrival_time",
+      "value": "19:45",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The return flight arrival time is listed as '19:45'."
+    },
+    {
+      "field_name": "return_flight_route",
+      "value": "Berlin Brandenburg (BER) -> Stuttgart (STR)",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The route is listed as 'Berlin Brandenburg (BER) -> Stuttgart (STR)' under 'Route'."
+    },
+    {
+      "field_name": "return_flight_number",
+      "value": "EWX 4488",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The flight number is listed as 'EWX 4488'."
+    },
+    {
+      "field_name": "total_flight_cost",
+      "value": "EUR 192.50",
+      "source_document": "receipt_1.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The total charged amount for flights is listed as 'TOTAL CHARGED: EUR 192.50'."
+    },
+    {
+      "field_name": "hotel_name",
+      "value": "Hotel Metropol Berlin",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The hotel name is clearly mentioned at the top of the invoice."
+    },
+    {
+      "field_name": "check_in_date",
+      "value": "14.03.2025",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The check-in date is listed as 'Check-in: 14.03.2025'."
+    },
+    {
+      "field_name": "check_out_date",
+      "value": "16.03.2025",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The check-out date is listed as 'Check-out: 16.03.2025'."
+    },
+    {
+      "field_name": "stay_duration",
+      "value": "2 nights",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The duration of stay is listed as 'Aufenthaltsdauer: 2 Nächte / 2 nights'."
+    },
+    {
+      "field_name": "room_type",
+      "value": "Single Room (Einzelzimmer)",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The room type is listed as '302 (Einzelzimmer / Single Room)'."
+    },
+    {
+      "field_name": "nightly_room_rate",
+      "value": "EUR 89.00",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The nightly rate for the single room is listed as 'EUR 89.00' under 'Einzelpreis'."
+    },
+    {
+      "field_name": "total_hotel_cost",
+      "value": "EUR 256.50",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The total amount (Gesamtbetrag) is listed as 'EUR 256.50'."
+    },
+    {
+      "field_name": "parking_fee",
+      "value": "EUR 8.50",
+      "source_document": "receipt_3.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The parking fee is listed as 'BETRAG / AMOUNT: EUR 8.50'."
+    },
+    {
+      "field_name": "parking_duration",
+      "value": "3h 15min",
+      "source_document": "receipt_3.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The duration of parking is listed as 'Dauer / Duration: 3h 15min'."
+    },
+    {
+      "field_name": "parking_entry_time",
+      "value": "14.03.2025 06:30",
+      "source_document": "receipt_3.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The entry time is listed as 'Einfahrt / Entry: 14.03.2025 06:30'."
+    },
+    {
+      "field_name": "parking_exit_time",
+      "value": "14.03.2025 09:45",
+      "source_document": "receipt_3.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The exit time is listed as 'Ausfahrt / Exit: 14.03.2025 09:45'."
+    },
+    {
+      "field_name": "car_plate_number",
+      "value": "UL-MH 482",
+      "source_document": "receipt_3.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The car plate number is listed as 'Kennzeichen / Plate: UL-MH 482'."
+    },
+    {
+      "field_name": "payment_method_hotel",
+      "value": "Credit Card (Visa ending 4821)",
+      "source_document": "receipt_2.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The payment method is mentioned as 'Zahlungsart: Kreditkarte (Visa ****4821)'."
+    },
+    {
+      "field_name": "payment_method_parking",
+      "value": "EC-Karte (EC Card)",
+      "source_document": "receipt_3.pdf",
+      "bounding_box": null,
+      "confidence": 1,
+      "reasoning": "The payment method is mentioned as 'Zahlungsart: EC-Karte'."
+    }
+  ],
+  "errors": null
+}

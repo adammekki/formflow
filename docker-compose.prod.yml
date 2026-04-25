@@ -1,0 +1,74 @@
+# FormFlow - Production Docker Compose Configuration
+# Optimized for Linux deployment with vLLM
+
+services:
+  # ===========================
+  # FastAPI Application
+  # ===========================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: formflow-app
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount configs and templates (read-only in production)
+      - ./configs:/app/configs:ro
+      - ./templates:/app/templates:ro
+      # Mount feedback for training data collection
+      - ./feedback:/app/feedback
+    environment:
+      - INFERENCE_PROVIDER=vllm
+      - INFERENCE_BASE_URL=http://vllm:8000/v1
+      - INFERENCE_MODEL=Qwen/Qwen2-VL-7B-Instruct
+      - LOG_LEVEL=INFO
+    depends_on:
+      vllm:
+        condition: service_healthy
+    networks:
+      - formflow-network
+    restart: unless-stopped
+
+  # ===========================
+  # vLLM - Production LLM Server
+  # ===========================
+  vllm:
+    image: vllm/vllm-openai:latest
+    container_name: formflow-vllm
+    ports:
+      - "8001:8000"
+    volumes:
+      # Persist downloaded models
+      - vllm-models:/root/.cache/huggingface
+    environment:
+      - HUGGING_FACE_HUB_TOKEN=${HUGGING_FACE_HUB_TOKEN}
+    command: >
+      --model Qwen/Qwen2-VL-7B-Instruct
+      --trust-remote-code
+      --max-model-len 4096
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    networks:
+      - formflow-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+networks:
+  formflow-network:
+    driver: bridge
+
+volumes:
+  vllm-models:
+    name: formflow-vllm-models

@@ -1,0 +1,412 @@
+client_name: uni-ulm
+fields:
+- data_type: text
+  description: Full name of the applicant (last name and first name)
+  field_name: AntragstellerIn_Name_Vorname
+  required: true
+  semantic_name: Applicant Name
+- data_type: text
+  description: Personal number of the applicant (without AG)
+  field_name: Personalnummer
+  required: true
+  semantic_name: Personal Number
+- data_type: text
+  description: Private address of the applicant (street, postal code, city)
+  field_name: \000P\000r\000i\000v\000a\000t\000e\000_\000A\000n\000s\000c\000h\000r\000i\000f\000t\000_\000S\000t\000r\000a\000ß\000e\000_\000P\000L\000Z\000_\000W\000o\000h\000n\000o\000r\000t
+  required: false
+  semantic_name: Private Address
+- data_type: text
+  description: Employment place or institution of the applicant
+  field_name: \000B\000e\000s\000c\000h\000ä\000f\000t\000i\000g\000u\000n\000g\000s\000s\000t\000e\000l\000l\000e\000I\000n\000s\000t\000i\000t\000u\000t\000_\000e\000i\000n\000s\000c\000h\000l\000_\000A\000n\000s\000c\000h\000r\000i\000f\000t
+  required: false
+  semantic_name: Employment Institution
+- data_type: email
+  description: Official email address of the applicant
+  field_name: E-Mail-dienstlich
+  required: true
+  semantic_name: Official Email
+- data_type: phone
+  description: Official phone number of the applicant
+  field_name: Telefon_dienstlich
+  required: false
+  semantic_name: Official Phone Number
+- data_type: text
+  description: Bank name where the reimbursement should be transferred
+  field_name: Kreditinstitut
+  required: true
+  semantic_name: Bank Name
+- data_type: text
+  description: BIC code of the bank account
+  field_name: BIC
+  required: true
+  semantic_name: BIC Code
+- data_type: text
+  description: IBAN of the bank account
+  field_name: BAN
+  required: true
+  semantic_name: IBAN
+- data_type: text
+  description: Account holder's name
+  field_name: KontoinhaberIn
+  required: true
+  semantic_name: Account Holder
+- data_type: checkbox
+  description: 'Type of trip: Business trip, Commencement of employment, Official
+    duty'
+  field_name: Reiseart
+  required: true
+  semantic_name: Type of Trip
+- data_type: text
+  description: Date(s) when the trip was approved (from/to)
+  field_name: Genehmigung_der_Dienstreise_am__von
+  required: true
+  semantic_name: Approval Date of Trip
+- data_type: text
+  description: Budget program or project code
+  field_name: Haushaltsprogramm
+  required: false
+  semantic_name: Budget Program
+- data_type: text
+  description: Financial department responsible for the reimbursement
+  field_name: Finanzstelle
+  required: false
+  semantic_name: Financial Department
+- data_type: text
+  description: Third-party project code if applicable
+  field_name: Drittmittelprojekt
+  required: false
+  semantic_name: Third-Party Project
+- data_type: currency
+  description: Advance amount received from the university's cashier
+  field_name: Abschlag
+  required: false
+  semantic_name: Advance Amount
+- data_type: checkbox
+  description: Whether daily allowance is being claimed
+  field_name: Tagegeld
+  required: false
+  semantic_name: Daily Allowance Claim
+- data_type: text
+  description: Starting location of the trip
+  field_name: Hinreise_von
+  required: true
+  semantic_name: Departure Location
+- data_type: text
+  description: Destination of the trip
+  field_name: Hinreise_nach
+  required: true
+  semantic_name: Destination
+- data_type: date
+  description: Date when the trip begins
+  field_name: Hinreise_Beginn
+  required: true
+  semantic_name: Start Date of Trip
+- data_type: time
+  description: Time when the trip begins
+  field_name: Hinreise_Uhrzeit
+  required: false
+  semantic_name: Start Time of Trip
+- data_type: text
+  description: Location of departure (home, workplace, etc.)
+  field_name: Hinreise_Ort
+  required: true
+  semantic_name: Departure Location Type
+- data_type: text
+  description: Type of transportation used for the trip (train, plane, car, etc.)
+  field_name: Verkehrsmittel Hinreise
+  required: true
+  semantic_name: Mode of Transportation (Outbound)
+- data_type: checkbox
+  description: Check if 1st class, 2nd class, or other class was used for train travel
+  field_name: Bahn_1u2_Klasse_Hinreise
+  required: false
+  semantic_name: Train Class (Outbound)
+- data_type: checkbox
+  description: Check if airplane was used for the trip
+  field_name: Flugzeug_Hinreise
+  required: false
+  semantic_name: Airplane (Outbound)
+- data_type: text
+  description: Other means of transportation used for the trip
+  field_name: Sonstiges_Hinreise
+  required: false
+  semantic_name: Other Transport (Outbound)
+- data_type: checkbox
+  description: Check if private car was used for the trip
+  field_name: Eigenes_KfZ_Hinreise
+  required: false
+  semantic_name: Private Vehicle (Outbound)
+- data_type: checkbox
+  description: Check if carpooling was used for the trip
+  field_name: Fahrgemeinschaft Hinreise
+  required: false
+  semantic_name: Carpool (Outbound)
+- data_type: checkbox
+  description: Check if the trip involved a significant distance (>50%)
+  field_name: \000S\000c\000h\000w\000e\000r\000b\000e\000s\000c\000h\000ä\000d\000i\000g\000t\000_\000H\000i\000n\000r\000e\000i\000s\000e
+  required: false
+  semantic_name: Long Distance (Outbound)
+- data_type: text
+  description: Costs for overnight stay including breakfast
+  field_name: \000p\000l\000a\000n\000m\000ä\000ß\000i\000g\000e\000_\000A\000b\000f\000a\000h\000r\000t
+  required: false
+  semantic_name: Overnight Stay with Breakfast
+- data_type: currency
+  description: Costs for overnight stay (excluding breakfast)
+  field_name: \000B\000u\000s\000_\000B\000a\000h\000n\000_\000S\000t\000r\000a\000ß\000e\000n\000b\000a\000h\000n\000_\000H\000i\000n\000r\000e\000i\000s\000e
+  required: false
+  semantic_name: Overnight Stay Costs
+- data_type: text
+  description: Arrival time at the destination
+  field_name: Aufenthalt_am_Geschäftsort_am_Uhrzeit
+  required: false
+  semantic_name: Arrival Time at Destination
+- data_type: date
+  description: Start date of the business at the destination
+  field_name: Begin des Dienstgeschäfts am Uhrzeit
+  required: true
+  semantic_name: Start Date of Business Activities
+- data_type: date
+  description: End date of the business at the destination
+  field_name: Ende des Dienstgeschäfts am Uhrzeit
+  required: true
+  semantic_name: End Date of Business Activities
+- data_type: currency
+  description: Costs for meals (breakfast, lunch, dinner) during the trip
+  field_name: Kosten am Geschäftsort
+  required: false
+  semantic_name: Meal Costs at Destination
+- data_type: currency
+  description: Transportation costs at the destination
+  field_name: \000G\000e\000s\000c\000h\000ä\000f\000t\000s\000k\000o\000r\000t\000_\000K\000o\000s\000t\000e\000n\000_\000U\000n\000t\000e\000r\000k\000u\000n\000f
+  required: false
+  semantic_name: Transportation Costs at Destination
+- data_type: text
+  description: Return location of the trip
+  field_name: Rückreise_von
+  required: true
+  semantic_name: Return Location
+- data_type: text
+  description: Return destination of the trip
+  field_name: Rückreise_nach
+  required: true
+  semantic_name: Return Destination
+- data_type: date
+  description: Date when the trip returns
+  field_name: Rückreise_Beginn
+  required: true
+  semantic_name: Return Date
+- data_type: time
+  description: Time when the trip returns
+  field_name: Rückreise_Uhrzeit
+  required: false
+  semantic_name: Return Time
+- data_type: text
+  description: Location of return (home, workplace, etc.)
+  field_name: Rückreise_Ort
+  required: true
+  semantic_name: Return Location Type
+- data_type: text
+  description: Type of transportation used for the return trip
+  field_name: Verkehrsmittel Rückreise
+  required: true
+  semantic_name: Mode of Transportation (Return)
+- data_type: checkbox
+  description: Check if 1st class, 2nd class, or other class was used for train travel
+    on return
+  field_name: \000B\000a\000h\000n\000_\0001\000u\0002\000_\000K\000l\000a\000s\000s\000e\000_\000R\000ü\000c\000k\000r\000e\000i\000s\000e
+  required: false
+  semantic_name: Train Class (Return)
+- data_type: checkbox
+  description: Check if airplane was used for the return trip
+  field_name: \000F\000l\000u\000g\000z\000e\000u\000g\000_\000R\000ü\000c\000k\000r\000e\000i\000s\000e
+  required: false
+  semantic_name: Airplane (Return)
+- data_type: text
+  description: Other means of transportation used for the return trip
+  field_name: \000S\000o\000n\000s\000t\000i\000g\000e\000s\000_\000R\000ü\000c\000k\000r\000e\000i\000s\000e
+  required: false
+  semantic_name: Other Transport (Return)
+- data_type: currency
+  description: Costs for transportation on the return trip
+  field_name: \000F\000a\000h\000r\000g\000e\000m\000e\000i\000n\000s\000c\000h\000a\000f\000t\000_\000R\000ü\000c\000k\000r\000e\000i\000s\000e
+  required: false
+  semantic_name: Return Trip Transportation Costs
+- data_type: text
+  description: Date and time of crossing the border on the outbound trip
+  field_name: Grenzübertritt_Landungen_Hinreise_Datum
+  required: false
+  semantic_name: Border Crossing Date (Outbound)
+- data_type: time
+  description: Time of crossing the border on the outbound trip
+  field_name: Grenzübertritt_Landungen_Hinreise_Uhrzeit
+  required: false
+  semantic_name: Border Crossing Time (Outbound)
+- data_type: text
+  description: Date and time of crossing the border on the return trip
+  field_name: \000A\000u\000s\000l\000a\000n\000d\000_\000R\000ü\000c\000k\000r\000e\000i\000s\000e_Datum
+  required: false
+  semantic_name: Border Crossing Date (Return)
+- data_type: time
+  description: Time of crossing the border on the return trip
+  field_name: \000A\000u\000s\000l\000a\000n\000d\000_\000R\000ü\000c\000k\000r\000e\000i\000s\000e_Uhrzeit
+  required: false
+  semantic_name: Border Crossing Time (Return)
+- data_type: checkbox
+  description: Check if meals were provided free of charge during the trip
+  field_name: Unentgeltliche_V
+  required: false
+  semantic_name: Free Meals Provided
+- data_type: checkbox
+  description: Check if accommodation was provided free of charge
+  field_name: Unentgeltliche Unterkunft
+  required: false
+  semantic_name: Free Accommodation
+- data_type: text
+  description: Number of times free accommodation was provided
+  field_name: Unterkunft_(xMal)
+  required: false
+  semantic_name: Number of Free Accommodation Nights
+- data_type: date
+  description: Dates for free accommodation provided
+  field_name: Untentgeltiche Unterkunft von . auf
+  required: false
+  semantic_name: Dates of Free Accommodation
+- data_type: currency
+  description: Participation fee paid by the participant
+  field_name: Teilnehmergebühr
+  required: false
+  semantic_name: Participation Fee
+- data_type: text
+  description: Reason for the trip
+  field_name: \000B\000e\000g\000r\000ü\000n\000d\000u\000n\000g
+  required: false
+  semantic_name: Reason for the Trip
+- data_type: checkbox
+  description: Confirmation of correctness of all entries
+  field_name: \000i\000n\000 \000T\000e\000i\000l\000n\000e\000h\000m\000e\000r\000g\000e\000b\000ü\000h\000r\000
+    \000e\000n\000t\000h\000a\000l\000t\000e\000n\000 \000j\000a\000 \000u\000n\000d\000
+    \000z\000w\000a\000r
+  required: true
+  semantic_name: Confirmation of Correctness
+form_language: German
+form_title: Reisekostenabrechnung (Travel Expense Report)
+pdf_fields_raw:
+- AntragstellerIn_Name_Vorname
+- Personalnummer
+- \000P\000r\000i\000v\000a\000t\000e\000_\000A\000n\000s\000c\000h\000r\000i\000f\000t\000_\000S\000t\000r\000a\000ß\000e\000_\000P\000L\000Z\000_\000W\000o\000h\000n\000o\000r\000t
+- \000B\000e\000s\000c\000h\000ä\000f\000t\000i\000g\000u\000n\000g\000s\000s\000t\000e\000l\000l\000e\000I\000n\000s\000t\000i\000t\000u\000t\000_\000e\000i\000n\000s\000c\000h\000l\000_\000A\000n\000s\000c\000h\000r\000i\000f\000t
+- E-Mail-dienstlich
+- Telefon_dienstlich
+- Kreditinstitut
+- BIC
+- BAN
+- KontoinhaberIn
+- Reiseart
+- Genehmigung_der_Dienstreise_am__von
+- Haushaltsprogramm
+- Finanzstelle
+- Drittmittelprojekt
+- Abschlag
+- Tagegeld
+- Hinreise_von
+- Hinreise_nach
+- Hinreise_Beginn
+- Hinreise_Uhrzeit
+- Hinreise_Ort
+- Hinreise_Urlaubsort
+- Verkehrsmittel Hinreise
+- Klasse Hinreise
+- \000p\000l\000a\000n\000m\000ä\000ß\000i\000g\000e\000_\000A\000b\000f\000a\000h\000r\000t
+- Bahn_1u2_Klasse_Hinreise
+- Flugzeug_Hinreise
+- Sonstiges_Hinreise
+- Eigenes_KfZ_Hinreise
+- Fahrgemeinschaft Hinreise
+- \000S\000c\000h\000w\000e\000r\000b\000e\000s\000c\000h\000ä\000d\000i\000g\000t\000
+  \000H\000i\000n\000r\000e\000i\000s\000e
+- \000B\000u\000s\000_\000B\000a\000h\000n\000_\000S\000t\000r\000a\000ß\000e\000n\000b\000a\000h\000n\000_\000H\000i\000n\000r\000e\000i\000s\000e
+- Dienstwagen_Hinreise
+- \000G\000e\000s\000c\000h\000ä\000f\000t\000s\000o\000r\000t\000_\000a\000m
+- \000G\000e\000s\000c\000h\000ä\000f\000t\000s\000o\000r\000t\000_\000U\000h\000r\000z\000e\000i\000t
+- \000D\000i\000e\000n\000s\000t\000g\000e\000s\000c\000h\000ä\000f\000t\000_\000a\000m
+- \000D\000i\000e\000n\000s\000t\000g\000e\000s\000c\000h\000ä\000f\000t\000_\000u\000m
+- \000E\000n\000d\000e\000_\000D\000i\000e\000n\000s\000t\000g\000e\000s\000c\000h\000ä\000f\000t\000_\000a\000m
+- \000E\000n\000d\000e\000_\000D\000i\000e\000n\000s\000t\000g\000e\000s\000c\000h\000ä\000f\000t\000_\000u\000m
+- \000G\000e\000s\000c\000h\000ä\000f\000t\000s\000k\000o\000r\000t\000_\000K\000o\000s\000t\000e\000n\000_\000U\000n\000t\000e\000r\000k\000u\000n\000f\000t
+- \000G\000e\000s\000c\000h\000ä\000f\000t\000s\000k\000o\000r\000t\000_\000s\000o\000n\000s\000t\000i\000g\000e\000_\000K\000o\000s\000t\000e\000n
+- \000B\000u\000s\000 \000G\000e\000s\000c\000h\000ä\000f\000t\000s\000o\000r\000t
+- \000G\000e\000s\000c\000h\000ä\000f\000t\000s\000k\000o\000r\000t\000_\000F\000a\000h\000r\000t\000k\000o\000s\000t\000e\000n\000_\000B\000a\000h\000n\000_\000S\000t\000r\000a\000ß\000e\000n\000b\000a\000h\000n
+- \000S\000o\000n\000s\000t\000i\000g\000e\000 \000G\000e\000s\000c\000h\000ä\000f\000t\000s\000o\000r\000t
+- \000G\000e\000s\000c\000h\000ä\000f\000t\000s\000k\000o\000r\000t\000_\000F\000a\000h\000r\000t\000k\000o\000s\000t\000e\000n\000_\000s\000o\000n\000s\000t\000i\000g\000e\000s
+- \000E\000i\000g\000e\000n\000e\000s\000_\000K\000f\000Z\000_\000G\000e\000s\000c\000h\000ä\000f\000t\000s\000o\000r\000t
+- \000W\000e\000g\000s\000t\000r\000e\000c\000k\000e\000n\000_\000G\000e\000s\000c\000h\000ä\000f\000t\000s\000o\000r\000t\000_\000e\000i\000g\000\\\000.\000_\000K\000f\000Z
+- Eigenes_KfZ
+- \000S\000c\000h\000w\000e\000r\000b\000e\000s\000c\000h\000ä\000d\000i\000g\000t\000
+  \000G\000e\000s\000c\000h\000ä\000f\000t\000s\000o\000r\000t
+- \000W\000e\000g\000s\000t\000r\000e\000c\000k\000e\000n\000_\000G\000e\000s\000c\000h\000ä\000f\000t\000s\000o\000r\000t\000_\000D\000i\000e\000n\000s\000t\000w\000a\000g\000e\000n
+- \000R\000ü\000c\000k\000r\000e\000i\000s\000e\000 \000v\000o\000n
+- \000R\000ü\000c\000k\000r\000e\000i\000s\000e\000 \000n\000a\000c\000h
+- \000R\000ü\000c\000k\000r\000e\000i\000s\000e\000 \000a\000m
+- \000R\000ü\000c\000k\000r\000e\000i\000s\000e\000 \000U\000h\000r\000z\000e\000i\000t
+- \000R\000ü\000c\000k\000r\000e\000i\000s\000e\000 \000E\000n\000d\000e\000 \000a\000m
+- \000R\000ü\000c\000k\000r\000e\000i\000s\000e\000 \000E\000n\000d\000e\000 \000U\000h\000r\000z\000e\000i\000t
+- Rückreise_Ort
+- Verkehrsmittel Rückreise
+- Klasse Rückreise
+- Benutztes Verkehrsmittel Planm. Abfahrt
+- \000B\000a\000h\000n\000_\0001\000u\0002\000_\000K\000l\000a\000s\000s\000e\000_\000R\000ü\000c\000k\000r\000e\000i\000s\000e
+- \000F\000l\000u\000g\000z\000e\000u\000g\000_\000R\000ü\000c\000k\000r\000e\000i\000s\000e
+- \000S\000o\000n\000s\000t\000i\000g\000e\000s\000_\000R\000ü\000c\000k\000r\000e\000i\000s\000e
+- \000F\000a\000h\000r\000g\000e\000m\000e\000i\000n\000s\000c\000h\000a\000f\000t\000_\000R\000ü\000c\000k\000r\000e\000i\000s\000e
+- \000E\000i\000g\000e\000n\000e\000s\000_\000K\000f\000Z\000_\000R\000ü\000c\000k\000r\000e\000i\000s\000e
+- \000S\000c\000h\000w\000e\000r\000b\000e\000s\000c\000h\000ä\000d\000i\000g\000t\000
+  \000R\000ü\000c\000k\000r\000e\000i\000s\000e
+- \000B\000u\000s\000_\000B\000a\000h\000n\000_\000S\000t\000r\000a\000ß\000e\000n\000b\000a\000h\000n\000_\000R\000ü\000c\000k\000r\000e\000i\000s\000e
+- \000D\000i\000e\000n\000s\000t\000w\000a\000g\000e\000n\000_\000R\000ü\000c\000k\000r\000e\000i\000s\000e
+- Ausland Hinreise
+- Ausland Datum Hinreise
+- Ausland Uhrzeit Hinreise
+- \000A\000u\000s\000l\000a\000n\000d\000 \000R\000ü\000k\000r\000e\000i\000s\000e
+- \000A\000u\000s\000l\000a\000n\000d\000 \000D\000a\000t\000u\000m\000 \000R\000ü\000c\000k\000r\000e\000i\000s\000e
+- \000A\000u\000s\000l\000a\000n\000d\000 \000U\000h\000r\000z\000e\000i\000t\000
+  \000R\000ü\000c\000k\000r\000e\000i\000s\000e
+- Unentgeltliche V
+- F0
+- M0
+- A0
+- Zuwendungen am 0
+- F1
+- M1
+- A1
+- Zuwendungen am 1
+- F2
+- M2
+- A2
+- Zuwendungen am 2
+- F3
+- M3
+- A3
+- Zuwendungen am 3
+- F4
+- M4
+- A4
+- Zuwendungen am 4
+- Zuwendungen Unterkunft
+- Untentgeltiche Unterkunft und zwar
+- Unterkunft \(xMal\)
+- Untentgeltiche Unterkunft von . auf
+- Teilnehmergebühr
+- \000i\000n\000 \000T\000e\000i\000l\000n\000e\000h\000m\000e\000r\000g\000e\000b\000ü\000h\000r\000
+  \000e\000n\000t\000h\000a\000l\000t\000e\000n\000 \000j\000a\000 \000u\000n\000d\000
+  \000z\000w\000a\000r
+- \000T\000e\000i\000l\000n\000e\000h\000m\000e\000r\000g\000e\000b\000ü\000h\000r\000
+  \000\(\000x\000M\000a\000l\000\)
+- \000i\000n\000 \000T\000e\000i\000l\000n\000e\000h\000m\000e\000r\000g\000e\000b\000ü\000h\000r\000
+  \000e\000n\000t\000h\000a\000l\000t\000e\000n\000 \000v\000o\000n\000 \000.\000
+  \000a\000u\000f
+- \000B\000e\000g\000r\000ü\000n\000d\000u\000n\000g
+supported_languages:
+- en
+- de
+target_currency: EUR

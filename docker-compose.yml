@@ -1,0 +1,77 @@
+# FormFlow - Docker Compose Configuration
+# Development setup with FastAPI + Ollama container
+
+services:
+  # ===========================
+  # FastAPI Application
+  # ===========================
+  app:
+    build:
+      context: .
+      target: development
+    container_name: formflow-app
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount source code for hot reload
+      - ./app:/app/app
+      # Mount configs and templates
+      - ./configs:/app/configs
+      - ./templates:/app/templates
+      # Mount feedback for training data collection
+      - ./feedback:/app/feedback
+    environment:
+      - PYTHONUNBUFFERED=1
+      - APP_ENV=development
+      - INFERENCE_PROVIDER=ollama
+      # Use host.docker.internal to connect to Ollama running on metal (native macOS)
+      - INFERENCE_BASE_URL=http://host.docker.internal:11434
+      - INFERENCE_MODEL=ministral-3:8b
+      - INFERENCE_TIMEOUT=1200
+    # No dependency on containerized ollama - using native metal instead
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - formflow-network
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # ===========================
+  # Ollama - Local LLM Server
+  # DISABLED: Using native macOS Ollama with Metal instead
+  # Uncomment this section to use containerized Ollama (slower, no GPU)
+  # ===========================
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: formflow-ollama
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama-models:/root/.ollama
+  #   environment:
+  #     - OLLAMA_DEBUG=1
+  #     - OLLAMA_NUM_CTX=16384
+  #     - OLLAMA_NUM_PARALLEL=1
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '8'
+  #         memory: 14G
+  #       reservations:
+  #         memory: 10G
+  #   healthcheck:
+  #     test: ["CMD", "ollama", "list"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 120s
+  #   networks:
+  #     - formflow-network
+  #   restart: unless-stopped
+
+networks:
+  formflow-network:
+    driver: bridge
+
+volumes:
+  ollama-models:
+    name: formflow-ollama-models

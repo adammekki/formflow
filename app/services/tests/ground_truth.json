@@ -1,0 +1,87 @@
+{
+  "trip": {
+    "traveler_name": "Dr. Maximilian Hofmann",
+    "institution": "Universitat Ulm",
+    "department": "Institute for Artificial Intelligence",
+    "email": "m.hofmann@uni-ulm.de",
+    "purpose": "Conference attendance – ICML 2025",
+    "departure_date": "14.03.2025",
+    "return_date": "16.03.2025",
+    "destination_city": "Berlin",
+    "destination_country": "Deutschland"
+  },
+  "transport": {
+    "outbound_type": "Flugzeug",
+    "outbound_flight_number": "EWX 4471",
+    "outbound_departure": "Stuttgart (STR)",
+    "outbound_arrival": "Berlin Brandenburg (BER)",
+    "outbound_date": "14.03.2025",
+    "outbound_time": "07:45",
+    "return_flight_number": "EWX 4488",
+    "return_departure": "Berlin Brandenburg (BER)",
+    "return_arrival": "Stuttgart (STR)",
+    "return_date": "16.03.2025",
+    "return_time": "18:20",
+    "flight_total_eur": 192.5,
+    "parking_location": "Parkhaus City, Bahnhofstrasse 5, Berlin",
+    "parking_date": "14.03.2025",
+    "parking_duration_hours": 3.25,
+    "parking_total_eur": 8.5
+  },
+  "accommodation": {
+    "hotel_name": "Hotel Metropol Berlin",
+    "hotel_address": "Friedrichstrasse 112, 10117 Berlin",
+    "check_in": "14.03.2025",
+    "check_out": "16.03.2025",
+    "nights": 2,
+    "room_type": "Einzelzimmer",
+    "hotel_total_eur": 256.5,
+    "invoice_number": "HMB-2025-003847"
+  },
+  "conference": {
+    "conference_name": "ICML 2025",
+    "registration_id": "ICML25-REG-007423",
+    "registration_type": "Academic / Full Conference Pass",
+    "conference_start": "14.03.2025",
+    "conference_end": "16.03.2025",
+    "venue": "Berlin Congress Center, Alexanderplatz 7, 10178 Berlin",
+    "registration_fee_eur": 650.0,
+    "total_conference_fees_eur": 810.0
+  },
+  "totals": {
+    "flight_eur": 192.5,
+    "hotel_eur": 256.5,
+    "conference_registration_eur": 810.0,
+    "parking_eur": 8.5,
+    "grand_total_eur": 1267.5
+  },
+  "source_map": {
+    "traveler_name": [
+      "flight_confirmation.pdf",
+      "hotel_invoice.pdf",
+      "conference_receipt.pdf"
+    ],
+    "departure_date": [
+      "flight_confirmation.pdf"
+    ],
+    "return_date": [
+      "flight_confirmation.pdf",
+      "hotel_invoice.pdf"
+    ],
+    "flight_total_eur": [
+      "flight_confirmation.pdf"
+    ],
+    "hotel_total_eur": [
+      "hotel_invoice.pdf"
+    ],
+    "conference_name": [
+      "conference_receipt.pdf"
+    ],
+    "total_conference_fees_eur": [
+      "conference_receipt.pdf"
+    ],
+    "parking_total_eur": [
+      "parking_receipt.pdf"
+    ]
+  }
+}
