@@ -14,12 +14,14 @@ export default function App() {
   const [sessionId, setSessionId] = useState("");
   const [fields, setFields] = useState<ExtractedField[]>([]);
   const [downloadUrl, setDownloadUrl] = useState("");
+  const [unmatchedFields, setUnmatchedFields] = useState<string[]>([]);
 
   function restart() {
     setClientName("");
     setSessionId("");
     setFields([]);
     setDownloadUrl("");
+    setUnmatchedFields([]);
     setStep("start");
   }
 
@@ -54,14 +56,21 @@ export default function App() {
         <ReviewStep
           sessionId={sessionId}
           fields={fields}
-          onDone={(url) => {
+          onDone={(url, unmatched) => {
             setDownloadUrl(url);
+            setUnmatchedFields(unmatched);
             setStep("done");
           }}
         />
       )}
 
-      {step === "done" && <DoneStep downloadUrl={downloadUrl} onRestart={restart} />}
+      {step === "done" && (
+        <DoneStep
+          downloadUrl={downloadUrl}
+          unmatchedFields={unmatchedFields}
+          onRestart={restart}
+        />
+      )}
     </main>
   );
 }

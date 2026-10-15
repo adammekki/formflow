@@ -3,6 +3,10 @@ FROM node:20-alpine AS build
 
 WORKDIR /app
 
+# The backend URL is compiled into the bundle, so it is a build-time value.
+ARG VITE_API_BASE=http://localhost:8000
+ENV VITE_API_BASE=$VITE_API_BASE
+
 COPY package*.json ./
 RUN npm ci
 

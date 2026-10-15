@@ -1,4 +1,5 @@
 client_name: uni-heidelberg
+institution_name: Universität Heidelberg
 fields:
 - data_type: text
   description: Optional reference number for processing the expense settlement

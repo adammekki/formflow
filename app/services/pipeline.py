@@ -11,12 +11,16 @@ Sequential pipeline orchestrator that coordinates:
 
 import os
 import json
+import logging
 import yaml
 from datetime import datetime
 from typing import Any
 from app.config import settings
 from app.services.inference import InferenceClient
 from app.services.pdf_form import fill_form_fields
+
+
+logger = logging.getLogger(__name__)
 
 
 class FormFillingPipeline:
@@ -280,7 +284,16 @@ IMPORTANT: Look at ALL documents together to build a complete picture. Informati
         
         # Filter out fields with no value and no confidence
         fields = [f for f in fields if f["value"] or f["confidence"] > 0]
-        
+
+        # Carry the form's plain-language label, so the review screen can show
+        # "Personnel number" instead of the raw PDF name "UHD".
+        semantic_names = {
+            field.get("field_name"): field.get("semantic_name")
+            for field in self.config.get("fields", [])
+        }
+        for field in fields:
+            field["semantic_name"] = semantic_names.get(field["field_name"])
+
         return fields
     
     async def fill_form(
@@ -337,11 +350,22 @@ IMPORTANT: Look at ALL documents together to build a complete picture. Informati
         output_path = os.path.join(output_dir, output_filename)
         
         # Fill the PDF
-        fill_form_fields(template_path, output_path, form_data)
-        
+        unmatched_fields = fill_form_fields(template_path, output_path, form_data)
+
+        # A config whose field names no longer exist on the form would otherwise
+        # produce a silently blank result.
+        if unmatched_fields:
+            logger.warning(
+                "Filled %s: %d value(s) matched no field on the form: %s",
+                self.client_name,
+                len(unmatched_fields),
+                ", ".join(unmatched_fields[:10]),
+            )
+
         return {
             "filename": output_filename,
             "path": output_path,
+            "unmatched_fields": unmatched_fields,
         }
     
     async def store_feedback(

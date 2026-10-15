@@ -19,7 +19,7 @@ type Row = {
 type Props = {
   sessionId: string;
   fields: ExtractedField[];
-  onDone: (downloadUrl: string) => void;
+  onDone: (downloadUrl: string, unmatchedFields: string[]) => void;
 };
 
 function initialRows(fields: ExtractedField[]): Row[] {
@@ -54,7 +54,7 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
         verifiedFields,
         keptFields: kept.map((row) => row.field_name),
       });
-      onDone(result.download_url);
+      onDone(result.download_url, result.unmatched_fields ?? []);
     } catch (e) {
       setError(messageOf(e));
     } finally {

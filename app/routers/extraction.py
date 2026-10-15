@@ -65,6 +65,7 @@ class FillResponse(BaseModel):
     status: str
     message: str
     download_url: Optional[str] = None
+    unmatched_fields: Optional[list[str]] = None
     errors: Optional[list[str]] = None
 
 
@@ -185,6 +186,7 @@ async def submit_verified_data(request: VerifyRequest):
             status="success",
             message="Form filled successfully",
             download_url=f"/api/extract/download/{session['client_name']}/{result['filename']}",
+            unmatched_fields=result.get("unmatched_fields") or None,
         )
         
     except Exception as e:

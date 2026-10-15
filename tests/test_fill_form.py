@@ -39,3 +39,14 @@ async def test_unknown_kept_field_is_ignored(pipeline, tmp_path, monkeypatch):
     _stage_template(tmp_path)
     result = await pipeline.fill_form(EXTRACTED, {}, kept_fields=["Name", "Nonexistent"])
     assert read_form_fields(result["path"])["Name"] == "Original"
+
+
+@pytest.mark.asyncio
+async def test_unmatched_fields_are_reported(pipeline, tmp_path, monkeypatch):
+    """A field name the form does not have must be reported, not dropped."""
+    monkeypatch.setattr("app.config.settings.templates_dir", str(tmp_path))
+    _stage_template(tmp_path)
+    result = await pipeline.fill_form(
+        EXTRACTED + [{"field_name": "NotOnThisForm", "value": "x"}], {}
+    )
+    assert result["unmatched_fields"] == ["NotOnThisForm"]

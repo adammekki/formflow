@@ -73,6 +73,10 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        # Baked into the bundle at build time; set VITE_API_BASE to the
+        # backend's public URL before building for a real deployment.
+        VITE_API_BASE: ${VITE_API_BASE:-http://localhost:8000}
     container_name: formflow-frontend
     ports:
       - "3000:80"

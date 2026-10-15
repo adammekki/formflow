@@ -22,6 +22,7 @@ export type Proposal = {
 
 export type ExtractedField = {
   field_name: string;
+  semantic_name?: string | null;
   value: string;
   source_document: string;
   confidence: number;
@@ -121,7 +122,7 @@ export async function verify(input: {
   sessionId: string;
   verifiedFields: Record<string, string>;
   keptFields: string[];
-}): Promise<{ download_url: string }> {
+}): Promise<{ download_url: string; unmatched_fields?: string[] }> {
   // The wire body is snake_case; the camelCase names are only for callers.
   return request("/api/extract/verify", {
     method: "POST",

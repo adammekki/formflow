@@ -1,4 +1,5 @@
 client_name: uni-ulm
+institution_name: Universität Ulm
 fields:
 - data_type: text
   description: Full name of the applicant (last name and first name)

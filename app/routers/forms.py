@@ -7,6 +7,7 @@ Endpoints for form template management and schema discovery.
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from pydantic import BaseModel
 from typing import Optional
+import logging
 import os
 import shutil
 import uuid
@@ -16,6 +17,8 @@ from app.config import settings
 from app.services.naming import slugify
 from app.services.schema_discovery import FormSchemaDiscoveryAgent
 
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/forms")
 
@@ -77,15 +80,19 @@ async def discover_form_schema(
         agent = FormSchemaDiscoveryAgent()
         schema = await agent.discover_schema(contents)
 
-        # Check for errors in the schema response
+        # Check for errors in the schema response. The raw model output stays in
+        # the logs: the traveller only ever sees a sentence they can act on.
         if "error" in schema:
             error_msg = schema.get("error", "Unknown error")
-            raw_response = schema.get("raw_response", "")
-            # Include raw_fields even on error for debugging
+            logger.warning(
+                "Schema discovery failed: %s | raw response: %s",
+                error_msg,
+                str(schema.get("raw_response", ""))[:500],
+            )
             return FormSchemaResponse(
                 status="error",
                 raw_fields=schema.get("pdf_fields_raw", {}),
-                error=f"{error_msg}. Raw response: {raw_response[:500] if raw_response else 'empty'}"
+                error=error_msg,
             )
 
         # Normalize fields in schema before staging
@@ -211,6 +218,14 @@ async def list_clients():
 
             config_file = os.path.join(client_path, "config.yaml")
             configured = os.path.exists(config_file)
+
+            # Without a form template there is nothing to fill, so the
+            # university cannot be used and must not be offered.
+            template_file = os.path.join(
+                settings.templates_dir, entry, "form_template.pdf"
+            )
+            if not os.path.exists(template_file):
+                continue
 
             # The traveller picks their university by its display name. Configs
             # written before that field existed fall back to the directory name.

@@ -3,9 +3,10 @@ import { apiUrl } from "../api";
 type Props = {
   downloadUrl: string;
   onRestart: () => void;
+  unmatchedFields?: string[];
 };
 
-export default function DoneStep({ downloadUrl, onRestart }: Props) {
+export default function DoneStep({ downloadUrl, onRestart, unmatchedFields = [] }: Props) {
   return (
     <section className="space-y-6">
       <div>
@@ -21,6 +22,12 @@ export default function DoneStep({ downloadUrl, onRestart }: Props) {
       >
         Download the filled form
       </a>
+
+      {unmatchedFields.length > 0 && (
+        <p role="alert" className="rounded-md bg-amber-50 p-3 text-sm text-amber-800">
+          Some of your values could not be placed on the form — please check it before sending.
+        </p>
+      )}
 
       <p className="text-sm text-slate-500">
         Something wrong with the result? Send it back to whoever handles your expenses.

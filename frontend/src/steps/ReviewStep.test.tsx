@@ -65,3 +65,33 @@ it("leaves an unticked field out of the payload", async () => {
     keptFields: [],
   });
 });
+
+it("shows the plain-language name when the form gives one", () => {
+  const fields: api.ExtractedField[] = [
+    {
+      field_name: "UHD",
+      semantic_name: "Personnel number",
+      value: "12345",
+      source_document: "Rechnung.pdf",
+      confidence: 0.9,
+      reasoning: null,
+    },
+  ];
+
+  render(<ReviewStep sessionId="s1" fields={fields} onDone={vi.fn()} />);
+
+  expect(screen.getByLabelText("Personnel number")).toBeTruthy();
+});
+
+it("passes values the form could not place through to the caller", async () => {
+  vi.mocked(api.verify).mockResolvedValue({
+    download_url: "/api/extract/download/x/y.pdf",
+    unmatched_fields: ["UHD"],
+  });
+  const onDone = vi.fn();
+
+  render(<ReviewStep sessionId="s1" fields={FIELDS} onDone={onDone} />);
+  await userEvent.click(screen.getByRole("button", { name: /finish|fill/i }));
+
+  expect(onDone).toHaveBeenCalledWith("/api/extract/download/x/y.pdf", ["UHD"]);
+});

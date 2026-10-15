@@ -1,4 +1,5 @@
 client_name: uni-hamburg
+institution_name: Universität Hamburg
 fields:
 - data_type: text
   description: Surname or last name of the traveler

@@ -26,6 +26,28 @@ def test_non_fillable_pdf_is_rejected(monkeypatch, tmp_path):
     assert "field" in r.json()["error"].lower()
 
 
+def test_error_text_stays_readable_for_the_user(monkeypatch, tmp_path):
+    """A traveller must never be shown a raw model response."""
+    monkeypatch.setattr("app.config.settings.templates_dir", str(tmp_path))
+    monkeypatch.setattr("app.config.settings.configs_dir", str(tmp_path / "configs"))
+    import pymupdf
+
+    doc = pymupdf.open()
+    doc.new_page()
+    blank = str(tmp_path / "blank.pdf")
+    doc.save(blank)
+
+    with open(blank, "rb") as fh:
+        r = client.post(
+            "/api/forms/discover-schema",
+            files={"form_template": ("blank.pdf", fh, "application/pdf")},
+        )
+
+    error = r.json()["error"]
+    assert "Raw response" not in error
+    assert "{" not in error
+
+
 def test_staging_does_not_write_a_config(monkeypatch, tmp_path):
     monkeypatch.setattr("app.config.settings.templates_dir", str(tmp_path))
     monkeypatch.setattr("app.config.settings.configs_dir", str(tmp_path / "configs"))
