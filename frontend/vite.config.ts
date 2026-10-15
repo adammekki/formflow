@@ -8,5 +8,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: "./vitest.setup.ts",
+    // Call counts must not leak from one test into the next.
+    clearMocks: true,
   },
 });
