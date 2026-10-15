@@ -57,6 +57,7 @@ class VerifyRequest(BaseModel):
     """Request model for submitting verified/corrected data."""
     session_id: str
     verified_fields: dict[str, str]
+    kept_fields: Optional[list[str]] = None
 
 
 class FillResponse(BaseModel):
@@ -165,6 +166,7 @@ async def submit_verified_data(request: VerifyRequest):
         result = await pipeline.fill_form(
             extracted_data=session["extracted_data"],
             verified_data=request.verified_fields,
+            kept_fields=request.kept_fields,
         )
         
         # Store feedback for training (original vs corrected)

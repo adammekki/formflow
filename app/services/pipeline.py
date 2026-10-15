@@ -287,6 +287,7 @@ IMPORTANT: Look at ALL documents together to build a complete picture. Informati
         self,
         extracted_data: list[dict],
         verified_data: dict[str, str],
+        kept_fields: list[str] | None = None,
     ) -> dict[str, Any]:
         """
         Fill the PDF form with verified data.
@@ -294,6 +295,8 @@ IMPORTANT: Look at ALL documents together to build a complete picture. Informati
         Args:
             extracted_data: Original extracted field data
             verified_data: User-verified/corrected field values
+            kept_fields: When given, only these fields are filled. None keeps
+                the previous behaviour of filling every extracted field.
             
         Returns:
             Result with path to filled PDF
@@ -319,6 +322,11 @@ IMPORTANT: Look at ALL documents together to build a complete picture. Informati
         # Then, override with verified values
         for field_name, value in verified_data.items():
             form_data[field_name] = value
+        
+        # The traveller ticks the fields they need; anything unticked is dropped
+        if kept_fields is not None:
+            kept = set(kept_fields)
+            form_data = {name: value for name, value in form_data.items() if name in kept}
         
         # Generate output path
         output_dir = os.path.join(settings.templates_dir, self.client_name, "output")
