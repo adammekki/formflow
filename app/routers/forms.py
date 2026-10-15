@@ -199,19 +199,35 @@ async def confirm_schema(request: ConfirmSchemaRequest):
 
 @router.get("/clients")
 async def list_clients():
-    """List all configured clients."""
+    """List configured clients with the name to show the traveller."""
     clients = []
     configs_path = settings.configs_dir
     
     if os.path.exists(configs_path):
         for entry in os.listdir(configs_path):
             client_path = os.path.join(configs_path, entry)
-            if os.path.isdir(client_path):
-                config_file = os.path.join(client_path, "config.yaml")
-                clients.append({
-                    "name": entry,
-                    "configured": os.path.exists(config_file),
-                })
+            if not os.path.isdir(client_path):
+                continue
+
+            config_file = os.path.join(client_path, "config.yaml")
+            configured = os.path.exists(config_file)
+
+            # The traveller picks their university by its display name. Configs
+            # written before that field existed fall back to the directory name.
+            institution_name = entry
+            if configured:
+                try:
+                    with open(config_file, "r") as f:
+                        loaded = yaml.safe_load(f) or {}
+                    institution_name = loaded.get("institution_name") or entry
+                except Exception:
+                    pass
+
+            clients.append({
+                "name": entry,
+                "institution_name": institution_name,
+                "configured": configured,
+            })
     
     return {"clients": clients}
 
