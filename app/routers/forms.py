@@ -8,9 +8,12 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 from pydantic import BaseModel
 from typing import Optional
 import os
+import shutil
 import uuid
+import yaml
 
 from app.config import settings
+from app.services.naming import slugify
 from app.services.schema_discovery import FormSchemaDiscoveryAgent
 
 
@@ -108,8 +111,6 @@ async def discover_form_schema(
             "pdf_fields_raw": list(schema.get("pdf_fields_raw", {}).keys()),
         }
 
-        import yaml
-
         with open(os.path.join(staging_dir, "config.yaml"), "w") as f:
             yaml.dump(draft_config, f, default_flow_style=False, allow_unicode=True)
 
@@ -130,6 +131,71 @@ async def discover_form_schema(
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Schema discovery failed: {str(e)}")
+
+class ConfirmSchemaRequest(BaseModel):
+    """Confirmation of the agent's proposed institution name."""
+    proposal_id: str
+    institution_name: str
+
+
+@router.post("/confirm-schema")
+async def confirm_schema(request: ConfirmSchemaRequest):
+    """
+    Save a staged form under the name the traveller confirmed.
+
+    The agent proposes an institution name during discovery; this endpoint is
+    where the user's correction takes effect. The slugified name becomes the
+    client id used by the extraction endpoints.
+    """
+    institution_name = request.institution_name.strip()
+    slug = slugify(institution_name)
+
+    # Checked before the staging lookup so a blank name always reads as a name
+    # problem, whatever the proposal's state.
+    if not institution_name or not slug:
+        raise HTTPException(status_code=422, detail="Please provide the university's name")
+
+    staging_dir = os.path.join(settings.templates_dir, ".staging", request.proposal_id)
+    if not os.path.isdir(staging_dir):
+        raise HTTPException(
+            status_code=404,
+            detail="This form is no longer available. Please upload it again.",
+        )
+
+    config_dir = os.path.join(settings.configs_dir, slug)
+    template_dir = os.path.join(settings.templates_dir, slug)
+    if os.path.exists(config_dir) or os.path.exists(template_dir):
+        raise HTTPException(
+            status_code=409,
+            detail=f"{institution_name} is already set up. Please pick it from the list.",
+        )
+
+    draft_path = os.path.join(staging_dir, "config.yaml")
+    draft: dict = {}
+    if os.path.exists(draft_path):
+        with open(draft_path, "r") as f:
+            draft = yaml.safe_load(f) or {}
+    draft["client_name"] = slug
+    draft["institution_name"] = institution_name
+
+    os.makedirs(config_dir, exist_ok=True)
+    os.makedirs(template_dir, exist_ok=True)
+
+    with open(os.path.join(config_dir, "config.yaml"), "w") as f:
+        yaml.dump(draft, f, default_flow_style=False, allow_unicode=True)
+
+    shutil.move(
+        os.path.join(staging_dir, "form_template.pdf"),
+        os.path.join(template_dir, "form_template.pdf"),
+    )
+    shutil.rmtree(staging_dir, ignore_errors=True)
+
+    return {
+        "status": "success",
+        "client_name": slug,
+        "institution_name": institution_name,
+    }
+
 
 @router.get("/clients")
 async def list_clients():
