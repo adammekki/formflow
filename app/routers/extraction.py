@@ -14,6 +14,7 @@ import tempfile
 import shutil
 
 from app.config import settings
+from app.services.naming import safe_filename, unique_filename
 from app.services.pipeline import FormFillingPipeline
 
 
@@ -91,16 +92,20 @@ async def extract_from_receipts(
     
     errors = []
     saved_receipts = []
+    taken_names: set[str] = set()
     
     try:
-        # Save uploaded receipts
-        for i, receipt in enumerate(receipts):
+        # Save uploaded receipts under their original names so extracted values
+        # can cite a document the traveller recognises.
+        for receipt in receipts:
             ext = os.path.splitext(receipt.filename)[1].lower()
             if ext not in [".pdf", ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff"]:
                 errors.append(f"Unsupported file type: {receipt.filename}")
                 continue
             
-            receipt_path = os.path.join(temp_dir, f"receipt_{i}{ext}")
+            filename = unique_filename(safe_filename(receipt.filename), taken_names)
+            taken_names.add(filename)
+            receipt_path = os.path.join(temp_dir, filename)
             contents = await receipt.read()
             with open(receipt_path, "wb") as f:
                 f.write(contents)
