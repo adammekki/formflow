@@ -8,9 +8,15 @@ Handles both text and vision model requests with streaming support.
 import base64
 import httpx
 import json
+import logging
+import time
 from pathlib import Path
 from typing import Optional, AsyncGenerator
 from app.config import get_settings
+
+
+logger = logging.getLogger(__name__)
+
 
 class InferenceClient:
     """Unified client for Ollama/vLLM inference"""
@@ -74,16 +80,34 @@ class InferenceClient:
         }
         
         try:
+            logger.info(
+                "Vision request -> %s: model=%s images=%d prompt_chars=%d",
+                self.base_url,
+                self.model,
+                len(images),
+                len(prompt),
+            )
+            started = time.perf_counter()
+
             async with httpx.AsyncClient(timeout=self.timeout) as client:
                 response = await client.post(
                     f"{self.base_url}/api/chat",
                     json=payload
                 )
                 response.raise_for_status()
-                return response.json()
+                data = response.json()
+
+            logger.info(
+                "Vision response <- %.1fs, %d chars",
+                time.perf_counter() - started,
+                len(data.get("message", {}).get("content", "")),
+            )
+            return data
         except httpx.TimeoutException:
+            logger.warning("Vision request timed out after %.0fs", self.timeout.read or 0)
             raise Exception("Inference request timed out after 10 minutes")
         except httpx.HTTPStatusError as e:
+            logger.warning("Vision request failed: %s", e.response.text[:500])
             raise Exception(f"Inference request failed: {e.response.text}")
     
     async def chat(
@@ -112,16 +136,24 @@ class InferenceClient:
         }
         
         try:
+            logger.info("Text request -> %s: model=%s", self.base_url, self.model)
+            started = time.perf_counter()
+
             async with httpx.AsyncClient(timeout=self.timeout) as client:
                 response = await client.post(
                     f"{self.base_url}/api/chat",
                     json=payload
                 )
                 response.raise_for_status()
-                return response.json()
+                data = response.json()
+
+            logger.info("Text response <- %.1fs", time.perf_counter() - started)
+            return data
         except httpx.TimeoutException:
+            logger.warning("Text request timed out after %.0fs", self.timeout.read or 0)
             raise Exception("Inference request timed out after 10 minutes")
         except httpx.HTTPStatusError as e:
+            logger.warning("Text request failed: %s", e.response.text[:500])
             raise Exception(f"Inference request failed: {e.response.text}")
 
 

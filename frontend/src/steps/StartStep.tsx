@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
 import { confirmSchema, discoverSchema, listClients, type Client, type Proposal } from "../api";
+import Button from "../components/Button";
+import Notice from "../components/Notice";
 
 function messageOf(error: unknown): string {
   if (error instanceof Error && error.message) {
@@ -8,6 +10,9 @@ function messageOf(error: unknown): string {
   }
   return "Something went wrong. Please try again.";
 }
+
+const INPUT =
+  "w-full rounded-lg border border-line bg-muted px-3 py-2 text-fg transition-colors placeholder:text-fg-muted/50 focus:border-accent";
 
 type Props = {
   onReady: (clientName: string) => void;
@@ -65,23 +70,25 @@ export default function StartStep({ onReady }: Props) {
   }
 
   return (
-    <section className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Which university is this for?</h1>
-        <p className="mt-1 text-slate-600">
+    <section className="space-y-7">
+      <div className="space-y-2">
+        <h1 className="text-2xl font-semibold text-accent-soft">
+          Which university is this for?
+        </h1>
+        <p className="text-fg-muted">
           Pick yours from the list, or add it if it is not there yet.
         </p>
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="university" className="block text-sm font-medium text-slate-700">
+        <label htmlFor="university" className="block text-sm font-medium text-fg-muted">
           University
         </label>
         <select
           id="university"
           value={selected}
           onChange={(e) => setSelected(e.target.value)}
-          className="w-full rounded-md border border-slate-300 bg-white p-2"
+          className={INPUT}
         >
           <option value="">Choose a university…</option>
           {clients.map((client) => (
@@ -92,28 +99,19 @@ export default function StartStep({ onReady }: Props) {
         </select>
       </div>
 
-      <button
-        type="button"
-        onClick={() => selected && onReady(selected)}
-        disabled={!selected}
-        className="rounded-md bg-slate-900 px-4 py-2 text-white disabled:opacity-40"
-      >
+      <Button type="button" onClick={() => selected && onReady(selected)} disabled={!selected}>
         Continue
-      </button>
+      </Button>
 
-      <div className="border-t border-slate-200 pt-6">
-        <button
-          type="button"
-          onClick={() => setShowNew((open) => !open)}
-          className="text-sm font-medium text-slate-700 underline"
-        >
+      <div className="space-y-4 border-t border-line/60 pt-6">
+        <Button variant="link" type="button" onClick={() => setShowNew((open) => !open)}>
           My university isn't listed
-        </button>
+        </Button>
 
         {showNew && (
-          <div className="mt-4 space-y-4">
+          <div className="space-y-5 rounded-lg border border-line/60 bg-muted/40 p-5">
             <div className="space-y-2">
-              <label htmlFor="blank-form" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="blank-form" className="block text-sm font-medium text-fg-muted">
                 Upload the blank expense form
               </label>
               <input
@@ -122,9 +120,9 @@ export default function StartStep({ onReady }: Props) {
                 accept="application/pdf"
                 onChange={handleFile}
                 disabled={busy}
-                className="block w-full text-sm"
+                className="block w-full text-sm text-fg-muted file:mr-3 file:rounded-md file:border-0 file:bg-line file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-fg"
               />
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-fg-muted">
                 An empty PDF form, not a scan of a filled one.
               </p>
             </div>
@@ -133,7 +131,7 @@ export default function StartStep({ onReady }: Props) {
               <div className="space-y-2">
                 <label
                   htmlFor="institution-name"
-                  className="block text-sm font-medium text-slate-700"
+                  className="block text-sm font-medium text-fg-muted"
                 >
                   University name
                 </label>
@@ -141,27 +139,18 @@ export default function StartStep({ onReady }: Props) {
                   id="institution-name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-md border border-slate-300 p-2"
+                  className={INPUT}
                 />
-                <button
-                  type="button"
-                  onClick={handleConfirm}
-                  disabled={busy}
-                  className="rounded-md bg-slate-900 px-4 py-2 text-white disabled:opacity-40"
-                >
+                <Button type="button" onClick={handleConfirm} disabled={busy}>
                   Save this university
-                </button>
+                </Button>
               </div>
             )}
           </div>
         )}
       </div>
 
-      {error && (
-        <p role="alert" className="rounded-md bg-red-50 p-3 text-sm text-red-700">
-          {error}
-        </p>
-      )}
+      {error && <Notice tone="error">{error}</Notice>}
     </section>
   );
 }

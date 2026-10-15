@@ -6,6 +6,8 @@ Provides endpoints for form processing, extraction, and verification.
 """
 
 from contextlib import asynccontextmanager
+import logging
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
@@ -14,6 +16,18 @@ from copy import deepcopy
 
 from app.config import settings
 from app.routers import health, forms, extraction
+
+
+# Without this the app's own loggers propagate to a root logger with no
+# handler, and uvicorn shows only HTTP access lines — the inference work
+# would be invisible in `docker-compose logs app`.
+logging.basicConfig(
+    level=settings.log_level.upper(),
+    format="%(asctime)s %(levelname)-8s %(name)s: %(message)s",
+)
+
+# httpx logs every single request at INFO, which drowns out the inference lines.
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 
 @asynccontextmanager

@@ -24,6 +24,7 @@ services:
       - INFERENCE_PROVIDER=vllm
       - INFERENCE_BASE_URL=http://vllm:8000/v1
       - INFERENCE_MODEL=Qwen/Qwen2-VL-7B-Instruct
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
       - LOG_LEVEL=INFO
     depends_on:
       vllm:

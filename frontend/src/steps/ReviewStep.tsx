@@ -1,7 +1,9 @@
 import { useState } from "react";
 
 import { verify, type ExtractedField } from "../api";
+import Button from "../components/Button";
 import FieldRow from "../components/FieldRow";
+import Notice from "../components/Notice";
 
 function messageOf(error: unknown): string {
   if (error instanceof Error && error.message) {
@@ -65,8 +67,8 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
   if (fields.length === 0) {
     return (
       <section className="space-y-4">
-        <h1 className="text-2xl font-semibold text-slate-900">Nothing was found</h1>
-        <p className="text-slate-600">
+        <h1 className="text-2xl font-semibold text-accent-soft">Nothing was found</h1>
+        <p className="text-fg-muted">
           We could not read any values from those receipts. Try adding more of them, or
           clearer copies.
         </p>
@@ -75,15 +77,15 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
   }
 
   return (
-    <section className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Check what we found</h1>
-        <p className="mt-1 text-slate-600">
+    <section className="space-y-7">
+      <div className="space-y-2">
+        <h1 className="text-2xl font-semibold text-accent-soft">Check what we found</h1>
+        <p className="text-fg-muted">
           Fix anything that looks wrong, and untick what you do not need on the form.
         </p>
       </div>
 
-      <div>
+      <div className="divide-y divide-line/40 rounded-lg border border-line/60 bg-muted/20 px-4">
         {rows.map((row, index) => (
           <FieldRow
             key={row.field_name}
@@ -96,20 +98,11 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
         ))}
       </div>
 
-      <button
-        type="button"
-        onClick={handleSubmit}
-        disabled={busy}
-        className="rounded-md bg-slate-900 px-4 py-2 text-white disabled:opacity-40"
-      >
+      <Button type="button" onClick={handleSubmit} disabled={busy}>
         {busy ? "Filling…" : "Fill the form"}
-      </button>
+      </Button>
 
-      {error && (
-        <p role="alert" className="rounded-md bg-red-50 p-3 text-sm text-red-700">
-          {error}
-        </p>
-      )}
+      {error && <Notice tone="error">{error}</Notice>}
     </section>
   );
 }

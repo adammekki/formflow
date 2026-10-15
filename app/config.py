@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     app_name: str = "FormFlow"
     app_version: str = "0.1.0"
     app_env: str = "development"
+    log_level: str = "INFO"
 
     # Inference settings
     inference_provider: Literal["ollama", "vllm"] = "ollama"

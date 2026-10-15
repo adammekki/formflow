@@ -40,8 +40,9 @@ it("walks from picker to download", async () => {
   await userEvent.selectOptions(await screen.findByRole("combobox"), "uni-hamburg");
   await userEvent.click(screen.getByRole("button", { name: /continue|start/i }));
 
+  // Steps are swapped behind a fade, so wait for the next screen to appear.
   await userEvent.upload(
-    screen.getByLabelText(/receipts/i),
+    await screen.findByLabelText(/receipts/i),
     new File(["x"], "a.pdf", { type: "application/pdf" })
   );
   await userEvent.click(screen.getByRole("button", { name: /upload|extract/i }));

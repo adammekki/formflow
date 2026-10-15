@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 import { extract, type ExtractionResult } from "../api";
+import Button from "../components/Button";
+import Notice from "../components/Notice";
 
 function messageOf(error: unknown): string {
   if (error instanceof Error && error.message) {
@@ -35,16 +37,16 @@ export default function UploadStep({ clientName, onExtracted }: Props) {
   }
 
   return (
-    <section className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Add your receipts</h1>
-        <p className="mt-1 text-slate-600">
+    <section className="space-y-7">
+      <div className="space-y-2">
+        <h1 className="text-2xl font-semibold text-accent-soft">Add your receipts</h1>
+        <p className="text-fg-muted">
           Drop in everything from the trip — several files are fine, they are read together.
         </p>
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="receipts" className="block text-sm font-medium text-slate-700">
+        <label htmlFor="receipts" className="block text-sm font-medium text-fg-muted">
           Receipts
         </label>
         <input
@@ -54,30 +56,21 @@ export default function UploadStep({ clientName, onExtracted }: Props) {
           accept=".pdf,.jpg,.jpeg,.png,.gif,.bmp,.tiff"
           onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
           disabled={busy}
-          className="block w-full rounded-md border border-dashed border-slate-300 p-6 text-sm"
+          className="block w-full rounded-lg border border-dashed border-line bg-muted/40 p-6 text-sm text-fg-muted file:mr-3 file:rounded-md file:border-0 file:bg-line file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-fg"
         />
       </div>
 
-      <button
-        type="button"
-        onClick={handleUpload}
-        disabled={busy || files.length === 0}
-        className="rounded-md bg-slate-900 px-4 py-2 text-white disabled:opacity-40"
-      >
+      <Button type="button" onClick={handleUpload} disabled={busy || files.length === 0}>
         {busy ? "Reading…" : "Upload and read receipts"}
-      </button>
+      </Button>
 
       {busy && (
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-fg-muted">
           Reading your receipts — this can take a few minutes.
         </p>
       )}
 
-      {error && (
-        <p role="alert" className="rounded-md bg-red-50 p-3 text-sm text-red-700">
-          {error}
-        </p>
-      )}
+      {error && <Notice tone="error">{error}</Notice>}
     </section>
   );
 }
