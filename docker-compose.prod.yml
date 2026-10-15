@@ -66,6 +66,22 @@ services:
               count: all
               capabilities: [gpu]
 
+  # ===========================
+  # Frontend - built SPA served by nginx
+  # ===========================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: formflow-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - app
+    networks:
+      - formflow-network
+    restart: unless-stopped
+
 networks:
   formflow-network:
     driver: bridge
