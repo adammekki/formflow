@@ -14,9 +14,10 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Mount configs and templates (read-only in production)
-      - ./configs:/app/configs:ro
-      - ./templates:/app/templates:ro
+      # Mount configs and templates (writable: onboarding writes configs and
+      # templates, and filling writes the generated PDFs)
+      - ./configs:/app/configs
+      - ./templates:/app/templates
       # Mount feedback for training data collection
       - ./feedback:/app/feedback
     environment:

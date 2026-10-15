@@ -60,5 +60,6 @@ USER appuser
 # Expose port
 EXPOSE 8000
 
-# Run with production settings
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
+# Run with production settings (single worker: extraction sessions live in
+# per-process memory, so a second worker would not find them)
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
