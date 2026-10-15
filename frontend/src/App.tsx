@@ -101,7 +101,7 @@ export default function App() {
 
   return (
     <main className="flex min-h-full items-center justify-center p-6">
-      <div className="w-full max-w-2xl">
+      <div className="w-full max-w-3xl">
         <header className="mb-6 flex items-center gap-3">
           <span
             aria-hidden="true"

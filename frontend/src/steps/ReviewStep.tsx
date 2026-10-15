@@ -85,17 +85,52 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
         </p>
       </div>
 
-      <div className="divide-y divide-line/40 rounded-lg border border-line/60 bg-muted/20 px-4">
-        {rows.map((row, index) => (
-          <FieldRow
-            key={row.field_name}
-            field={fields[index]}
-            kept={row.kept}
-            value={row.value}
-            onToggle={(kept) => update(index, { kept })}
-            onValueChange={(value) => update(index, { value })}
-          />
-        ))}
+      <div className="space-y-2">
+        <div className="flex items-baseline justify-between">
+          <span className="text-xs uppercase tracking-wide text-fg-muted">Fields found</span>
+          <span className="text-xs text-fg-muted">
+            {rows.filter((row) => row.kept).length} of {rows.length} selected
+          </span>
+        </div>
+
+        <div className="overflow-hidden rounded-lg border border-line/60">
+          <table className="w-full table-fixed border-collapse">
+            <colgroup>
+              <col className="w-12" />
+              <col className="w-[34%]" />
+              <col className="w-[40%]" />
+              <col className="w-[26%]" />
+            </colgroup>
+            <thead className="bg-muted/60 text-left text-xs uppercase tracking-wide text-fg-muted">
+              <tr>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Keep
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Field
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Value
+                </th>
+                <th scope="col" className="px-3 py-2 font-medium">
+                  Where from
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, index) => (
+                <FieldRow
+                  key={row.field_name}
+                  field={fields[index]}
+                  kept={row.kept}
+                  value={row.value}
+                  onToggle={(kept) => update(index, { kept })}
+                  onValueChange={(value) => update(index, { value })}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <Button type="button" onClick={handleSubmit} disabled={busy}>

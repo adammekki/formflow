@@ -83,6 +83,24 @@ it("shows the plain-language name when the form gives one", () => {
   expect(screen.getByLabelText("Personnel number")).toBeTruthy();
 });
 
+it("lays the fields out as a grid with column headings", () => {
+  render(<ReviewStep sessionId="s1" fields={FIELDS} onDone={vi.fn()} />);
+
+  for (const heading of ["Keep", "Field", "Value", "Where from"]) {
+    expect(screen.getByRole("columnheader", { name: heading })).toBeTruthy();
+  }
+});
+
+it("says how many values will be filled, and keeps that count current", async () => {
+  render(<ReviewStep sessionId="s1" fields={FIELDS} onDone={vi.fn()} />);
+
+  expect(screen.getByText(/1 of 2 selected/i)).toBeTruthy();
+
+  await userEvent.click(screen.getByRole("checkbox", { name: /keep name/i }));
+
+  expect(screen.getByText(/0 of 2 selected/i)).toBeTruthy();
+});
+
 it("passes values the form could not place through to the caller", async () => {
   vi.mocked(api.verify).mockResolvedValue({
     download_url: "/api/extract/download/x/y.pdf",
