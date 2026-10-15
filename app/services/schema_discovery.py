@@ -7,7 +7,9 @@ Uses pymupdf for field extraction and vision model for semantic understanding.
 
 import os
 import json
+import io
 import logging
+import uuid
 from typing import Any
 from pathlib import Path
 from PIL import Image
@@ -108,7 +110,7 @@ class FormSchemaDiscoveryAgent:
     async def discover_schema(
         self,
         form_pdf_bytes: bytes,
-        client_name: str
+        client_name: str = "pending"
     ) -> dict:
         """
         Analyze a PDF form template and discover its schema.
@@ -120,8 +122,9 @@ class FormSchemaDiscoveryAgent:
         """
         
         # Step 1: Extract PDF form fields
-        # pymupdf reads fields from a path, so stage the upload briefly
-        temp_path = Path(f"/tmp/{client_name}_form.pdf")
+        # pymupdf reads fields from a path, so stage the upload briefly under a
+        # unique name (several uploads can be in flight at once)
+        temp_path = Path(f"/tmp/{uuid.uuid4().hex}_form.pdf")
         temp_path.write_bytes(form_pdf_bytes)
         
         try:
@@ -133,6 +136,14 @@ class FormSchemaDiscoveryAgent:
             pdf_fields = {}
         finally:
             temp_path.unlink(missing_ok=True)
+        
+        # A scan or flattened PDF has no form fields, so there is nothing the
+        # vision model could map extracted values onto.
+        if not pdf_fields:
+            return {
+                "error": "This PDF has no fillable form fields. Please upload the blank form, not a scan.",
+                "pdf_fields_raw": {},
+            }
         
         # Step 2: Convert PDF to images for vision analysis
         form_images = pdf_to_images(form_pdf_bytes, max_size=1024)
@@ -156,6 +167,7 @@ For EACH field, provide:
 
 Respond with this JSON structure:
 {{
+  "institution_name": "University or organisation this form belongs to, in its own language",
   "form_title": "Form title",
   "form_language": "German/English/etc",
   "fields": [
@@ -198,6 +210,14 @@ Respond with this JSON structure:
             
             # Add the raw PDF fields for reference
             schema["pdf_fields_raw"] = pdf_fields
+            
+            # The institution name is what the user confirms; fall back to the
+            # form title when the model does not supply one.
+            schema["institution_name"] = (
+                schema.get("institution_name")
+                or schema.get("form_title")
+                or "Unknown institution"
+            )
             
             return schema
             
