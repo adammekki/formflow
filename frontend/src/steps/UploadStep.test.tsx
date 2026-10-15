@@ -42,3 +42,37 @@ it("cannot be submitted twice while running", async () => {
 
   resolve({ session_id: "s1", extracted_fields: [] });
 });
+
+it("tells the traveller what is happening while the receipts are read", async () => {
+  let resolve!: (value: api.ExtractionResult) => void;
+  vi.mocked(api.extract).mockReturnValue(
+    new Promise((r) => {
+      resolve = r;
+    })
+  );
+
+  render(<UploadStep clientName="uni-hamburg" onExtracted={vi.fn()} />);
+
+  await userEvent.upload(screen.getByLabelText(/receipts/i), PDF());
+  await userEvent.click(screen.getByRole("button", { name: /upload|extract/i }));
+
+  const status = await screen.findByRole("status");
+  expect(status).toHaveTextContent(/reading your receipts/i);
+  expect(status).toHaveTextContent(/1 file/i);
+  // An elapsed clock, so a long wait is visibly alive rather than frozen.
+  expect(status).toHaveTextContent(/\d+:\d\d/);
+
+  resolve({ session_id: "s1", extracted_fields: [] });
+});
+
+it("stops reporting progress once the read finishes", async () => {
+  vi.mocked(api.extract).mockRejectedValue(new api.ApiError("Could not read the receipts"));
+
+  render(<UploadStep clientName="uni-hamburg" onExtracted={vi.fn()} />);
+
+  await userEvent.upload(screen.getByLabelText(/receipts/i), PDF());
+  await userEvent.click(screen.getByRole("button", { name: /upload|extract/i }));
+
+  await screen.findByRole("alert");
+  expect(screen.queryByRole("status")).toBeNull();
+});

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { extract, type ExtractionResult } from "../api";
 import Button from "../components/Button";
 import Notice from "../components/Notice";
+import Working from "../components/Working";
 
 function messageOf(error: unknown): string {
   if (error instanceof Error && error.message) {
@@ -65,9 +66,10 @@ export default function UploadStep({ clientName, onExtracted }: Props) {
       </Button>
 
       {busy && (
-        <p className="text-sm text-fg-muted">
-          Reading your receipts — this can take a few minutes.
-        </p>
+        <Working
+          label="Reading your receipts"
+          detail={`${files.length} file${files.length === 1 ? "" : "s"} · this can take a few minutes`}
+        />
       )}
 
       {error && <Notice tone="error">{error}</Notice>}

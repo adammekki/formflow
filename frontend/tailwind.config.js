@@ -41,10 +41,15 @@ export default {
           from: { opacity: "1", transform: "none" },
           to: { opacity: "0", transform: "translateY(-6px)" },
         },
+        slide: {
+          from: { transform: "translateX(-100%)" },
+          to: { transform: "translateX(300%)" },
+        },
       },
       animation: {
         "fade-in": "fadeIn 240ms ease-out both",
         "fade-out": "fadeOut 160ms ease-in both",
+        slide: "slide 1.4s ease-in-out infinite",
       },
     },
   },
