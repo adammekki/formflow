@@ -42,7 +42,7 @@ async def discover_form_schema(
     Analyze a PDF form template and discover its field schema.
     
     This endpoint:
-    1. Extracts all fillable fields from the PDF using fillpdfs
+    1. Extracts all fillable fields from the PDF using pymupdf
     2. Uses vision model to analyze the form and infer field meanings
     3. Returns a draft schema for refinement during client onboarding
     """

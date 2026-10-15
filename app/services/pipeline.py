@@ -14,10 +14,9 @@ import json
 import yaml
 from datetime import datetime
 from typing import Any
-from fillpdf import fillpdfs
-
 from app.config import settings
 from app.services.inference import InferenceClient
+from app.services.pdf_form import fill_form_fields
 
 
 class FormFillingPipeline:
@@ -330,7 +329,7 @@ IMPORTANT: Look at ALL documents together to build a complete picture. Informati
         output_path = os.path.join(output_dir, output_filename)
         
         # Fill the PDF
-        fillpdfs.write_fillable_pdf(template_path, output_path, form_data)
+        fill_form_fields(template_path, output_path, form_data)
         
         return {
             "filename": output_filename,

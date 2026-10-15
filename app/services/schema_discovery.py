@@ -2,7 +2,7 @@
 FormFlow - Form Schema Discovery Agent
 
 Analyzes PDF form templates to discover and understand form fields.
-Uses fillpdfs for field extraction and vision model for semantic understanding.
+Uses pymupdf for field extraction and vision model for semantic understanding.
 """
 
 import os
@@ -13,9 +13,8 @@ from pathlib import Path
 from PIL import Image
 from pdf2image import convert_from_bytes
 import io
-from fillpdf import fillpdfs
-
 from app.services.inference import get_inference_client
+from app.services.pdf_form import read_form_fields
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -114,21 +113,21 @@ class FormSchemaDiscoveryAgent:
         """
         Analyze a PDF form template and discover its schema.
         
-        1. Extract field names using fillpdfs
+        1. Extract field names using pymupdf
         2. Convert PDF to images
         3. Use vision model to understand field semantics
         4. Return structured schema
         """
         
         # Step 1: Extract PDF form fields
-        # Save temporarily to extract fields (fillpdfs needs a file path)
+        # pymupdf reads fields from a path, so stage the upload briefly
         temp_path = Path(f"/tmp/{client_name}_form.pdf")
         temp_path.write_bytes(form_pdf_bytes)
         
         try:
-            raw_fields = fillpdfs.get_form_fields(str(temp_path))
+            raw_fields = read_form_fields(str(temp_path))
             pdf_fields = clean_pdf_fields(raw_fields)
-            logger.info(f"Extracted {len(pdf_fields)} PDF fields via fillpdfs")
+            logger.info(f"Extracted {len(pdf_fields)} PDF fields via pymupdf")
         except Exception as e:
             logger.warning(f"Failed to extract PDF fields: {e}")
             pdf_fields = {}
