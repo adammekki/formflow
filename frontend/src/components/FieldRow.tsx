@@ -25,6 +25,7 @@ export default function FieldRow({
   return (
     <tr
       onClick={onSelect}
+      onFocus={onSelect}
       className={`border-t border-line/40 align-top ${kept ? "" : "text-fg-muted"}`}
     >
       <td className="px-3 py-3">

@@ -1,3 +1,4 @@
+import app.services.locator as locator
 from app.services.locator import Word, match_words, normalize, parse_date, parse_number
 
 
@@ -31,6 +32,16 @@ def test_parse_number_rejects_dates():
 
 def test_parse_number_rejects_non_numbers():
     assert parse_number("Berlin") is None
+
+
+def test_parse_number_rejects_times_and_multi_number_text():
+    """A time or an IBAN must never become the number 10 or 89 (anti-goal)."""
+    assert parse_number("10:30") is None
+    assert parse_number("IBAN: DE89 3704 0044 0532 0130 00") is None
+
+
+def test_match_words_does_not_box_a_time_on_an_amount():
+    assert match_words([w("10,00")], "10:30") is None
 
 
 def test_parse_date_iso():
@@ -268,3 +279,75 @@ def test_ocr_leg_handles_uploaded_image(tmp_path):
     locate_fields(paths, documents, str(pages_dir), [field])
 
     assert field["bounding_box"] is not None
+
+
+# --- Final review fixes -----------------------------------------------------
+
+
+def test_model_supplied_box_is_cleared(tmp_path):
+    """Only the locator may set a box; a model-emitted one must not survive."""
+    paths, documents, pages_dir = _setup_docs(tmp_path, {"hotel.pdf": ["Hotel Metropol Berlin"]})
+    field = _field("Stuttgart", "hotel.pdf")
+    field["bounding_box"] = {"page": 0, "x": 1.0, "y": 1.0, "width": 1.0, "height": 1.0}
+
+    locate_fields(paths, documents, pages_dir, [field])
+
+    assert field["bounding_box"] is None
+
+
+def test_ocr_runs_once_per_page_for_repeated_searches(tmp_path, monkeypatch):
+    """Unresolved fields must not re-run Tesseract on the same page."""
+    src = fitz.open()
+    src.new_page().insert_text((72, 72), "Berlin")
+    img_path = tmp_path / "photo.jpg"
+    src[0].get_pixmap(dpi=150).save(str(img_path))
+    src.close()
+    paths = [str(img_path)]
+    pages_dir = tmp_path / "pages"
+    _, _, documents = _pipeline()._prepare_documents(paths, str(pages_dir))
+
+    calls = {"n": 0}
+
+    def counting_ocr(image_path):
+        calls["n"] += 1
+        return [Word(x0=0, y0=0, x1=50, y1=12, text="Berlin", line=0)]
+
+    monkeypatch.setattr(locator, "_ocr_page_words", counting_ocr)
+    fields = [_field("Berlin", "unknown"), _field("Berlin", "unknown")]
+
+    locate_fields(paths, documents, str(pages_dir), fields)
+
+    assert calls["n"] == 1
+
+
+def test_ocr_leg_refuses_low_confidence_misread(tmp_path, monkeypatch):
+    """A misread number below the confidence floor yields no box, not a wrong one."""
+    import pytesseract
+
+    src = fitz.open()
+    src.new_page().insert_text((72, 72), "192,50")
+    img_path = tmp_path / "receipt.jpg"
+    src[0].get_pixmap(dpi=150).save(str(img_path))
+    src.close()
+    paths = [str(img_path)]
+    pages_dir = tmp_path / "pages"
+    _, _, documents = _pipeline()._prepare_documents(paths, str(pages_dir))
+
+    def fake_image_to_data(img, lang=None, output_type=None):
+        return {
+            "text": ["192,50"],
+            "conf": ["30"],
+            "left": [72],
+            "top": [60],
+            "width": [50],
+            "height": [12],
+            "block_num": [1],
+            "line_num": [1],
+        }
+
+    monkeypatch.setattr(pytesseract, "image_to_data", fake_image_to_data)
+    field = _field("192.5", "receipt.jpg")
+
+    locate_fields(paths, documents, str(pages_dir), [field])
+
+    assert field["bounding_box"] is None

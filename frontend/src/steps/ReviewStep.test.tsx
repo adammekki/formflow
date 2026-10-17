@@ -135,6 +135,26 @@ it("shows the focused field's page and box in the viewer", async () => {
   expect(screen.getByTestId("bbox-overlay")).toBeTruthy();
 });
 
+it("follows keyboard focus into the viewer", async () => {
+  const boxed: api.ExtractedField[] = [
+    {
+      ...FIELDS[0],
+      bounding_box: { page: 0, x: 10, y: 20, width: 100, height: 30 },
+    },
+  ];
+
+  render(<ReviewStep sessionId="s1" fields={boxed} onDone={vi.fn()} />);
+
+  fireEvent.focus(await screen.findByRole("checkbox", { name: /keep name/i }));
+
+  const img = await screen.findByAltText("Page 1 of Rechnung.pdf");
+  Object.defineProperty(img, "naturalWidth", { value: 1000 });
+  Object.defineProperty(img, "naturalHeight", { value: 500 });
+  fireEvent.load(img);
+
+  expect(screen.getByTestId("bbox-overlay")).toBeTruthy();
+});
+
 it("passes values the form could not place through to the caller", async () => {
   vi.mocked(api.verify).mockResolvedValue({
     download_url: "/api/extract/download/x/y.pdf",

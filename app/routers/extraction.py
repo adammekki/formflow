@@ -8,6 +8,7 @@ from fastapi import APIRouter, UploadFile, File, HTTPException, Form
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional
+import logging
 import os
 import uuid
 import tempfile
@@ -125,14 +126,21 @@ async def extract_from_receipts(
         extraction_result = await pipeline.extract(saved_receipts, pages_dir=pages_dir)
 
         # Locate each value in the source documents (deterministic; OCR on
-        # scans can block for seconds, so it runs off the event loop)
-        await run_in_threadpool(
-            locate_fields,
-            saved_receipts,
-            extraction_result["documents"],
-            pages_dir,
-            extraction_result["fields"],
-        )
+        # scans can block for seconds, so it runs off the event loop).
+        # Boxes are an aid: a missing OCR binary or an unreadable file must
+        # leave values without a box, never fail the extraction.
+        try:
+            await run_in_threadpool(
+                locate_fields,
+                saved_receipts,
+                extraction_result["documents"],
+                pages_dir,
+                extraction_result["fields"],
+            )
+        except Exception:
+            logging.getLogger(__name__).exception(
+                "Bounding box location failed; continuing without boxes"
+            )
 
         # Store session for verification
         verification_sessions[session_id] = {

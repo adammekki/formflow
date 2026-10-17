@@ -101,6 +101,11 @@ def parse_number(s: str) -> float | None:
     m = _NUM_TOKEN.search(s)
     if not m:
         return None
+    # The token must be the only digits in the string, or a time ("10:30"),
+    # an IBAN, or a labelled line would parse as a number and match an
+    # unrelated amount elsewhere on the page (anti-goal).
+    if re.search(r"\d", s[: m.start()] + s[m.end() :]):
+        return None
     token = m.group(0)
     dots = token.count(".")
     commas = token.count(",")
@@ -261,26 +266,43 @@ def _rect_to_wh(rect: tuple[float, float, float, float]) -> tuple[float, float, 
     return x0, y0, x1 - x0, y1 - y0
 
 
-def _locate_in_pdf(pdf_path: str, image_paths: list[str], value: str):
-    """Search a PDF page by page; return (page_index, (x, y, w, h)) in pixels, or None."""
-    import fitz
+def _locate_in_doc(
+    path: str, image_paths: list[str], value: str, cache: dict[int, tuple[list[Word], float | None]]
+):
+    """Search one document page by page; return (page_index, (x, y, w, h)), or None.
+
+    `cache` (per document) maps page index to (words, scale) so a session
+    with several fields on the same page runs Tesseract and text extraction
+    once per page instead of once per field.
+    """
     from PIL import Image
 
-    doc = fitz.open(pdf_path)
+    if not path.lower().endswith(".pdf"):
+        if 0 not in cache:
+            cache[0] = (_ocr_page_words(image_paths[0]), None)
+        rect = match_words(cache[0][0], value)
+        return (0, _rect_to_wh(rect)) if rect is not None else None
+
+    import fitz
+
+    doc = fitz.open(path)
     try:
         for pi in range(doc.page_count):
-            page = doc[pi]
-            if _printable_ratio(page.get_text()) < GARBAGE_RATIO:
-                rect = match_words(_ocr_page_words(image_paths[pi]), value)
-                if rect is not None:
-                    return pi, _rect_to_wh(rect)
-                continue
-            rect = match_words(_pdf_page_words(page), value)
+            if pi not in cache:
+                page = doc[pi]
+                if _printable_ratio(page.get_text()) < GARBAGE_RATIO:
+                    cache[pi] = (_ocr_page_words(image_paths[pi]), None)
+                else:
+                    with Image.open(image_paths[pi]) as img:
+                        scale = img.width / page.rect.width
+                    cache[pi] = (_pdf_page_words(page), scale)
+            words, scale = cache[pi]
+            rect = match_words(words, value)
             if rect is None:
                 continue
-            with Image.open(image_paths[pi]) as img:
-                scale = img.width / page.rect.width
             x, y, w, h = _rect_to_wh(rect)
+            if scale is None:
+                return pi, (x, y, w, h)
             return pi, (
                 round(x * scale, 1),
                 round(y * scale, 1),
@@ -310,6 +332,7 @@ def locate_fields(
     path_by_name = {os.path.basename(p): p for p in receipt_paths}
     names = [d["name"] for d in documents]
     page_counts = {d["name"]: d["page_count"] for d in documents}
+    caches: dict[str, dict[int, tuple[list[Word], float | None]]] = {}
 
     def page_files(name: str) -> list[str]:
         di = names.index(name)
@@ -322,12 +345,12 @@ def locate_fields(
         path = path_by_name.get(name)
         if path is None:
             return None
-        if path.lower().endswith(".pdf"):
-            return _locate_in_pdf(path, page_files(name), value)
-        rect = match_words(_ocr_page_words(page_files(name)[0]), value)
-        return (0, _rect_to_wh(rect)) if rect is not None else None
+        return _locate_in_doc(path, page_files(name), value, caches.setdefault(name, {}))
 
     for field in fields:
+        # The locator owns the box: a box emitted by the model (which is
+        # unreliable at coordinates) must never survive as an overlay.
+        field["bounding_box"] = None
         value = (field.get("value") or "").strip()
         if not value:
             continue
