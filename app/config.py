@@ -21,6 +21,11 @@ class Settings(BaseSettings):
     app_env: str = "development"
     log_level: str = "INFO"
 
+    # Development aid: return dummy extraction values instead of calling the
+    # vision model, so the review screen can be seen without a long wait.
+    mock_extraction: bool = False
+    mock_extraction_seconds: float = 5.0
+
     # Inference settings
     inference_provider: Literal["ollama", "vllm"] = "ollama"
     inference_base_url: str = "http://localhost:11434"
