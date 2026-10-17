@@ -76,3 +76,126 @@ def test_match_words_no_match_returns_none():
 def test_match_words_skips_low_confidence_windows():
     words = [w("192.50", conf=40)]
     assert match_words(words, "192.5") is None
+
+
+# --- Task 3: document resolution + PDF leg ---------------------------------
+
+import os
+
+import fitz
+import pytest
+from PIL import Image
+
+from app.services.locator import locate_fields, resolve_document
+from app.services.pipeline import FormFillingPipeline
+
+
+def _pipeline():
+    p = FormFillingPipeline.__new__(FormFillingPipeline)
+    p.client_name = "uni-hamburg"
+    p.config = {}
+    return p
+
+
+def _field(value, source_document):
+    return {
+        "field_name": "f",
+        "value": value,
+        "source_document": source_document,
+        "bounding_box": None,
+        "confidence": 0.9,
+        "reasoning": None,
+    }
+
+
+def _setup_docs(tmp_path, texts_by_name):
+    paths = []
+    for name, pages in texts_by_name.items():
+        p = tmp_path / name
+        doc = fitz.open()
+        for text in pages:
+            page = doc.new_page()
+            page.insert_text((72, 72 + 20 * pages.index(text)), text)
+        doc.save(p)
+        doc.close()
+        paths.append(str(p))
+    pages_dir = tmp_path / "pages"
+    _, _, documents = _pipeline()._prepare_documents(paths, str(pages_dir))
+    return paths, documents, str(pages_dir)
+
+
+def test_resolve_document_case_insensitive():
+    assert resolve_document("Hotel.PDF", ["hotel.pdf"]) == "hotel.pdf"
+    assert resolve_document("nope.pdf", ["hotel.pdf"]) is None
+
+
+def test_locates_value_with_pixel_box(tmp_path):
+    paths, documents, pages_dir = _setup_docs(tmp_path, {"hotel.pdf": ["Hotel Metropol Berlin"]})
+    field = _field("Hotel Metropol Berlin", "hotel.pdf")
+
+    locate_fields(paths, documents, pages_dir, [field])
+
+    box = field["bounding_box"]
+    assert box is not None and box["page"] == 0
+    page_file = FormFillingPipeline._page_path(pages_dir, 0, 0)
+    with Image.open(page_file) as img:
+        scale = img.width / 595  # fitz default A4 width in points
+    assert box["x"] == pytest.approx(72 * scale, abs=2)
+    assert box["width"] > 0
+
+
+def test_locates_value_on_second_page(tmp_path):
+    paths, documents, pages_dir = _setup_docs(
+        tmp_path, {"hotel.pdf": ["nothing here", "Hotel Metropol Berlin"]}
+    )
+    field = _field("Hotel Metropol Berlin", "hotel.pdf")
+
+    locate_fields(paths, documents, pages_dir, [field])
+
+    assert field["bounding_box"]["page"] == 1
+
+
+def test_first_duplicate_wins(tmp_path):
+    paths, documents, pages_dir = _setup_docs(
+        tmp_path, {"hotel.pdf": ["Hotel Metropol Berlin", "Hotel Metropol Berlin"]}
+    )
+    field = _field("Hotel Metropol Berlin", "hotel.pdf")
+
+    locate_fields(paths, documents, pages_dir, [field])
+
+    assert field["bounding_box"]["page"] == 0
+
+
+def test_unresolved_source_uses_unique_global_match(tmp_path):
+    paths, documents, pages_dir = _setup_docs(
+        tmp_path,
+        {"flight.pdf": ["EuroWings Express"], "hotel.pdf": ["Hotel Metropol Berlin"]},
+    )
+    field = _field("Hotel Metropol Berlin", "unknown")
+
+    locate_fields(paths, documents, pages_dir, [field])
+
+    assert field["bounding_box"] is not None
+    assert field["source_document"] == "hotel.pdf"
+
+
+def test_ambiguous_global_match_gives_no_box(tmp_path):
+    paths, documents, pages_dir = _setup_docs(
+        tmp_path,
+        {"flight.pdf": ["Dr. Maximilian Hofmann"], "hotel.pdf": ["Dr. Maximilian Hofmann"]},
+    )
+    field = _field("Dr. Maximilian Hofmann", "unknown")
+
+    locate_fields(paths, documents, pages_dir, [field])
+
+    assert field["bounding_box"] is None
+    assert field["source_document"] == "unknown"
+
+
+def test_empty_value_is_skipped(tmp_path):
+    paths, documents, pages_dir = _setup_docs(tmp_path, {"hotel.pdf": ["Hotel Metropol Berlin"]})
+    field = _field("", "hotel.pdf")
+
+    locate_fields(paths, documents, pages_dir, [field])
+
+    assert field["bounding_box"] is None

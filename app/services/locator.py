@@ -6,6 +6,7 @@ words of a document page (from the PDF text layer or OCR), find where an
 extracted value appears and return its rectangle.
 """
 
+import os
 import re
 import unicodedata
 from dataclasses import dataclass
@@ -13,6 +14,10 @@ from dataclasses import dataclass
 # Tesseract per-word confidence floor: below this a misread token could put
 # a box on the wrong value, so the match is refused instead.
 MIN_OCR_CONF = 60
+
+# A PDF text layer below this printable-character ratio is treated as
+# garbage (broken font encoding) and read via OCR instead.
+GARBAGE_RATIO = 0.85
 
 
 @dataclass
@@ -187,3 +192,134 @@ def match_words(words: list[Word], value: str) -> tuple[float, float, float, flo
                 return _union(win)
 
     return None
+
+
+# --- Document legs ---------------------------------------------------------
+
+
+def resolve_document(source_document: str, known_names: list[str]) -> str | None:
+    """Match the model's document citation to an actual uploaded filename."""
+    if source_document in known_names:
+        return source_document
+    folded = normalize(source_document or "")
+    for name in known_names:
+        if normalize(name) == folded:
+            return name
+    return None
+
+
+def _printable_ratio(text: str) -> float:
+    if not text:
+        return 0.0
+    printable = sum(1 for c in text if c.isprintable() or c.isspace())
+    return printable / len(text)
+
+
+def _pdf_page_words(page) -> list[Word]:
+    words = []
+    for x0, y0, x1, y1, text, block, line, _word_no in page.get_text("words"):
+        words.append(Word(x0=x0, y0=y0, x1=x1, y1=y1, text=text, line=(block << 16) | line))
+    return words
+
+
+def _ocr_page_words(image_path: str) -> list[Word]:
+    """OCR fallback for image documents and garbage text layers (Task 4)."""
+    raise NotImplementedError("OCR leg not available")
+
+
+def _rect_to_wh(rect: tuple[float, float, float, float]) -> tuple[float, float, float, float]:
+    x0, y0, x1, y1 = rect
+    return x0, y0, x1 - x0, y1 - y0
+
+
+def _locate_in_pdf(pdf_path: str, image_paths: list[str], value: str):
+    """Search a PDF page by page; return (page_index, (x, y, w, h)) in pixels, or None."""
+    import fitz
+    from PIL import Image
+
+    doc = fitz.open(pdf_path)
+    try:
+        for pi in range(doc.page_count):
+            page = doc[pi]
+            if _printable_ratio(page.get_text()) < GARBAGE_RATIO:
+                rect = match_words(_ocr_page_words(image_paths[pi]), value)
+                if rect is not None:
+                    return pi, _rect_to_wh(rect)
+                continue
+            rect = match_words(_pdf_page_words(page), value)
+            if rect is None:
+                continue
+            with Image.open(image_paths[pi]) as img:
+                scale = img.width / page.rect.width
+            x, y, w, h = _rect_to_wh(rect)
+            return pi, (
+                round(x * scale, 1),
+                round(y * scale, 1),
+                round(w * scale, 1),
+                round(h * scale, 1),
+            )
+    finally:
+        doc.close()
+    return None
+
+
+def locate_fields(
+    receipt_paths: list[str],
+    documents: list[dict],
+    pages_dir: str,
+    fields: list[dict],
+) -> None:
+    """Fill each field's bounding_box by locating its value in the receipts.
+
+    Mutates fields in place: sets bounding_box (pixel space of the saved page
+    JPEG, 0-based page) and rewrites source_document to the matched filename,
+    so the review screen can map fields to served pages. Fields whose value
+    is empty, or matches nowhere (or ambiguously), keep bounding_box=None.
+    """
+    from app.services.pipeline import FormFillingPipeline
+
+    path_by_name = {os.path.basename(p): p for p in receipt_paths}
+    names = [d["name"] for d in documents]
+    page_counts = {d["name"]: d["page_count"] for d in documents}
+
+    def page_files(name: str) -> list[str]:
+        di = names.index(name)
+        return [
+            FormFillingPipeline._page_path(pages_dir, di, pi)
+            for pi in range(page_counts[name])
+        ]
+
+    def search_doc(name: str, value: str):
+        path = path_by_name.get(name)
+        if path is None:
+            return None
+        if path.lower().endswith(".pdf"):
+            return _locate_in_pdf(path, page_files(name), value)
+        rect = match_words(_ocr_page_words(page_files(name)[0]), value)
+        return (0, _rect_to_wh(rect)) if rect is not None else None
+
+    for field in fields:
+        value = (field.get("value") or "").strip()
+        if not value:
+            continue
+        resolved = resolve_document(field.get("source_document") or "", names)
+        if resolved is not None:
+            result = search_doc(resolved, value)
+            if result is None:
+                continue
+            pi, (x, y, w, h) = result
+            field["bounding_box"] = {"page": pi, "x": x, "y": y, "width": w, "height": h}
+            field["source_document"] = resolved
+            continue
+        # Unresolved citation: accept the box only when exactly one document
+        # contains the value; an ambiguous match would risk a wrong-doc box.
+        hits = [
+            (name, result)
+            for name in names
+            if (result := search_doc(name, value)) is not None
+        ]
+        if len(hits) != 1:
+            continue
+        name, (pi, (x, y, w, h)) = hits[0]
+        field["bounding_box"] = {"page": pi, "x": x, "y": y, "width": w, "height": h}
+        field["source_document"] = name
