@@ -11,13 +11,16 @@ Sequential pipeline orchestrator that coordinates:
 
 import os
 import json
+import logging
 import yaml
 from datetime import datetime
 from typing import Any
-from fillpdf import fillpdfs
-
 from app.config import settings
 from app.services.inference import InferenceClient
+from app.services.pdf_form import fill_form_fields
+
+
+logger = logging.getLogger(__name__)
 
 
 class FormFillingPipeline:
@@ -281,13 +284,23 @@ IMPORTANT: Look at ALL documents together to build a complete picture. Informati
         
         # Filter out fields with no value and no confidence
         fields = [f for f in fields if f["value"] or f["confidence"] > 0]
-        
+
+        # Carry the form's plain-language label, so the review screen can show
+        # "Personnel number" instead of the raw PDF name "UHD".
+        semantic_names = {
+            field.get("field_name"): field.get("semantic_name")
+            for field in self.config.get("fields", [])
+        }
+        for field in fields:
+            field["semantic_name"] = semantic_names.get(field["field_name"])
+
         return fields
     
     async def fill_form(
         self,
         extracted_data: list[dict],
         verified_data: dict[str, str],
+        kept_fields: list[str] | None = None,
     ) -> dict[str, Any]:
         """
         Fill the PDF form with verified data.
@@ -295,6 +308,8 @@ IMPORTANT: Look at ALL documents together to build a complete picture. Informati
         Args:
             extracted_data: Original extracted field data
             verified_data: User-verified/corrected field values
+            kept_fields: When given, only these fields are filled. None keeps
+                the previous behaviour of filling every extracted field.
             
         Returns:
             Result with path to filled PDF
@@ -321,6 +336,11 @@ IMPORTANT: Look at ALL documents together to build a complete picture. Informati
         for field_name, value in verified_data.items():
             form_data[field_name] = value
         
+        # The traveller ticks the fields they need; anything unticked is dropped
+        if kept_fields is not None:
+            kept = set(kept_fields)
+            form_data = {name: value for name, value in form_data.items() if name in kept}
+        
         # Generate output path
         output_dir = os.path.join(settings.templates_dir, self.client_name, "output")
         os.makedirs(output_dir, exist_ok=True)
@@ -330,11 +350,22 @@ IMPORTANT: Look at ALL documents together to build a complete picture. Informati
         output_path = os.path.join(output_dir, output_filename)
         
         # Fill the PDF
-        fillpdfs.write_fillable_pdf(template_path, output_path, form_data)
-        
+        unmatched_fields = fill_form_fields(template_path, output_path, form_data)
+
+        # A config whose field names no longer exist on the form would otherwise
+        # produce a silently blank result.
+        if unmatched_fields:
+            logger.warning(
+                "Filled %s: %d value(s) matched no field on the form: %s",
+                self.client_name,
+                len(unmatched_fields),
+                ", ".join(unmatched_fields[:10]),
+            )
+
         return {
             "filename": output_filename,
             "path": output_path,
+            "unmatched_fields": unmatched_fields,
         }
     
     async def store_feedback(

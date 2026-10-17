@@ -2,20 +2,21 @@
 FormFlow - Form Schema Discovery Agent
 
 Analyzes PDF form templates to discover and understand form fields.
-Uses fillpdfs for field extraction and vision model for semantic understanding.
+Uses pymupdf for field extraction and vision model for semantic understanding.
 """
 
 import os
 import json
+import io
 import logging
+import uuid
 from typing import Any
 from pathlib import Path
 from PIL import Image
 from pdf2image import convert_from_bytes
 import io
-from fillpdf import fillpdfs
-
 from app.services.inference import get_inference_client
+from app.services.pdf_form import read_form_fields
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -109,31 +110,40 @@ class FormSchemaDiscoveryAgent:
     async def discover_schema(
         self,
         form_pdf_bytes: bytes,
-        client_name: str
+        client_name: str = "pending"
     ) -> dict:
         """
         Analyze a PDF form template and discover its schema.
         
-        1. Extract field names using fillpdfs
+        1. Extract field names using pymupdf
         2. Convert PDF to images
         3. Use vision model to understand field semantics
         4. Return structured schema
         """
         
         # Step 1: Extract PDF form fields
-        # Save temporarily to extract fields (fillpdfs needs a file path)
-        temp_path = Path(f"/tmp/{client_name}_form.pdf")
+        # pymupdf reads fields from a path, so stage the upload briefly under a
+        # unique name (several uploads can be in flight at once)
+        temp_path = Path(f"/tmp/{uuid.uuid4().hex}_form.pdf")
         temp_path.write_bytes(form_pdf_bytes)
         
         try:
-            raw_fields = fillpdfs.get_form_fields(str(temp_path))
+            raw_fields = read_form_fields(str(temp_path))
             pdf_fields = clean_pdf_fields(raw_fields)
-            logger.info(f"Extracted {len(pdf_fields)} PDF fields via fillpdfs")
+            logger.info(f"Extracted {len(pdf_fields)} PDF fields via pymupdf")
         except Exception as e:
             logger.warning(f"Failed to extract PDF fields: {e}")
             pdf_fields = {}
         finally:
             temp_path.unlink(missing_ok=True)
+        
+        # A scan or flattened PDF has no form fields, so there is nothing the
+        # vision model could map extracted values onto.
+        if not pdf_fields:
+            return {
+                "error": "This PDF has no fillable form fields. Please upload the blank form, not a scan.",
+                "pdf_fields_raw": {},
+            }
         
         # Step 2: Convert PDF to images for vision analysis
         form_images = pdf_to_images(form_pdf_bytes, max_size=1024)
@@ -157,6 +167,7 @@ For EACH field, provide:
 
 Respond with this JSON structure:
 {{
+  "institution_name": "University or organisation this form belongs to, in its own language",
   "form_title": "Form title",
   "form_language": "German/English/etc",
   "fields": [
@@ -199,6 +210,14 @@ Respond with this JSON structure:
             
             # Add the raw PDF fields for reference
             schema["pdf_fields_raw"] = pdf_fields
+            
+            # The institution name is what the user confirms; fall back to the
+            # form title when the model does not supply one.
+            schema["institution_name"] = (
+                schema.get("institution_name")
+                or schema.get("form_title")
+                or "Unknown institution"
+            )
             
             return schema
             

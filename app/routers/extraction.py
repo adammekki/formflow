@@ -14,6 +14,7 @@ import tempfile
 import shutil
 
 from app.config import settings
+from app.services.naming import safe_filename, unique_filename
 from app.services.pipeline import FormFillingPipeline
 
 
@@ -56,6 +57,7 @@ class VerifyRequest(BaseModel):
     """Request model for submitting verified/corrected data."""
     session_id: str
     verified_fields: dict[str, str]
+    kept_fields: Optional[list[str]] = None
 
 
 class FillResponse(BaseModel):
@@ -63,6 +65,7 @@ class FillResponse(BaseModel):
     status: str
     message: str
     download_url: Optional[str] = None
+    unmatched_fields: Optional[list[str]] = None
     errors: Optional[list[str]] = None
 
 
@@ -91,16 +94,20 @@ async def extract_from_receipts(
     
     errors = []
     saved_receipts = []
+    taken_names: set[str] = set()
     
     try:
-        # Save uploaded receipts
-        for i, receipt in enumerate(receipts):
+        # Save uploaded receipts under their original names so extracted values
+        # can cite a document the traveller recognises.
+        for receipt in receipts:
             ext = os.path.splitext(receipt.filename)[1].lower()
             if ext not in [".pdf", ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff"]:
                 errors.append(f"Unsupported file type: {receipt.filename}")
                 continue
             
-            receipt_path = os.path.join(temp_dir, f"receipt_{i}{ext}")
+            filename = unique_filename(safe_filename(receipt.filename), taken_names)
+            taken_names.add(filename)
+            receipt_path = os.path.join(temp_dir, filename)
             contents = await receipt.read()
             with open(receipt_path, "wb") as f:
                 f.write(contents)
@@ -160,6 +167,7 @@ async def submit_verified_data(request: VerifyRequest):
         result = await pipeline.fill_form(
             extracted_data=session["extracted_data"],
             verified_data=request.verified_fields,
+            kept_fields=request.kept_fields,
         )
         
         # Store feedback for training (original vs corrected)
@@ -178,6 +186,7 @@ async def submit_verified_data(request: VerifyRequest):
             status="success",
             message="Form filled successfully",
             download_url=f"/api/extract/download/{session['client_name']}/{result['filename']}",
+            unmatched_fields=result.get("unmatched_fields") or None,
         )
         
     except Exception as e:

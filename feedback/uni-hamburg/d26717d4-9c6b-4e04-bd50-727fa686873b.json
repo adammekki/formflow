@@ -1,0 +1,249 @@
+{
+  "session_id": "d26717d4-9c6b-4e04-bd50-727fa686873b",
+  "timestamp": "2026-10-17T12:23:11.467875",
+  "client_name": "uni-hamburg",
+  "receipt_count": 2,
+  "corrections": [
+    {
+      "field_name": "Name",
+      "value": "Sample Last Name",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Vorname",
+      "value": "Sample First Name",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Personalnummer",
+      "value": "Sample Employee ID",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Fakultät",
+      "value": "",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Dienststelle",
+      "value": "Sample Workplace",
+      "was_corrected": false
+    },
+    {
+      "field_name": "E-Mail-Adresse",
+      "value": "Sample Email Address",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Telefonnummer",
+      "value": "Sample Phone Number",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Anschrift privat",
+      "value": "Sample Private Address",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Familienstand",
+      "value": "Sample Marital Status",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Kostenstelle",
+      "value": "Sample Cost Center",
+      "was_corrected": false
+    },
+    {
+      "field_name": "IBAN",
+      "value": "",
+      "was_corrected": false
+    },
+    {
+      "field_name": "BIC",
+      "value": "Sample BIC/SWIFT Code",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Reiseantritt",
+      "value": "Sample Departure Location",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Datum_RA",
+      "value": "Sample Departure Date",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Uhrzeit_RA",
+      "value": "Sample Departure Time",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Reiseziel_RA",
+      "value": "Sample Destination",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Verkehrsmittel_RA",
+      "value": "Sample Mode of Departure Transport",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Datum_B",
+      "value": "",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Uhrzeit_B",
+      "value": "Sample Start Time of Business Activities",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Datum_E",
+      "value": "Sample End Date of Business Activities",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Uhrzeit_E",
+      "value": "Sample End Time of Business Activities",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Rückkehr",
+      "value": "Sample Return Location",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Datum_R2",
+      "value": "Sample Return Date",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Uhrzeit_R2",
+      "value": "Sample Return Time",
+      "was_corrected": false
+    },
+    {
+      "field_name": "R_Verkehrsmittel",
+      "value": "",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Reise",
+      "value": "Sample Combined with Private Trip",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Datum_pR",
+      "value": "Sample Private Trip Start Date",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Uhrzeit_pR",
+      "value": "Sample Private Trip Start Time",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Ort_pR",
+      "value": "Sample Private Trip Start Location",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Datum_pR 2",
+      "value": "Sample Private Trip End Date",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Uhrzeit_pR 2",
+      "value": "Sample Private Trip End Time",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Ort_pR 2",
+      "value": "",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Verpflegung u",
+      "value": "Sample Free Meals Provided",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Frühstück",
+      "value": "Sample Days Breakfast Provided",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Mittagessen",
+      "value": "Sample Days Lunch Provided",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Abendessen",
+      "value": "Sample Days Dinner Provided",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Übernachtung u",
+      "value": "Sample Free Overnight Accommodation",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Übernachtungen",
+      "value": "Sample Days Overnight Accommodation Provided",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Programm",
+      "value": "",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Programm_Begründung",
+      "value": "Sample Reason for No Conference Program",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Tagegeld",
+      "value": "Sample Daily Allowance Claimed",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Kostenaufstellung",
+      "value": "Sample Type of Trip",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Kantine2",
+      "value": "Sample Canteen Used",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Kantine",
+      "value": "Sample Days Canteen Used",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Erläuterung",
+      "value": "Sample Explanation",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Unterschrift",
+      "value": "",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Unterschrift Datum",
+      "value": "Sample Signature Date",
+      "was_corrected": false
+    },
+    {
+      "field_name": "Unterschrift Ort",
+      "value": "Sample Signature Location",
+      "was_corrected": false
+    }
+  ],
+  "correction_count": 0
+}

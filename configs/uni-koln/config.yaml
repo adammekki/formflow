@@ -1,4 +1,5 @@
 client_name: uni-koln
+institution_name: Universität Köln
 fields:
 - data_type: text
   description: Title, Vorname (First Name), Name (Last Name) of the employee

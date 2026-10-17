@@ -23,6 +23,7 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - APP_ENV=development
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
       - INFERENCE_PROVIDER=ollama
       # Use host.docker.internal to connect to Ollama running on metal (native macOS)
       - INFERENCE_BASE_URL=http://host.docker.internal:11434
@@ -34,6 +35,7 @@ services:
     networks:
       - formflow-network
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    restart: unless-stopped
 
   # ===========================
   # Ollama - Local LLM Server
@@ -67,6 +69,26 @@ services:
   #   networks:
   #     - formflow-network
   #   restart: unless-stopped
+
+  # ===========================
+  # Frontend - built SPA served by nginx
+  # ===========================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # Baked into the bundle at build time; the browser reaches the API on
+        # its published host port.
+        VITE_API_BASE: ${VITE_API_BASE:-http://localhost:8000}
+    container_name: formflow-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - app
+    networks:
+      - formflow-network
+    restart: unless-stopped
 
 networks:
   formflow-network:

@@ -79,3 +79,6 @@ scripts/
 # Feedback data (may contain sensitive info)
 # Uncomment if you don't want to track feedback
 # feedback/
+
+# Superpowers execution workspace (scratch, not source)
+.superpowers/
