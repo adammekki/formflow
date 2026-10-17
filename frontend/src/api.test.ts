@@ -1,6 +1,6 @@
 import { beforeEach, expect, it, vi } from "vitest";
 
-import { ApiError, discoverSchema, listClients } from "./api";
+import { ApiError, discoverSchema, getSession, listClients, pageImageUrl } from "./api";
 
 beforeEach(() => {
   vi.restoreAllMocks();
@@ -44,4 +44,33 @@ it("turns a 500 into a plain ApiError", async () => {
   vi.stubGlobal("fetch", vi.fn(async () => new Response("boom", { status: 500 })));
 
   await expect(listClients()).rejects.toBeInstanceOf(ApiError);
+});
+
+it("parses the session manifest", async () => {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            session_id: "s1",
+            client_name: "uni-ulm",
+            field_count: 3,
+            documents: [{ name: "hotel.pdf", page_count: 2 }],
+          }),
+          { status: 200 }
+        )
+    )
+  );
+
+  expect((await getSession("s1")).documents[0]).toEqual({
+    name: "hotel.pdf",
+    page_count: 2,
+  });
+});
+
+it("builds the page image URL", () => {
+  expect(pageImageUrl("s1", 0, 1)).toBe(
+    "http://localhost:8000/api/extract/session/s1/pages/0/1.jpg"
+  );
 });
