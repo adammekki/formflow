@@ -7,15 +7,26 @@ type Props = {
   value: string;
   onToggle: (kept: boolean) => void;
   onValueChange: (value: string) => void;
+  onSelect?: () => void;
 };
 
-export default function FieldRow({ field, kept, value, onToggle, onValueChange }: Props) {
+export default function FieldRow({
+  field,
+  kept,
+  value,
+  onToggle,
+  onValueChange,
+  onSelect,
+}: Props) {
   const inputId = `value-${field.field_name}`;
   const label = fieldLabel(field);
   const confident = field.confidence >= 0.5;
 
   return (
-    <tr className={`border-t border-line/40 align-top ${kept ? "" : "text-fg-muted"}`}>
+    <tr
+      onClick={onSelect}
+      className={`border-t border-line/40 align-top ${kept ? "" : "text-fg-muted"}`}
+    >
       <td className="px-3 py-3">
         <input
           type="checkbox"

@@ -1,13 +1,22 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { expect, it, vi } from "vitest";
+import { beforeEach, expect, it, vi } from "vitest";
 
 import * as api from "../api";
 import ReviewStep from "./ReviewStep";
 
 vi.mock("../api", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../api")>();
-  return { ...actual, verify: vi.fn() };
+  return { ...actual, verify: vi.fn(), getSession: vi.fn() };
+});
+
+beforeEach(() => {
+  vi.mocked(api.getSession).mockResolvedValue({
+    session_id: "s1",
+    client_name: "c",
+    field_count: 2,
+    documents: [{ name: "Rechnung.pdf", page_count: 1 }],
+  });
 });
 
 const FIELDS: api.ExtractedField[] = [
@@ -15,6 +24,7 @@ const FIELDS: api.ExtractedField[] = [
     field_name: "Name",
     value: "Müller",
     source_document: "Rechnung.pdf",
+    bounding_box: null,
     confidence: 0.9,
     reasoning: null,
   },
@@ -22,6 +32,7 @@ const FIELDS: api.ExtractedField[] = [
     field_name: "IBAN",
     value: "",
     source_document: "Rechnung.pdf",
+    bounding_box: null,
     confidence: 0.2,
     reasoning: null,
   },
@@ -73,6 +84,7 @@ it("shows the plain-language name when the form gives one", () => {
       semantic_name: "Personnel number",
       value: "12345",
       source_document: "Rechnung.pdf",
+      bounding_box: null,
       confidence: 0.9,
       reasoning: null,
     },
@@ -99,6 +111,28 @@ it("says how many values will be filled, and keeps that count current", async ()
   await userEvent.click(screen.getByRole("checkbox", { name: /keep name/i }));
 
   expect(screen.getByText(/0 of 2 selected/i)).toBeTruthy();
+});
+
+it("shows the focused field's page and box in the viewer", async () => {
+  const boxed: api.ExtractedField[] = [
+    {
+      ...FIELDS[0],
+      bounding_box: { page: 0, x: 10, y: 20, width: 100, height: 30 },
+    },
+  ];
+
+  render(<ReviewStep sessionId="s1" fields={boxed} onDone={vi.fn()} />);
+
+  await userEvent.click(await screen.findByLabelText("Name"));
+
+  const img = await screen.findByAltText("Page 1 of Rechnung.pdf");
+  // jsdom never fires image loads; the browser does, which is what the
+  // overlay's percentage positions depend on.
+  Object.defineProperty(img, "naturalWidth", { value: 1000 });
+  Object.defineProperty(img, "naturalHeight", { value: 500 });
+  fireEvent.load(img);
+
+  expect(screen.getByTestId("bbox-overlay")).toBeTruthy();
 });
 
 it("passes values the form could not place through to the caller", async () => {

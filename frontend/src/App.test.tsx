@@ -12,6 +12,7 @@ vi.mock("./api", async (importOriginal) => {
     listClients: vi.fn(),
     extract: vi.fn(),
     verify: vi.fn(),
+    getSession: vi.fn(),
   };
 });
 
@@ -26,10 +27,17 @@ it("walks from picker to download", async () => {
         field_name: "Name",
         value: "Müller",
         source_document: "Rechnung.pdf",
+        bounding_box: null,
         confidence: 0.9,
         reasoning: null,
       },
     ],
+  });
+  vi.mocked(api.getSession).mockResolvedValue({
+    session_id: "s1",
+    client_name: "uni-hamburg",
+    field_count: 1,
+    documents: [{ name: "Rechnung.pdf", page_count: 1 }],
   });
   vi.mocked(api.verify).mockResolvedValue({
     download_url: "/api/extract/download/uni-hamburg/f.pdf",
