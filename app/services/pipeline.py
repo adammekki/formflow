@@ -447,12 +447,14 @@ IMPORTANT: Look at ALL documents together to build a complete picture. Informati
                     "field_name": field_name,
                     "original_value": original_value,
                     "corrected_value": corrected_value,
+                    "bounding_box": field.get("bounding_box"),
                     "was_corrected": True,
                 })
             else:
                 corrections.append({
                     "field_name": field_name,
                     "value": original_value,
+                    "bounding_box": field.get("bounding_box"),
                     "was_corrected": False,
                 })
         
