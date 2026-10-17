@@ -155,6 +155,44 @@ it("follows keyboard focus into the viewer", async () => {
   expect(screen.getByTestId("bbox-overlay")).toBeTruthy();
 });
 
+it("marks the selected row so the viewer's field is obvious", async () => {
+  render(<ReviewStep sessionId="s1" fields={FIELDS} onDone={vi.fn()} />);
+
+  const row = await screen.findByRole("row", { name: /Name/ });
+  expect(row.getAttribute("aria-selected")).toBe("false");
+
+  fireEvent.focus(screen.getByRole("checkbox", { name: /keep name/i }));
+
+  expect(row.getAttribute("aria-selected")).toBe("true");
+});
+
+it("moves the selection with the arrow keys", async () => {
+  const boxed: api.ExtractedField[] = [
+    { ...FIELDS[0], bounding_box: { page: 0, x: 10, y: 20, width: 100, height: 30 } },
+    { ...FIELDS[1], value: "DE89 3704", bounding_box: { page: 0, x: 5, y: 6, width: 20, height: 8 } },
+  ];
+  render(<ReviewStep sessionId="s1" fields={boxed} onDone={vi.fn()} />);
+  const checkbox = await screen.findByRole("checkbox", { name: /keep name/i });
+
+  fireEvent.focus(checkbox);
+  fireEvent.keyDown(checkbox, { key: "ArrowDown" });
+
+  expect(screen.getByRole("row", { name: /IBAN/ }).getAttribute("aria-selected")).toBe("true");
+
+  fireEvent.keyDown(checkbox, { key: "ArrowUp" });
+
+  expect(screen.getByRole("row", { name: /Name/ }).getAttribute("aria-selected")).toBe("true");
+});
+
+it("keeps arrow keys inside the box while typing a value", async () => {
+  render(<ReviewStep sessionId="s1" fields={FIELDS} onDone={vi.fn()} />);
+
+  fireEvent.focus(screen.getByRole("checkbox", { name: /keep name/i }));
+  fireEvent.keyDown(screen.getByLabelText("Name"), { key: "ArrowDown" });
+
+  expect(screen.getByRole("row", { name: /Name/ }).getAttribute("aria-selected")).toBe("true");
+});
+
 it("passes values the form could not place through to the caller", async () => {
   vi.mocked(api.verify).mockResolvedValue({
     download_url: "/api/extract/download/x/y.pdf",

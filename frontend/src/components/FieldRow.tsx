@@ -5,6 +5,8 @@ type Props = {
   field: ExtractedField;
   kept: boolean;
   value: string;
+  selected?: boolean;
+  rowId?: string;
   onToggle: (kept: boolean) => void;
   onValueChange: (value: string) => void;
   onSelect?: () => void;
@@ -14,6 +16,8 @@ export default function FieldRow({
   field,
   kept,
   value,
+  selected = false,
+  rowId,
   onToggle,
   onValueChange,
   onSelect,
@@ -24,9 +28,13 @@ export default function FieldRow({
 
   return (
     <tr
+      id={rowId}
+      aria-selected={selected}
       onClick={onSelect}
       onFocus={onSelect}
-      className={`border-t border-line/40 align-top ${kept ? "" : "text-fg-muted"}`}
+      className={`border-t border-line/40 align-top ${kept ? "" : "text-fg-muted"} ${
+        selected ? "bg-accent/10 ring-1 ring-inset ring-accent/50" : ""
+      }`}
     >
       <td className="px-3 py-3">
         <input

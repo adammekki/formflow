@@ -61,10 +61,30 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
     };
   }, [sessionId]);
 
+  // Keep the selected row visible when the selection moves by keyboard.
+  useEffect(() => {
+    if (focused === null) return;
+    document.getElementById(`field-row-${focused}`)?.scrollIntoView?.({ block: "nearest" });
+  }, [focused]);
+
   function update(index: number, patch: Partial<Row>) {
     setRows((current) =>
       current.map((row, i) => (i === index ? { ...row, ...patch } : row))
     );
+  }
+
+  /** Up/Down walk the field list, so the viewer follows without the mouse. */
+  function handleListKeys(event: React.KeyboardEvent) {
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+    const target = event.target as HTMLInputElement;
+    // Arrow keys belong to the caret while a value is being edited.
+    if (target.tagName === "INPUT" && target.type !== "checkbox") return;
+    event.preventDefault();
+    setFocused((current) => {
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      const next = current === null ? 0 : current + step;
+      return Math.min(Math.max(next, 0), rows.length - 1);
+    });
   }
 
   /** Which page to show, and where the box sits on it. */
@@ -140,7 +160,7 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
               </span>
             </div>
 
-            <div className="overflow-hidden rounded-lg border border-line/60">
+            <div className="overflow-hidden rounded-lg border border-line/60" onKeyDown={handleListKeys}>
               <table className="w-full table-fixed border-collapse">
                 <colgroup>
                   <col className="w-12" />
@@ -171,6 +191,8 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
                       field={fields[index]}
                       kept={row.kept}
                       value={row.value}
+                      selected={focused === index}
+                      rowId={`field-row-${index}`}
                       onToggle={(kept) => update(index, { kept })}
                       onValueChange={(value) => update(index, { value })}
                       onSelect={() => setFocused(index)}
