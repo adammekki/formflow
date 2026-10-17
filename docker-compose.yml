@@ -24,10 +24,6 @@ services:
       - PYTHONUNBUFFERED=1
       - APP_ENV=development
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
-      # Preview the review screen without a real model run:
-      #   MOCK_EXTRACTION=true docker compose up -d app
-      - MOCK_EXTRACTION=${MOCK_EXTRACTION:-false}
-      - MOCK_EXTRACTION_SECONDS=${MOCK_EXTRACTION_SECONDS:-5}
       - INFERENCE_PROVIDER=ollama
       # Use host.docker.internal to connect to Ollama running on metal (native macOS)
       - INFERENCE_BASE_URL=http://host.docker.internal:11434

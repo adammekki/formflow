@@ -1,16 +1,6 @@
 from app.config import Settings
 
 
-def test_mock_extraction_is_off_by_default(monkeypatch):
-    monkeypatch.delenv("MOCK_EXTRACTION", raising=False)
-    assert Settings().mock_extraction is False
-
-
-def test_mock_extraction_can_be_enabled(monkeypatch):
-    monkeypatch.setenv("MOCK_EXTRACTION", "true")
-    assert Settings().mock_extraction is True
-
-
 def test_log_level_defaults_to_info(monkeypatch):
     monkeypatch.delenv("LOG_LEVEL", raising=False)
     assert Settings().log_level.upper() == "INFO"

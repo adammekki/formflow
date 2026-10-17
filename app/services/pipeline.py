@@ -10,7 +10,6 @@ Sequential pipeline orchestrator that coordinates:
 """
 
 import os
-import asyncio
 import json
 import logging
 import yaml
@@ -140,33 +139,6 @@ Only include fields where you found relevant information (confidence > 0). Do NO
         img.save(buffer, format='JPEG', quality=85)
         return buffer.getvalue()
 
-    def _mock_fields(self) -> list[dict]:
-        """Canned values shaped like real extraction output, for previewing the UI."""
-        fields = []
-        for index, field in enumerate(self.config.get("fields", [])):
-            name = field.get("field_name", "unknown")
-            label = field.get("semantic_name") or name
-
-            # A deliberate spread so the review screen shows every state it has:
-            # confident, unsure, and found-nothing.
-            if index % 7 == 3:
-                value, confidence = "", 0.2
-            elif index % 3 == 1:
-                value, confidence = f"Sample {label}", 0.45
-            else:
-                value, confidence = f"Sample {label}", 0.95
-
-            fields.append({
-                "field_name": name,
-                "semantic_name": field.get("semantic_name"),
-                "value": value,
-                "source_document": "sample-receipt.pdf",
-                "bounding_box": None,
-                "confidence": confidence,
-                "reasoning": "dummy value (MOCK_EXTRACTION)",
-            })
-        return fields
-
     async def extract(self, receipt_paths: list[str]) -> dict[str, Any]:
         """
         Extract data from receipt documents.
@@ -184,16 +156,7 @@ Only include fields where you found relevant information (confidence > 0). Do NO
         import io
         import logging
         logger = logging.getLogger(__name__)
-
-        if settings.mock_extraction:
-            logger.warning(
-                "MOCK_EXTRACTION is on: returning dummy values after %.1fs, "
-                "the vision model is NOT called",
-                settings.mock_extraction_seconds,
-            )
-            await asyncio.sleep(settings.mock_extraction_seconds)
-            return {"fields": self._mock_fields()}
-
+        
         # Load extraction prompt
         prompt = self._load_extraction_prompt()
         
