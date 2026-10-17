@@ -68,6 +68,10 @@ pip install -r requirements.txt
 brew install poppler            # macOS
 apt-get install poppler-utils   # Debian/Ubuntu
 
+# Tesseract is required for OCR (bounding boxes on scans/photos)
+brew install tesseract          # macOS (bundles German language data)
+apt-get install tesseract-ocr tesseract-ocr-deu   # Debian/Ubuntu
+
 ollama serve
 ollama pull ministral-3:8b
 

@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpoppler-cpp-dev \
     build-essential \
     curl \
+    tesseract-ocr \
+    tesseract-ocr-deu \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

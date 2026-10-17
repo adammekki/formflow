@@ -223,8 +223,37 @@ def _pdf_page_words(page) -> list[Word]:
 
 
 def _ocr_page_words(image_path: str) -> list[Word]:
-    """OCR fallback for image documents and garbage text layers (Task 4)."""
-    raise NotImplementedError("OCR leg not available")
+    """Words with pixel coordinates and per-word confidence from Tesseract OCR.
+
+    Runs on the saved page JPEG, so coordinates are already in the same
+    pixel space the review screen serves. Clients are en+de, so both
+    language packs are used.
+    """
+    import pytesseract
+    from PIL import Image
+
+    with Image.open(image_path) as img:
+        data = pytesseract.image_to_data(
+            img, lang="eng+deu", output_type=pytesseract.Output.DICT
+        )
+    words = []
+    for i in range(len(data["text"])):
+        text = data["text"][i].strip()
+        conf = float(data["conf"][i])
+        if not text or conf < 0:
+            continue
+        x = data["left"][i]
+        y = data["top"][i]
+        words.append(Word(
+            x0=x,
+            y0=y,
+            x1=x + data["width"][i],
+            y1=y + data["height"][i],
+            text=text,
+            line=(data["block_num"][i] << 16) | data["line_num"][i],
+            conf=conf,
+        ))
+    return words
 
 
 def _rect_to_wh(rect: tuple[float, float, float, float]) -> tuple[float, float, float, float]:

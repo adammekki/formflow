@@ -199,3 +199,72 @@ def test_empty_value_is_skipped(tmp_path):
     locate_fields(paths, documents, pages_dir, [field])
 
     assert field["bounding_box"] is None
+
+
+# --- Task 4: OCR leg --------------------------------------------------------
+
+import shutil
+
+tesseract = pytest.mark.skipif(
+    shutil.which("tesseract") is None, reason="tesseract not installed"
+)
+
+
+def _make_image_pdf(path, text):
+    """A PDF whose only content is a rendered image of text (no text layer)."""
+    src = fitz.open()
+    page = src.new_page()
+    page.insert_text((72, 72), text)
+    pix = page.get_pixmap(dpi=200)
+    img_pdf = fitz.open()
+    ipage = img_pdf.new_page(width=page.rect.width, height=page.rect.height)
+    ipage.insert_image(ipage.rect, pixmap=pix)
+    img_pdf.save(path)
+    img_pdf.close()
+    src.close()
+
+
+@tesseract
+def test_ocr_leg_locates_value_on_garbage_text_layer(tmp_path):
+    pdf = tmp_path / "scan.pdf"
+    _make_image_pdf(pdf, "Parkhaus City")
+    paths = [str(pdf)]
+    pages_dir = tmp_path / "pages"
+    _, _, documents = _pipeline()._prepare_documents(paths, str(pages_dir))
+    field = _field("Parkhaus City", "scan.pdf")
+
+    locate_fields(paths, documents, str(pages_dir), [field])
+
+    assert field["bounding_box"] is not None
+
+
+@tesseract
+def test_ocr_leg_gives_no_box_for_absent_value(tmp_path):
+    pdf = tmp_path / "scan.pdf"
+    _make_image_pdf(pdf, "Parkhaus City")
+    paths = [str(pdf)]
+    pages_dir = tmp_path / "pages"
+    _, _, documents = _pipeline()._prepare_documents(paths, str(pages_dir))
+    field = _field("Nonexistent String XYZ", "scan.pdf")
+
+    locate_fields(paths, documents, str(pages_dir), [field])
+
+    assert field["bounding_box"] is None
+
+
+@tesseract
+def test_ocr_leg_handles_uploaded_image(tmp_path):
+    src = fitz.open()
+    page = src.new_page()
+    page.insert_text((72, 72), "Bahnhofstrasse 5")
+    img_path = tmp_path / "photo.jpg"
+    page.get_pixmap(dpi=200).save(str(img_path))
+    src.close()
+    paths = [str(img_path)]
+    pages_dir = tmp_path / "pages"
+    _, _, documents = _pipeline()._prepare_documents(paths, str(pages_dir))
+    field = _field("Bahnhofstrasse 5", "photo.jpg")
+
+    locate_fields(paths, documents, str(pages_dir), [field])
+
+    assert field["bounding_box"] is not None
