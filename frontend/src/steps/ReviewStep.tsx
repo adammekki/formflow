@@ -15,6 +15,7 @@ import DocumentViewer from "../components/DocumentViewer";
 import FieldRow from "../components/FieldRow";
 import FormPreview from "../components/FormPreview";
 import Notice from "../components/Notice";
+import ZoomControls from "../components/ZoomControls";
 import { fieldLabel } from "../fieldLabel";
 
 function messageOf(error: unknown): string {
@@ -52,6 +53,8 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
   const [session, setSession] = useState<SessionInfo | null>(null);
   const [template, setTemplate] = useState<TemplateInfo | null>(null);
   const [focused, setFocused] = useState<number | null>(null);
+  const [sourceZoom, setSourceZoom] = useState(1);
+  const [formZoom, setFormZoom] = useState(1);
 
   // A missing manifest only costs the box overlay, so a failure keeps the
   // table usable instead of blocking the screen.
@@ -202,15 +205,19 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr_1.4fr]">
         {target && (
           <div className="min-w-0 space-y-2 lg:order-1 order-2 lg:sticky lg:top-3 lg:self-start">
-            <span className="text-xs uppercase tracking-wide text-fg-muted">
-              Source document
-            </span>
-            <div className="max-h-[70vh] space-y-3 overflow-auto lg:max-h-none lg:h-[calc(100vh-7rem)]">
+            <div className="flex items-center justify-between">
+              <span className="text-xs uppercase tracking-wide text-fg-muted">
+                Source document
+              </span>
+              <ZoomControls zoom={sourceZoom} onChange={setSourceZoom} name="source document" />
+            </div>
+            <div className="max-h-[70vh] space-y-3 overflow-auto lg:max-h-none lg:h-[calc(100vh-8.5rem)]">
               {target.pages.map((page) => (
                 <DocumentViewer
                   key={page.page}
                   documentName={target.documentName}
                   pageId={`source-page-${page.page}`}
+                  zoom={sourceZoom}
                   {...page}
                 />
               ))}
@@ -279,11 +286,12 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
 
         {preview && (
           <div className="min-w-0 space-y-2 lg:order-3 lg:sticky lg:top-3 lg:self-start">
-            <span className="text-xs uppercase tracking-wide text-fg-muted">
-              Filled form
-            </span>
-            <div className="max-h-[70vh] overflow-auto lg:max-h-none lg:h-[calc(100vh-7rem)]">
-              <FormPreview {...preview} />
+            <div className="flex items-center justify-between">
+              <span className="text-xs uppercase tracking-wide text-fg-muted">Filled form</span>
+              <ZoomControls zoom={formZoom} onChange={setFormZoom} name="filled form" />
+            </div>
+            <div className="max-h-[70vh] overflow-auto lg:max-h-none lg:h-[calc(100vh-8.5rem)]">
+              <FormPreview {...preview} zoom={formZoom} />
             </div>
           </div>
         )}

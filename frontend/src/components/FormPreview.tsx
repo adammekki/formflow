@@ -18,17 +18,20 @@ type PreviewPage = {
 type Props = {
   pages: PreviewPage[];
   boxes: PreviewBox[];
+  /** 1 fits the pane width; above that the pane scrolls sideways. */
+  zoom?: number;
 };
 
 /** The whole form template, stacked, with a labelled box on every line that
  *  will be filled. */
-export default function FormPreview({ pages, boxes }: Props) {
+export default function FormPreview({ pages, boxes, zoom = 1 }: Props) {
   return (
     <div className="space-y-3">
       {pages.map((page) => (
         <FormPage
           key={page.page}
           page={page}
+          zoom={zoom}
           boxes={boxes.filter((entry) => entry.box.page === page.page)}
         />
       ))}
@@ -36,14 +39,23 @@ export default function FormPreview({ pages, boxes }: Props) {
   );
 }
 
-function FormPage({ page, boxes }: { page: PreviewPage; boxes: PreviewBox[] }) {
+function FormPage({
+  page,
+  boxes,
+  zoom,
+}: {
+  page: PreviewPage;
+  boxes: PreviewBox[];
+  zoom: number;
+}) {
   const [natural, setNatural] = useState<{ w: number; h: number } | null>(null);
 
   return (
     <div
       id={`preview-page-${page.page}`}
       data-testid={`template-page-${page.page}`}
-      className="relative w-full min-w-[900px] overflow-hidden rounded-lg border border-line/60 bg-muted"
+      style={{ width: `${zoom * 100}%` }}
+      className="relative mx-auto overflow-hidden rounded-lg border border-line/60 bg-muted"
     >
       <img
         src={page.imageUrl}

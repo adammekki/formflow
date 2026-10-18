@@ -24,6 +24,14 @@ it("positions the overlay in percentages of the natural image", () => {
   expect(overlay.style.height).toBe("5%");
 });
 
+it("scales the page with the zoom factor", () => {
+  render(
+    <DocumentViewer imageUrl="/x.jpg" documentName="hotel.pdf" page={0} box={null} zoom={0.75} />
+  );
+
+  expect(screen.getByAltText("Page 1 of hotel.pdf").parentElement?.style.width).toBe("75%");
+});
+
 it("renders no overlay without a box", () => {
   render(<DocumentViewer imageUrl="/x.jpg" documentName="hotel.pdf" page={0} box={null} />);
 

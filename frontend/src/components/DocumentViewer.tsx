@@ -9,9 +9,18 @@ type Props = {
   documentName: string;
   page: number;
   pageId?: string;
+  /** 1 fits the pane width; above that the pane scrolls sideways. */
+  zoom?: number;
 };
 
-export default function DocumentViewer({ imageUrl, box, documentName, page, pageId }: Props) {
+export default function DocumentViewer({
+  imageUrl,
+  box,
+  documentName,
+  page,
+  pageId,
+  zoom = 1,
+}: Props) {
   const [natural, setNatural] = useState<{ w: number; h: number } | null>(null);
 
   // Percentage positions keep the overlay glued to the value across resizes,
@@ -19,7 +28,8 @@ export default function DocumentViewer({ imageUrl, box, documentName, page, page
   return (
     <div
       id={pageId}
-      className="relative w-full min-w-[900px] overflow-hidden rounded-lg border border-line/60 bg-muted"
+      style={{ width: `${zoom * 100}%` }}
+      className="relative mx-auto overflow-hidden rounded-lg border border-line/60 bg-muted"
     >
       <img
         src={imageUrl}

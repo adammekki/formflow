@@ -55,7 +55,7 @@ it("sends both the edited value and the ticks", async () => {
 
   await userEvent.clear(screen.getByLabelText("Name"));
   await userEvent.type(screen.getByLabelText("Name"), "Müller, Jörg");
-  await userEvent.click(screen.getByRole("button", { name: /finish|fill/i }));
+  await userEvent.click(screen.getByRole("button", { name: /^fill the form$/i }));
 
   // Name is ticked by default (confidence 0.9); IBAN is not (0.2, empty).
   expect(api.verify).toHaveBeenCalledWith({
@@ -72,7 +72,7 @@ it("leaves an unticked field out of the payload", async () => {
 
   // Name is ticked by default; unticking it is what the user does to drop a field.
   await userEvent.click(screen.getByRole("checkbox", { name: /keep name/i }));
-  await userEvent.click(screen.getByRole("button", { name: /finish|fill/i }));
+  await userEvent.click(screen.getByRole("button", { name: /^fill the form$/i }));
 
   expect(api.verify).toHaveBeenCalledWith({
     sessionId: "s1",
@@ -337,7 +337,7 @@ it("passes values the form could not place through to the caller", async () => {
   const onDone = vi.fn();
 
   render(<ReviewStep sessionId="s1" fields={FIELDS} onDone={onDone} />);
-  await userEvent.click(screen.getByRole("button", { name: /finish|fill/i }));
+  await userEvent.click(screen.getByRole("button", { name: /^fill the form$/i }));
 
   expect(onDone).toHaveBeenCalledWith("/api/extract/download/x/y.pdf", ["UHD"]);
 });
