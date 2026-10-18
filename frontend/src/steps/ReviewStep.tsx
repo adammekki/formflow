@@ -186,11 +186,11 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
 
       <div className="grid gap-6 lg:grid-cols-3">
         {target && (
-          <div className="space-y-2 lg:order-1 order-2 lg:flex lg:h-[calc(100vh-6rem)] lg:flex-col">
+          <div className="space-y-2 lg:order-1 order-2 lg:sticky lg:top-3 lg:self-start">
             <span className="text-xs uppercase tracking-wide text-fg-muted">
               Source document
             </span>
-            <div className="max-h-[70vh] overflow-y-auto lg:min-h-0 lg:max-h-none lg:flex-1">
+            <div className="max-h-[70vh] overflow-y-auto lg:max-h-none lg:h-[calc(100vh-7rem)]">
               <DocumentViewer {...target} />
             </div>
           </div>
@@ -256,11 +256,11 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
         </div>
 
         {preview && (
-          <div className="space-y-2 lg:order-3 lg:flex lg:h-[calc(100vh-6rem)] lg:flex-col">
+          <div className="space-y-2 lg:order-3 lg:sticky lg:top-3 lg:self-start">
             <span className="text-xs uppercase tracking-wide text-fg-muted">
               Filled form
             </span>
-            <div className="max-h-[70vh] overflow-y-auto lg:min-h-0 lg:max-h-none lg:flex-1">
+            <div className="max-h-[70vh] overflow-y-auto lg:max-h-none lg:h-[calc(100vh-7rem)]">
               <FormPreview {...preview} />
             </div>
           </div>
