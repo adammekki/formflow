@@ -5,17 +5,46 @@ type Props = {
   field: ExtractedField;
   kept: boolean;
   value: string;
+  selected?: boolean;
+  rowId?: string;
   onToggle: (kept: boolean) => void;
   onValueChange: (value: string) => void;
+  onSelect?: () => void;
 };
 
-export default function FieldRow({ field, kept, value, onToggle, onValueChange }: Props) {
+export default function FieldRow({
+  field,
+  kept,
+  value,
+  selected = false,
+  rowId,
+  onToggle,
+  onValueChange,
+  onSelect,
+}: Props) {
   const inputId = `value-${field.field_name}`;
   const label = fieldLabel(field);
   const confident = field.confidence >= 0.5;
 
   return (
-    <tr className={`border-t border-line/40 align-top ${kept ? "" : "text-fg-muted"}`}>
+    <tr
+      id={rowId}
+      tabIndex={0}
+      aria-selected={selected}
+      onClick={(event) => {
+        onSelect?.();
+        // Give the row keyboard focus so the arrow keys reach the list, unless
+        // the click landed on a control that needs focus itself.
+        const target = event.target as HTMLElement;
+        if (!target.closest("input, textarea, select, label, button")) {
+          event.currentTarget.focus();
+        }
+      }}
+      onFocus={onSelect}
+      className={`border-t border-line/40 align-top outline-none ${kept ? "" : "text-fg-muted"} ${
+        selected ? "bg-accent/10 ring-1 ring-inset ring-accent/50" : ""
+      }`}
+    >
       <td className="px-3 py-3">
         <input
           type="checkbox"

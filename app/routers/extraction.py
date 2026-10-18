@@ -8,13 +8,18 @@ from fastapi import APIRouter, UploadFile, File, HTTPException, Form
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional
+import logging
 import os
 import uuid
 import tempfile
 import shutil
 
+from starlette.concurrency import run_in_threadpool
+
 from app.config import settings
+from app.services.locator import locate_fields
 from app.services.naming import safe_filename, unique_filename
+from app.services.pdf_form import render_template_preview
 from app.services.pipeline import FormFillingPipeline
 
 
@@ -116,16 +121,53 @@ async def extract_from_receipts(
         if not saved_receipts:
             raise HTTPException(status_code=400, detail="No valid receipts uploaded")
         
-        # Run extraction pipeline
+        # Run extraction pipeline, saving full-size page renders for the review UI
+        pages_dir = os.path.join(temp_dir, "pages")
         pipeline = FormFillingPipeline(client_name)
-        extraction_result = await pipeline.extract(saved_receipts)
-        
+        extraction_result = await pipeline.extract(saved_receipts, pages_dir=pages_dir)
+
+        # Locate each value in the source documents (deterministic; OCR on
+        # scans can block for seconds, so it runs off the event loop).
+        # Boxes are an aid: a missing OCR binary or an unreadable file must
+        # leave values without a box, never fail the extraction.
+        try:
+            await run_in_threadpool(
+                locate_fields,
+                saved_receipts,
+                extraction_result["documents"],
+                pages_dir,
+                extraction_result["fields"],
+            )
+        except Exception:
+            logging.getLogger(__name__).exception(
+                "Bounding box location failed; continuing without boxes"
+            )
+
+        # Render the form template so the review screen can show where each
+        # value will be written. A missing template only costs the preview.
+        template = None
+        template_path = os.path.join(settings.templates_dir, client_name, "form_template.pdf")
+        if os.path.exists(template_path):
+            try:
+                template = await run_in_threadpool(
+                    render_template_preview,
+                    template_path,
+                    os.path.join(temp_dir, "template_pages"),
+                )
+            except Exception:
+                logging.getLogger(__name__).exception(
+                    "Form template preview failed; continuing without it"
+                )
+
         # Store session for verification
         verification_sessions[session_id] = {
             "temp_dir": temp_dir,
             "client_name": client_name,
             "extracted_data": extraction_result["fields"],
             "receipt_paths": saved_receipts,
+            "documents": extraction_result["documents"],
+            "pages_dir": pages_dir,
+            "template": template,
         }
         
         return ExtractionResponse(
@@ -216,13 +258,54 @@ async def download_filled_form(client_name: str, filename: str):
 
 @router.get("/session/{session_id}")
 async def get_session_status(session_id: str):
-    """Get the status of an extraction session."""
+    """Get the status of an extraction session, including the page manifest."""
     if session_id not in verification_sessions:
         raise HTTPException(status_code=404, detail="Session not found or expired")
-    
+
     session = verification_sessions[session_id]
     return {
         "session_id": session_id,
         "client_name": session["client_name"],
         "field_count": len(session["extracted_data"]),
+        "documents": session.get("documents", []),
     }
+
+
+@router.get("/session/{session_id}/template")
+async def get_session_template(session_id: str):
+    """The form template preview: page sizes and where each field will be filled."""
+    if session_id not in verification_sessions:
+        raise HTTPException(status_code=404, detail="Session not found or expired")
+
+    template = verification_sessions[session_id].get("template")
+    if template is None:
+        raise HTTPException(status_code=404, detail="No form preview for this session")
+    return template
+
+
+@router.get("/session/{session_id}/template/pages/{page}.jpg")
+async def get_template_page(session_id: str, page: int):
+    """Serve a rendered form template page; preview boxes refer to these pixels."""
+    if session_id not in verification_sessions:
+        raise HTTPException(status_code=404, detail="Session not found or expired")
+
+    path = os.path.join(
+        verification_sessions[session_id]["temp_dir"], "template_pages", f"p{page:03d}.jpg"
+    )
+    if not os.path.isfile(path):
+        raise HTTPException(status_code=404, detail="Page not found")
+    return FileResponse(path=path, media_type="image/jpeg")
+
+
+@router.get("/session/{session_id}/pages/{doc_index}/{page}.jpg")
+async def get_session_page(session_id: str, doc_index: int, page: int):
+    """Serve a rendered receipt page; bounding boxes refer to these pixels."""
+    if session_id not in verification_sessions:
+        raise HTTPException(status_code=404, detail="Session not found or expired")
+
+    # int path params make the filename safe to construct
+    filename = f"doc{doc_index:02d}_p{page:03d}.jpg"
+    path = os.path.join(verification_sessions[session_id]["pages_dir"], filename)
+    if not os.path.isfile(path):
+        raise HTTPException(status_code=404, detail="Page not found")
+    return FileResponse(path=path, media_type="image/jpeg")

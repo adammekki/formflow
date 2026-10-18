@@ -20,13 +20,50 @@ export type Proposal = {
   fields: ProposedField[];
 };
 
+export type BoundingBox = {
+  page: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
 export type ExtractedField = {
   field_name: string;
   semantic_name?: string | null;
   value: string;
   source_document: string;
+  bounding_box: BoundingBox | null;
   confidence: number;
   reasoning: string | null;
+};
+
+export type SessionDocument = {
+  name: string;
+  page_count: number;
+};
+
+export type SessionInfo = {
+  session_id: string;
+  client_name: string;
+  field_count: number;
+  documents: SessionDocument[];
+};
+
+export type TemplatePage = {
+  page: number;
+  width: number;
+  height: number;
+};
+
+/** A form line that will receive a value, in the rendered page's pixels. */
+export type TemplateField = BoundingBox & {
+  field_name: string;
+};
+
+export type TemplateInfo = {
+  pages: TemplatePage[];
+  fields: TemplateField[];
 };
 
 export type ExtractionResult = {
@@ -133,4 +170,20 @@ export async function verify(input: {
       kept_fields: input.keptFields,
     }),
   });
+}
+
+export async function getSession(sessionId: string): Promise<SessionInfo> {
+  return request<SessionInfo>(`/api/extract/session/${sessionId}`);
+}
+
+export function pageImageUrl(sessionId: string, docIndex: number, page: number): string {
+  return apiUrl(`/api/extract/session/${sessionId}/pages/${docIndex}/${page}.jpg`);
+}
+
+export async function getTemplate(sessionId: string): Promise<TemplateInfo> {
+  return request<TemplateInfo>(`/api/extract/session/${sessionId}/template`);
+}
+
+export function templatePageUrl(sessionId: string, page: number): string {
+  return apiUrl(`/api/extract/session/${sessionId}/template/pages/${page}.jpg`);
 }
