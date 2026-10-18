@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import type { BoundingBox } from "../api";
+import { pct } from "../percent";
 
 type Props = {
   imageUrl: string;
@@ -8,11 +9,6 @@ type Props = {
   documentName: string;
   page: number;
 };
-
-/** toFixed+parseFloat avoids artifacts like "10.000000000000002%". */
-function pct(part: number, whole: number): string {
-  return `${parseFloat(((part / whole) * 100).toFixed(2))}%`;
-}
 
 export default function DocumentViewer({ imageUrl, box, documentName, page }: Props) {
   const [natural, setNatural] = useState<{ w: number; h: number } | null>(null);

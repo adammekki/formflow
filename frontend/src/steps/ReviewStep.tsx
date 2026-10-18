@@ -2,15 +2,20 @@ import { useEffect, useState } from "react";
 
 import {
   getSession,
+  getTemplate,
   pageImageUrl,
+  templatePageUrl,
   verify,
   type ExtractedField,
   type SessionInfo,
+  type TemplateInfo,
 } from "../api";
 import Button from "../components/Button";
 import DocumentViewer from "../components/DocumentViewer";
 import FieldRow from "../components/FieldRow";
+import FormPreview from "../components/FormPreview";
 import Notice from "../components/Notice";
+import { fieldLabel } from "../fieldLabel";
 
 function messageOf(error: unknown): string {
   if (error instanceof Error && error.message) {
@@ -45,6 +50,7 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [session, setSession] = useState<SessionInfo | null>(null);
+  const [template, setTemplate] = useState<TemplateInfo | null>(null);
   const [focused, setFocused] = useState<number | null>(null);
 
   // A missing manifest only costs the box overlay, so a failure keeps the
@@ -54,6 +60,11 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
     getSession(sessionId)
       .then((info) => {
         if (!cancelled) setSession(info);
+      })
+      .catch(() => {});
+    getTemplate(sessionId)
+      .then((info) => {
+        if (!cancelled) setTemplate(info);
       })
       .catch(() => {});
     return () => {
@@ -139,7 +150,38 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
     );
   }
 
+  /** The template page to show, with a labelled box per kept field on it. */
+  function previewTarget() {
+    if (!template || template.pages.length === 0) {
+      return null;
+    }
+    const targets = rows.flatMap((row, index) => {
+      const target = template.fields.find((f) => f.field_name === row.field_name);
+      if (!row.kept || !target) {
+        return [];
+      }
+      return [
+        {
+          key: row.field_name,
+          label: fieldLabel(fields[index]),
+          box: target,
+          selected: focused === index,
+          page: target.page,
+        },
+      ];
+    });
+    const page = targets.find((entry) => entry.selected)?.page ?? 0;
+    return {
+      imageUrl: templatePageUrl(sessionId, page),
+      page,
+      boxes: targets
+        .filter((entry) => entry.page === page)
+        .map(({ page: _page, ...box }) => box),
+    };
+  }
+
   const target = viewerTarget();
+  const preview = previewTarget();
 
   return (
     <section className="space-y-7">
@@ -150,8 +192,17 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
         </p>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="space-y-4">
+      <div className="grid gap-6 lg:grid-cols-3">
+        {target && (
+          <div className="space-y-2 lg:order-1 order-2">
+            <span className="text-xs uppercase tracking-wide text-fg-muted">
+              Source document
+            </span>
+            <DocumentViewer {...target} />
+          </div>
+        )}
+
+        <div className="space-y-4 lg:order-2 order-1">
           <div className="space-y-2">
             <div className="flex items-baseline justify-between">
               <span className="text-xs uppercase tracking-wide text-fg-muted">Fields found</span>
@@ -210,12 +261,12 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
           {error && <Notice tone="error">{error}</Notice>}
         </div>
 
-        {target && (
-          <div className="space-y-2">
+        {preview && (
+          <div className="space-y-2 lg:order-3">
             <span className="text-xs uppercase tracking-wide text-fg-muted">
-              Source document
+              Filled form
             </span>
-            <DocumentViewer {...target} />
+            <FormPreview {...preview} />
           </div>
         )}
       </div>

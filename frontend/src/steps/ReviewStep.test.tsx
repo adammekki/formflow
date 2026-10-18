@@ -7,7 +7,7 @@ import ReviewStep from "./ReviewStep";
 
 vi.mock("../api", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../api")>();
-  return { ...actual, verify: vi.fn(), getSession: vi.fn() };
+  return { ...actual, verify: vi.fn(), getSession: vi.fn(), getTemplate: vi.fn() };
 });
 
 beforeEach(() => {
@@ -16,6 +16,10 @@ beforeEach(() => {
     client_name: "c",
     field_count: 2,
     documents: [{ name: "Rechnung.pdf", page_count: 1 }],
+  });
+  vi.mocked(api.getTemplate).mockResolvedValue({
+    pages: [{ page: 0, width: 1000, height: 500 }],
+    fields: [],
   });
 });
 
@@ -209,6 +213,50 @@ it("keeps arrow keys inside the box while typing a value", async () => {
   fireEvent.keyDown(screen.getByLabelText("Name"), { key: "ArrowDown" });
 
   expect(screen.getByRole("row", { name: /Name/ }).getAttribute("aria-selected")).toBe("true");
+});
+
+function loadFormPreview() {
+  const img = screen.getByAltText("Form page 1");
+  Object.defineProperty(img, "naturalWidth", { value: 1000 });
+  Object.defineProperty(img, "naturalHeight", { value: 500 });
+  fireEvent.load(img);
+}
+
+it("shows where the selected field will be written on the form", async () => {
+  vi.mocked(api.getTemplate).mockResolvedValue({
+    pages: [{ page: 0, width: 1000, height: 500 }],
+    fields: [{ field_name: "Name", page: 0, x: 100, y: 50, width: 200, height: 25 }],
+  });
+  const fields: api.ExtractedField[] = [
+    { ...FIELDS[0], bounding_box: { page: 0, x: 10, y: 20, width: 100, height: 30 } },
+  ];
+  render(<ReviewStep sessionId="s1" fields={fields} onDone={vi.fn()} />);
+
+  await userEvent.click(await screen.findByLabelText("Name"));
+  await screen.findByAltText("Form page 1");
+  loadFormPreview();
+
+  expect(screen.getByTestId("target-box-Name")).toBeTruthy();
+});
+
+it("drops the target box when the field is unticked", async () => {
+  vi.mocked(api.getTemplate).mockResolvedValue({
+    pages: [{ page: 0, width: 1000, height: 500 }],
+    fields: [{ field_name: "Name", page: 0, x: 100, y: 50, width: 200, height: 25 }],
+  });
+  const fields: api.ExtractedField[] = [
+    { ...FIELDS[0], bounding_box: { page: 0, x: 10, y: 20, width: 100, height: 30 } },
+  ];
+  render(<ReviewStep sessionId="s1" fields={fields} onDone={vi.fn()} />);
+
+  await userEvent.click(await screen.findByLabelText("Name"));
+  await screen.findByAltText("Form page 1");
+  loadFormPreview();
+  expect(screen.getByTestId("target-box-Name")).toBeTruthy();
+
+  await userEvent.click(screen.getByRole("checkbox", { name: /keep name/i }));
+
+  expect(screen.queryByTestId("target-box-Name")).toBeNull();
 });
 
 it("passes values the form could not place through to the caller", async () => {

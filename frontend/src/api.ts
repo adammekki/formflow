@@ -50,6 +50,22 @@ export type SessionInfo = {
   documents: SessionDocument[];
 };
 
+export type TemplatePage = {
+  page: number;
+  width: number;
+  height: number;
+};
+
+/** A form line that will receive a value, in the rendered page's pixels. */
+export type TemplateField = BoundingBox & {
+  field_name: string;
+};
+
+export type TemplateInfo = {
+  pages: TemplatePage[];
+  fields: TemplateField[];
+};
+
 export type ExtractionResult = {
   session_id: string;
   extracted_fields: ExtractedField[];
@@ -162,4 +178,12 @@ export async function getSession(sessionId: string): Promise<SessionInfo> {
 
 export function pageImageUrl(sessionId: string, docIndex: number, page: number): string {
   return apiUrl(`/api/extract/session/${sessionId}/pages/${docIndex}/${page}.jpg`);
+}
+
+export async function getTemplate(sessionId: string): Promise<TemplateInfo> {
+  return request<TemplateInfo>(`/api/extract/session/${sessionId}/template`);
+}
+
+export function templatePageUrl(sessionId: string, page: number): string {
+  return apiUrl(`/api/extract/session/${sessionId}/template/pages/${page}.jpg`);
 }

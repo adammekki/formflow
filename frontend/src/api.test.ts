@@ -1,6 +1,14 @@
 import { beforeEach, expect, it, vi } from "vitest";
 
-import { ApiError, discoverSchema, getSession, listClients, pageImageUrl } from "./api";
+import {
+  ApiError,
+  discoverSchema,
+  getSession,
+  getTemplate,
+  listClients,
+  pageImageUrl,
+  templatePageUrl,
+} from "./api";
 
 beforeEach(() => {
   vi.restoreAllMocks();
@@ -72,5 +80,31 @@ it("parses the session manifest", async () => {
 it("builds the page image URL", () => {
   expect(pageImageUrl("s1", 0, 1)).toBe(
     "http://localhost:8000/api/extract/session/s1/pages/0/1.jpg"
+  );
+});
+
+it("parses the template preview manifest", async () => {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            pages: [{ page: 0, width: 1654, height: 2339 }],
+            fields: [
+              { field_name: "Reiseziel", page: 0, x: 10, y: 20, width: 30, height: 8 },
+            ],
+          }),
+          { status: 200 }
+        )
+    )
+  );
+
+  expect((await getTemplate("s1")).fields[0].field_name).toBe("Reiseziel");
+});
+
+it("builds the template page URL", () => {
+  expect(templatePageUrl("s1", 2)).toBe(
+    "http://localhost:8000/api/extract/session/s1/template/pages/2.jpg"
   );
 });
