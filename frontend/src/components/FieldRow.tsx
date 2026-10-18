@@ -29,10 +29,19 @@ export default function FieldRow({
   return (
     <tr
       id={rowId}
+      tabIndex={0}
       aria-selected={selected}
-      onClick={onSelect}
+      onClick={(event) => {
+        onSelect?.();
+        // Give the row keyboard focus so the arrow keys reach the list, unless
+        // the click landed on a control that needs focus itself.
+        const target = event.target as HTMLElement;
+        if (!target.closest("input, textarea, select, label, button")) {
+          event.currentTarget.focus();
+        }
+      }}
       onFocus={onSelect}
-      className={`border-t border-line/40 align-top ${kept ? "" : "text-fg-muted"} ${
+      className={`border-t border-line/40 align-top outline-none ${kept ? "" : "text-fg-muted"} ${
         selected ? "bg-accent/10 ring-1 ring-inset ring-accent/50" : ""
       }`}
     >

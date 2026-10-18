@@ -184,6 +184,24 @@ it("moves the selection with the arrow keys", async () => {
   expect(screen.getByRole("row", { name: /Name/ }).getAttribute("aria-selected")).toBe("true");
 });
 
+it("takes keyboard focus when a row is clicked so arrows work", async () => {
+  const boxed: api.ExtractedField[] = [
+    { ...FIELDS[0], bounding_box: { page: 0, x: 10, y: 20, width: 100, height: 30 } },
+    { ...FIELDS[1], value: "DE89 3704" },
+  ];
+  render(<ReviewStep sessionId="s1" fields={boxed} onDone={vi.fn()} />);
+
+  const row = await screen.findByRole("row", { name: /Name/ });
+  // Click a plain cell, not the value input, like a user aiming at the row.
+  await userEvent.click(screen.getByText(/90% confident/));
+
+  expect(document.activeElement).toBe(row);
+
+  fireEvent.keyDown(row, { key: "ArrowDown" });
+
+  expect(screen.getByRole("row", { name: /IBAN/ }).getAttribute("aria-selected")).toBe("true");
+});
+
 it("keeps arrow keys inside the box while typing a value", async () => {
   render(<ReviewStep sessionId="s1" fields={FIELDS} onDone={vi.fn()} />);
 
