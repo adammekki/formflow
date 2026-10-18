@@ -8,15 +8,19 @@ type Props = {
   box: BoundingBox | null;
   documentName: string;
   page: number;
+  pageId?: string;
 };
 
-export default function DocumentViewer({ imageUrl, box, documentName, page }: Props) {
+export default function DocumentViewer({ imageUrl, box, documentName, page, pageId }: Props) {
   const [natural, setNatural] = useState<{ w: number; h: number } | null>(null);
 
   // Percentage positions keep the overlay glued to the value across resizes,
   // with no listeners: the wrapper is exactly as tall as the image it contains.
   return (
-    <div className="relative w-full overflow-hidden rounded-lg border border-line/60 bg-muted">
+    <div
+      id={pageId}
+      className="relative w-full overflow-hidden rounded-lg border border-line/60 bg-muted"
+    >
       <img
         src={imageUrl}
         alt={`Page ${page + 1} of ${documentName}`}

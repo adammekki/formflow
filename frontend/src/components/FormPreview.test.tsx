@@ -1,7 +1,9 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it } from "vitest";
 
 import FormPreview, { type PreviewBox } from "./FormPreview";
+
+const PAGE = { page: 0, imageUrl: "/t.jpg" };
 
 const NAME_BOX: PreviewBox = {
   key: "Name",
@@ -19,7 +21,7 @@ function loadImage(alt: string) {
 }
 
 it("draws a labelled target box where a value will be written", () => {
-  render(<FormPreview imageUrl="/t.jpg" page={0} boxes={[NAME_BOX]} />);
+  render(<FormPreview pages={[PAGE]} boxes={[NAME_BOX]} />);
   loadImage("Form page 1");
 
   const box = screen.getByTestId("target-box-Name");
@@ -31,20 +33,37 @@ it("draws a labelled target box where a value will be written", () => {
 });
 
 it("marks the target box of the selected field", () => {
-  const unselected = render(<FormPreview imageUrl="/t.jpg" page={0} boxes={[NAME_BOX]} />);
+  const first = render(<FormPreview pages={[PAGE]} boxes={[NAME_BOX]} />);
   loadImage("Form page 1");
   expect(screen.getByTestId("target-box-Name").getAttribute("data-selected")).toBe("false");
-  unselected.unmount();
+  first.unmount();
 
-  render(
-    <FormPreview imageUrl="/t.jpg" page={0} boxes={[{ ...NAME_BOX, selected: true }]} />
-  );
+  render(<FormPreview pages={[PAGE]} boxes={[{ ...NAME_BOX, selected: true }]} />);
   loadImage("Form page 1");
   expect(screen.getByTestId("target-box-Name").getAttribute("data-selected")).toBe("true");
 });
 
-it("shows the page without boxes when nothing will be filled there", () => {
-  render(<FormPreview imageUrl="/t.jpg" page={1} boxes={[]} />);
+it("stacks every page so the whole form can be scrolled", () => {
+  render(
+    <FormPreview
+      pages={[
+        { page: 0, imageUrl: "/a.jpg" },
+        { page: 1, imageUrl: "/b.jpg" },
+      ]}
+      boxes={[{ ...NAME_BOX, box: { ...NAME_BOX.box, page: 1 } }]}
+    />
+  );
+
+  expect(screen.getByAltText("Form page 1")).toBeTruthy();
+  loadImage("Form page 2");
+
+  expect(
+    within(screen.getByTestId("template-page-1")).getByTestId("target-box-Name")
+  ).toBeTruthy();
+});
+
+it("shows a page without boxes when nothing will be filled there", () => {
+  render(<FormPreview pages={[{ page: 1, imageUrl: "/b.jpg" }]} boxes={[]} />);
 
   expect(loadImage("Form page 2")).toBeTruthy();
   expect(screen.queryByTestId(/^target-box-/)).toBeNull();

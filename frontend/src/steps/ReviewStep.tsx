@@ -72,11 +72,22 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
     };
   }, [sessionId]);
 
-  // Keep the selected row visible when the selection moves by keyboard.
+  // Keep the selected row, and the page holding its box, in view.
   useEffect(() => {
     if (focused === null) return;
     document.getElementById(`field-row-${focused}`)?.scrollIntoView?.({ block: "nearest" });
-  }, [focused]);
+    const field = fields[focused];
+    const box = field?.bounding_box;
+    if (box) {
+      document.getElementById(`source-page-${box.page}`)?.scrollIntoView?.({ block: "nearest" });
+    }
+    const target = template?.fields.find((f) => f.field_name === field?.field_name);
+    if (target) {
+      document
+        .getElementById(`preview-page-${target.page}`)
+        ?.scrollIntoView?.({ block: "nearest" });
+    }
+  }, [focused, fields, template]);
 
   function update(index: number, patch: Partial<Row>) {
     setRows((current) =>
@@ -98,7 +109,7 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
     });
   }
 
-  /** Which page to show, and where the box sits on it. */
+  /** Every page of the selected field's document, boxed on the page it came from. */
   function viewerTarget() {
     const documents = session?.documents ?? [];
     if (documents.length === 0) {
@@ -110,11 +121,14 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
       : -1;
     const docIndex = index >= 0 ? index : 0;
     const box = index >= 0 ? field?.bounding_box ?? null : null;
+    const document = documents[docIndex];
     return {
-      imageUrl: pageImageUrl(sessionId, docIndex, box?.page ?? 0),
-      box,
-      documentName: documents[docIndex].name,
-      page: box?.page ?? 0,
+      documentName: document.name,
+      pages: Array.from({ length: document.page_count }, (_, page) => ({
+        page,
+        imageUrl: pageImageUrl(sessionId, docIndex, page),
+        box: box && box.page === page ? box : null,
+      })),
     };
   }
 
@@ -150,7 +164,7 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
     );
   }
 
-  /** The template page for the selected field, with only its target line boxed. */
+  /** The whole form, with only the selected field's target line boxed. */
   function previewTarget() {
     if (!template || template.pages.length === 0) {
       return null;
@@ -161,13 +175,14 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
     const kept = focused === null ? false : rows[focused]?.kept;
     const target =
       field && kept ? template.fields.find((f) => f.field_name === field.field_name) : undefined;
-    const page = target?.page ?? 0;
     const boxes = target && field
       ? [{ key: target.field_name, label: fieldLabel(field), box: target, selected: true }]
       : [];
     return {
-      imageUrl: templatePageUrl(sessionId, page),
-      page,
+      pages: template.pages.map((page) => ({
+        page: page.page,
+        imageUrl: templatePageUrl(sessionId, page.page),
+      })),
       boxes,
     };
   }
@@ -190,8 +205,15 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
             <span className="text-xs uppercase tracking-wide text-fg-muted">
               Source document
             </span>
-            <div className="max-h-[70vh] overflow-y-auto lg:max-h-none lg:h-[calc(100vh-7rem)]">
-              <DocumentViewer {...target} />
+            <div className="max-h-[70vh] space-y-3 overflow-y-auto lg:max-h-none lg:h-[calc(100vh-7rem)]">
+              {target.pages.map((page) => (
+                <DocumentViewer
+                  key={page.page}
+                  documentName={target.documentName}
+                  pageId={`source-page-${page.page}`}
+                  {...page}
+                />
+              ))}
             </div>
           </div>
         )}

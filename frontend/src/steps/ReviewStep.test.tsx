@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, expect, it, vi } from "vitest";
 
@@ -221,6 +221,50 @@ function loadFormPreview() {
   Object.defineProperty(img, "naturalHeight", { value: 500 });
   fireEvent.load(img);
 }
+
+it("stacks every page of the selected field's document", async () => {
+  vi.mocked(api.getSession).mockResolvedValue({
+    session_id: "s1",
+    client_name: "c",
+    field_count: 1,
+    documents: [{ name: "Rechnung.pdf", page_count: 3 }],
+  });
+  const fields: api.ExtractedField[] = [
+    { ...FIELDS[0], bounding_box: { page: 2, x: 10, y: 20, width: 100, height: 30 } },
+  ];
+  render(<ReviewStep sessionId="s1" fields={fields} onDone={vi.fn()} />);
+
+  await userEvent.click(await screen.findByLabelText("Name"));
+
+  expect(await screen.findByAltText("Page 1 of Rechnung.pdf")).toBeTruthy();
+  expect(screen.getByAltText("Page 2 of Rechnung.pdf")).toBeTruthy();
+  const third = screen.getByAltText("Page 3 of Rechnung.pdf");
+
+  // jsdom never fires image loads, and the overlay waits for natural size.
+  Object.defineProperty(third, "naturalWidth", { value: 1000 });
+  Object.defineProperty(third, "naturalHeight", { value: 500 });
+  fireEvent.load(third);
+
+  // The box belongs to page 3 (index 2), where the value came from.
+  expect(within(document.getElementById("source-page-2")!).getByTestId("bbox-overlay")).toBeTruthy();
+  expect(screen.getAllByTestId("bbox-overlay")).toHaveLength(1);
+});
+
+it("stacks every page of the form template", async () => {
+  vi.mocked(api.getTemplate).mockResolvedValue({
+    pages: [
+      { page: 0, width: 10, height: 10 },
+      { page: 1, width: 10, height: 10 },
+    ],
+    fields: [{ field_name: "Name", page: 1, x: 1, y: 1, width: 2, height: 2 }],
+  });
+  render(<ReviewStep sessionId="s1" fields={FIELDS} onDone={vi.fn()} />);
+
+  await userEvent.click(await screen.findByLabelText("Name"));
+
+  expect(await screen.findByAltText("Form page 1")).toBeTruthy();
+  expect(screen.getByAltText("Form page 2")).toBeTruthy();
+});
 
 it("shows where the selected field will be written on the form", async () => {
   vi.mocked(api.getTemplate).mockResolvedValue({

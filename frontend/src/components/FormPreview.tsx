@@ -10,21 +10,44 @@ export type PreviewBox = {
   selected: boolean;
 };
 
-type Props = {
-  imageUrl: string;
+type PreviewPage = {
   page: number;
+  imageUrl: string;
+};
+
+type Props = {
+  pages: PreviewPage[];
   boxes: PreviewBox[];
 };
 
-/** The form template with a labelled box on every line that will be filled. */
-export default function FormPreview({ imageUrl, page, boxes }: Props) {
+/** The whole form template, stacked, with a labelled box on every line that
+ *  will be filled. */
+export default function FormPreview({ pages, boxes }: Props) {
+  return (
+    <div className="space-y-3">
+      {pages.map((page) => (
+        <FormPage
+          key={page.page}
+          page={page}
+          boxes={boxes.filter((entry) => entry.box.page === page.page)}
+        />
+      ))}
+    </div>
+  );
+}
+
+function FormPage({ page, boxes }: { page: PreviewPage; boxes: PreviewBox[] }) {
   const [natural, setNatural] = useState<{ w: number; h: number } | null>(null);
 
   return (
-    <div className="relative w-full overflow-hidden rounded-lg border border-line/60 bg-muted">
+    <div
+      id={`preview-page-${page.page}`}
+      data-testid={`template-page-${page.page}`}
+      className="relative w-full overflow-hidden rounded-lg border border-line/60 bg-muted"
+    >
       <img
-        src={imageUrl}
-        alt={`Form page ${page + 1}`}
+        src={page.imageUrl}
+        alt={`Form page ${page.page + 1}`}
         className="block w-full"
         onLoad={(e) =>
           setNatural({ w: e.currentTarget.naturalWidth, h: e.currentTarget.naturalHeight })
