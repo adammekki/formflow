@@ -225,7 +225,7 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
           </div>
         )}
 
-        <div className="space-y-4 lg:order-2 order-1">
+        <div className="space-y-2 lg:order-2 order-1">
           <div className="space-y-2">
             <div className="flex items-baseline justify-between">
               <span className="text-xs uppercase tracking-wide text-fg-muted">Fields found</span>
@@ -276,12 +276,6 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
               </table>
             </div>
           </div>
-
-          <Button type="button" onClick={handleSubmit} disabled={busy}>
-            {busy ? "Filling…" : "Fill the form"}
-          </Button>
-
-          {error && <Notice tone="error">{error}</Notice>}
         </div>
 
         {preview && (
@@ -293,6 +287,18 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
             <div className="max-h-[70vh] overflow-auto lg:max-h-none lg:h-[calc(100vh-8.5rem)]">
               <FormPreview {...preview} zoom={formZoom} />
             </div>
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-col items-center gap-3">
+        <Button type="button" onClick={handleSubmit} disabled={busy}>
+          {busy ? "Filling…" : "Fill the form"}
+        </Button>
+
+        {error && (
+          <div className="w-full max-w-2xl">
+            <Notice tone="error">{error}</Notice>
           </div>
         )}
       </div>
