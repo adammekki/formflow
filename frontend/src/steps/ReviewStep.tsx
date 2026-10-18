@@ -190,7 +190,9 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
             <span className="text-xs uppercase tracking-wide text-fg-muted">
               Source document
             </span>
-            <DocumentViewer {...target} />
+            <div className="max-h-[80vh] overflow-y-auto">
+              <DocumentViewer {...target} />
+            </div>
           </div>
         )}
 
@@ -258,7 +260,9 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
             <span className="text-xs uppercase tracking-wide text-fg-muted">
               Filled form
             </span>
-            <FormPreview {...preview} />
+            <div className="max-h-[80vh] overflow-y-auto">
+              <FormPreview {...preview} />
+            </div>
           </div>
         )}
       </div>
