@@ -239,6 +239,32 @@ it("shows where the selected field will be written on the form", async () => {
   expect(screen.getByTestId("target-box-Name")).toBeTruthy();
 });
 
+it("shows only the selected field's target line, not every suggestion", async () => {
+  vi.mocked(api.getTemplate).mockResolvedValue({
+    pages: [{ page: 0, width: 1000, height: 500 }],
+    fields: [
+      { field_name: "Name", page: 0, x: 10, y: 20, width: 100, height: 20 },
+      { field_name: "IBAN", page: 0, x: 10, y: 60, width: 100, height: 20 },
+    ],
+  });
+  const fields: api.ExtractedField[] = [
+    { ...FIELDS[0], bounding_box: { page: 0, x: 10, y: 20, width: 100, height: 30 } },
+    { ...FIELDS[1], value: "DE89 3704" },
+  ];
+  render(<ReviewStep sessionId="s1" fields={fields} onDone={vi.fn()} />);
+
+  await userEvent.click(await screen.findByLabelText("Name"));
+  await screen.findByAltText("Form page 1");
+  loadFormPreview();
+  expect(screen.getByTestId("target-box-Name")).toBeTruthy();
+  expect(screen.queryByTestId("target-box-IBAN")).toBeNull();
+
+  fireEvent.focus(screen.getByRole("checkbox", { name: /keep iban/i }));
+
+  expect(screen.getByTestId("target-box-IBAN")).toBeTruthy();
+  expect(screen.queryByTestId("target-box-Name")).toBeNull();
+});
+
 it("drops the target box when the field is unticked", async () => {
   vi.mocked(api.getTemplate).mockResolvedValue({
     pages: [{ page: 0, width: 1000, height: 500 }],

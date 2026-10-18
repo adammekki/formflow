@@ -150,33 +150,25 @@ export default function ReviewStep({ sessionId, fields, onDone }: Props) {
     );
   }
 
-  /** The template page to show, with a labelled box per kept field on it. */
+  /** The template page for the selected field, with only its target line boxed. */
   function previewTarget() {
     if (!template || template.pages.length === 0) {
       return null;
     }
-    const targets = rows.flatMap((row, index) => {
-      const target = template.fields.find((f) => f.field_name === row.field_name);
-      if (!row.kept || !target) {
-        return [];
-      }
-      return [
-        {
-          key: row.field_name,
-          label: fieldLabel(fields[index]),
-          box: target,
-          selected: focused === index,
-          page: target.page,
-        },
-      ];
-    });
-    const page = targets.find((entry) => entry.selected)?.page ?? 0;
+    // One box at a time: showing every suggestion at once makes it harder to
+    // work through them.
+    const field = focused === null ? undefined : fields[focused];
+    const kept = focused === null ? false : rows[focused]?.kept;
+    const target =
+      field && kept ? template.fields.find((f) => f.field_name === field.field_name) : undefined;
+    const page = target?.page ?? 0;
+    const boxes = target && field
+      ? [{ key: target.field_name, label: fieldLabel(field), box: target, selected: true }]
+      : [];
     return {
       imageUrl: templatePageUrl(sessionId, page),
       page,
-      boxes: targets
-        .filter((entry) => entry.page === page)
-        .map(({ page: _page, ...box }) => box),
+      boxes,
     };
   }
 

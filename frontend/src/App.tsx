@@ -99,10 +99,12 @@ export default function App() {
     }
   }
 
+  const wide = step === "review";
+
   return (
-    <main className="flex min-h-full items-center justify-center p-6">
-      <div className={step === "review" ? "w-full max-w-7xl" : "w-full max-w-3xl"}>
-        <header className="mb-6 flex items-center gap-3">
+    <main className={`flex min-h-full justify-center ${wide ? "p-3" : "items-center p-6"}`}>
+      <div className={wide ? "w-full" : "w-full max-w-3xl"}>
+        <header className={`flex items-center gap-3 ${wide ? "mb-2 px-1" : "mb-6"}`}>
           <span
             aria-hidden="true"
             className="h-2.5 w-2.5 rounded-full bg-accent"
@@ -112,7 +114,11 @@ export default function App() {
           </span>
         </header>
 
-        <div className="rounded-2xl border border-line/60 bg-card p-8 shadow-2xl shadow-black/40">
+        <div
+          className={`rounded-2xl border border-line/60 bg-card shadow-2xl shadow-black/40 ${
+            wide ? "p-4" : "p-8"
+          }`}
+        >
           <div key={step} className={leaving ? "animate-fade-out" : "animate-fade-in"}>
             {renderStep()}
           </div>
