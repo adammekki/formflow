@@ -19,7 +19,7 @@ export default function DocumentViewer({ imageUrl, box, documentName, page, page
   return (
     <div
       id={pageId}
-      className="relative w-full overflow-hidden rounded-lg border border-line/60 bg-muted"
+      className="relative w-full min-w-[900px] overflow-hidden rounded-lg border border-line/60 bg-muted"
     >
       <img
         src={imageUrl}

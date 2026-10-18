@@ -43,7 +43,7 @@ function FormPage({ page, boxes }: { page: PreviewPage; boxes: PreviewBox[] }) {
     <div
       id={`preview-page-${page.page}`}
       data-testid={`template-page-${page.page}`}
-      className="relative w-full overflow-hidden rounded-lg border border-line/60 bg-muted"
+      className="relative w-full min-w-[900px] overflow-hidden rounded-lg border border-line/60 bg-muted"
     >
       <img
         src={page.imageUrl}
@@ -73,7 +73,7 @@ function FormPage({ page, boxes }: { page: PreviewPage; boxes: PreviewBox[] }) {
               height: pct(entry.box.height, natural.h),
             }}
           >
-            <span className="absolute -top-4 left-0 max-w-full truncate rounded bg-accent px-1 text-[10px] leading-4 text-bg">
+            <span className="absolute -top-5 left-0 whitespace-nowrap rounded bg-accent px-1 py-0.5 text-[11px] leading-tight text-bg">
               {entry.label}
             </span>
           </div>
